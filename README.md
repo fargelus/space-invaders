@@ -1,3 +1,5 @@
+# Classic Space Invaders Game
+
 ## Rules:
 1. Player moves gun horizontally by pressing on keyboard.
 2. Player shoot aliens, which can move horizontally & vertically.
