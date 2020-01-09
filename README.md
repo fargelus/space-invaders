@@ -10,6 +10,6 @@
 9. Game has ability of multiplayer.
 
 ### Resources
-[Youtube](https://duckduckgo.com)
+[Youtube](https://www.youtube.com/watch?v=MU4psw3ccUI)
 [Wiki](https://ru.wikipedia.org/wiki/Space_Invaders)
 [Gosu tutorial](https://leanpub.com/developing-games-with-ruby/read)
