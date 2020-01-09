@@ -11,7 +11,7 @@
 8. Game has sounds effects.
 9. Game has ability of multiplayer.
 
-### Resources
-[Youtube](Demo)
-[Wiki](https://ru.wikipedia.org/wiki/Space_Invaders)
-[Gosu tutorial](https://leanpub.com/developing-games-with-ruby/read)
+### Resources:
+- [Demo](https://www.youtube.com/watch?v=MU4psw3ccUI)
+- [Wiki](https://ru.wikipedia.org/wiki/Space_Invaders)
+- [Gosu tutorial](https://leanpub.com/developing-games-with-ruby/read)
