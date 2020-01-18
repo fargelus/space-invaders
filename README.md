@@ -15,3 +15,4 @@
 - [Demo](https://www.youtube.com/watch?v=MU4psw3ccUI)
 - [Wiki](https://ru.wikipedia.org/wiki/Space_Invaders)
 - [Gosu tutorial](https://leanpub.com/developing-games-with-ruby/read)
+
