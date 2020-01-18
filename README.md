@@ -1,43 +1,18 @@
-# SpaceInvaders
+# Classic Space Invaders Game
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/space_invaders`. To experiment with that code, run `bin/console` for an interactive prompt.
+## Rules:
+1. Player moves gun horizontally by pressing on keyboard.
+2. Player shoot aliens, which can move horizontally & vertically.
+3. When bullet reach alien, alien disappear & total score increase. Other aliens will move faster after that.
+4. Aliens can shoot too. When alien hit player, his lifes decrease.
+5. Player can hide behind obstacles.
+6. Game ends when player lifes become 0.
+7. Game has record table.
+8. Game has sounds effects.
+9. Game has ability of multiplayer.
 
-TODO: Delete this and the text above, and describe your gem
+### Resources:
+- [Demo](https://www.youtube.com/watch?v=MU4psw3ccUI)
+- [Wiki](https://ru.wikipedia.org/wiki/Space_Invaders)
+- [Gosu tutorial](https://leanpub.com/developing-games-with-ruby/read)
 
-## Installation
-
-Add this line to your application's Gemfile:
-
-```ruby
-gem 'space_invaders'
-```
-
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
-
-    $ gem install space_invaders
-
-## Usage
-
-TODO: Write usage instructions here
-
-## Development
-
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
-
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
-
-## Contributing
-
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/space_invaders. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
-
-## License
-
-The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
-
-## Code of Conduct
-
-Everyone interacting in the SpaceInvaders project’s codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/[USERNAME]/space_invaders/blob/master/CODE_OF_CONDUCT.md).
