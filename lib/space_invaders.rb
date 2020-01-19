@@ -19,8 +19,9 @@ module SpaceInvaders
     end
 
     def update
-      @ship.set(@ship.x - 3, @ship.y) if move_ship_left?
-      @ship.set(@ship.x + 3, @ship.y) if move_ship_right?
+      ship_speed = Settings::SPACESHIP_SPEED
+      @ship.set(@ship.x - ship_speed, @ship.y) if move_ship_left?
+      @ship.set(@ship.x + ship_speed, @ship.y) if move_ship_right?
     end
 
     def move_ship_left?
