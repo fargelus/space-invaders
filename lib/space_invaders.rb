@@ -12,33 +12,20 @@ module SpaceInvaders
       @screen_width = width
       @screen_height = height
       @draws = 0
-      @movements = 0
+      @ship = Ship.new
+      @game_objects = [@ship]
 
       setup_bg
       setup_assets
     end
 
     def update
-      ship_speed = Settings::SPACESHIP_SPEED
-      @ship.set(@ship.x - ship_speed, @ship.y) if move_ship_left?
-      @ship.set(@ship.x + ship_speed, @ship.y) if move_ship_right?
-    end
-
-    def move_ship_left?
-      button_down?(Gosu::KbLeft) && @ship.x > 0
-    end
-
-    def move_ship_right?
-      button_down?(Gosu::KbRight) && @ship.x + @ship.w < @screen_width
+      @ship.move_left! if button_down?(Gosu::KbLeft)
+      @ship.move_right! if button_down?(Gosu::KbRight)
     end
 
     def button_down(id)
       close if id == Gosu::KbEscape
-      @movements += 1
-    end
-
-    def button_up(_id)
-      @movements -= 1
     end
 
     def draw
@@ -48,7 +35,7 @@ module SpaceInvaders
     end
 
     def needs_redraw?
-      @draws == 0 || @movements > 0
+      @draws == 0 || @game_objects.any?(&:needs_redraw?)
     end
 
     private
@@ -59,9 +46,11 @@ module SpaceInvaders
     end
 
     def setup_assets
-      @ship = Ship.new
-      @ship.set(@screen_width / 2 - @ship.w / 2,
-                @screen_height * 0.9 - @ship.h / 2)
+      @ship.set(
+        @screen_width / 2 - @ship.w / 2,
+        @screen_height * 0.9 - @ship.h / 2,
+        [0, @screen_width]
+      )
     end
   end
 end
