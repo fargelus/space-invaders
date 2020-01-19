@@ -9,8 +9,8 @@ module SpaceInvaders
                    height = Settings::HEIGHT)
       super
       self.caption = Settings::CAPTION
-      @width = width
-      @height = height
+      @screen_width = width
+      @screen_height = height
       @draws = 0
       @movements = 0
 
@@ -29,7 +29,7 @@ module SpaceInvaders
     end
 
     def move_ship_right?
-      button_down?(Gosu::KbRight) && @ship.x + @ship.w < @width
+      button_down?(Gosu::KbRight) && @ship.x + @ship.w < @screen_width
     end
 
     def button_down(id)
@@ -60,8 +60,8 @@ module SpaceInvaders
 
     def setup_assets
       @ship = Ship.new
-      @ship.set(@width / 2 - @ship.w / 2,
-                @height * 0.9 - @ship.h / 2)
+      @ship.set(@screen_width / 2 - @ship.w / 2,
+                @screen_height * 0.9 - @ship.h / 2)
     end
   end
 end
