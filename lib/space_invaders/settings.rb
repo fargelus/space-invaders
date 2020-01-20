@@ -9,10 +9,7 @@ module SpaceInvaders
     HEIGHT = 480
     CAPTION = 'Space Invaders'
     ASSETS_PATH = Pathname.pwd.join('assets')
+    IMAGES_PATH = ASSETS_PATH / 'images'
     SPACESHIP_SPEED = 3
-
-    def self.images_path(image)
-      File.join(ASSETS_PATH, 'images', image)
-    end
   end
 end

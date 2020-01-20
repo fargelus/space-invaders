@@ -41,8 +41,8 @@ module SpaceInvaders
     private
 
     def setup_bg
-      bg_image = Settings.images_path('space.png')
-      @bg = Gosu::Image.new(bg_image)
+      bg_image = Settings::IMAGES_PATH / 'space.png'
+      @bg = Gosu::Image.new(bg_image.to_s)
     end
 
     def setup_assets
