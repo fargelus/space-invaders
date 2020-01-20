@@ -2,6 +2,7 @@
 
 require 'gosu'
 require_relative 'space_invaders/ship'
+require_relative 'space_invaders/alien'
 
 module SpaceInvaders
   class Game < Gosu::Window
@@ -13,6 +14,7 @@ module SpaceInvaders
       @screen_height = height
       @draws = 0
       @ship = Ship.new
+      @alien = Alien.new
       @game_objects = [@ship]
 
       setup_bg
@@ -32,6 +34,7 @@ module SpaceInvaders
       @draws += 1
       @bg.draw(0, 0, 0)
       @ship.draw
+      @alien.draw
     end
 
     def needs_redraw?
