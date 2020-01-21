@@ -12,9 +12,10 @@ module SpaceInvaders
       self.caption = Settings::CAPTION
       @screen_width = width
       @screen_height = height
+
       @draws = 0
       @ship = Ship.new
-      @alien = Alien.new
+      @aliens = []
       @game_objects = [@ship]
 
       setup_bg
@@ -34,7 +35,7 @@ module SpaceInvaders
       @draws += 1
       @bg.draw(0, 0, 0)
       @ship.draw
-      @alien.draw
+      @aliens.each(&:draw)
     end
 
     def needs_redraw?
@@ -49,11 +50,31 @@ module SpaceInvaders
     end
 
     def setup_assets
+      setup_ship
+      setup_aliens
+    end
+
+    def setup_ship
       @ship.set(
         @screen_width / 2 - @ship.w / 2,
         @screen_height * 0.9 - @ship.h / 2,
         [0, @screen_width]
       )
+    end
+
+    def setup_aliens
+      alien_y = margin = Settings::ALIENS_MARGIN
+      Settings::ALIENS_ROWS.times do
+        alien_x = @screen_width * 0.05
+
+        Settings::ALIENS_PER_ROW.times do
+          alien = Alien.new(alien_x, alien_y)
+          alien_x += alien.w + margin
+          @aliens << alien
+        end
+
+        alien_y += @aliens[-1].h + margin
+      end
     end
   end
 end

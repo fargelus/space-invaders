@@ -8,7 +8,7 @@ module SpaceInvaders
     @@amount = 0
 
     def initialize(x = 0, y = 0)
-      prefix = @@amount % Settings::INVADERS_TYPES_COUNT
+      prefix = @@amount % Settings::ALIENS_TYPES_COUNT
       alien_path = Settings::IMAGES_PATH / "invader_#{prefix}.png"
 
       super x, y, alien_path.to_s
