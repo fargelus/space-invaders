@@ -15,5 +15,6 @@ module SpaceInvaders
     ALIENS_ROWS = 4
     ALIENS_PER_ROW = 10
     ALIENS_MARGIN = 10
+    ALIEN_HEIGHT = 32
   end
 end

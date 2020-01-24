@@ -11,7 +11,7 @@ module SpaceInvaders
       prefix = @@amount % Settings::ALIENS_TYPES_COUNT
       alien_path = Settings::IMAGES_PATH / "invader_#{prefix}.png"
 
-      super x, y, alien_path.to_s
+      super x, y, alien_path
       @@amount += 1
       @init_draw = true
     end

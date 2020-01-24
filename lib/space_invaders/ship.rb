@@ -9,7 +9,7 @@ module SpaceInvaders
     SHIP_IMAGE_PATH = Settings::IMAGES_PATH / 'ship.png'
 
     def initialize(x = 0, y = 0, boundaries = [])
-      super x, y, SHIP_IMAGE_PATH.to_s
+      super x, y, SHIP_IMAGE_PATH
 
       @boundaries = boundaries
       @speed = Settings::SPACESHIP_SPEED

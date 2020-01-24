@@ -73,7 +73,7 @@ module SpaceInvaders
           @aliens << alien
         end
 
-        alien_y += @aliens[-1].h + margin
+        alien_y += Settings::ALIEN_HEIGHT + margin
       end
     end
   end
