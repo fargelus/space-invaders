@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
 require 'gosu'
-require_relative 'settings/settings'
+require_relative 'settings'
 require_relative 'game_object'
 
 module SpaceInvaders
   class Ship < GameObject
-    SHIP_IMAGE_PATH = AssetsSettings::IMAGES_PATH / 'ship.png'
+    SHIP_IMAGE_PATH = Settings::IMAGES_PATH / 'ship.png'
 
     def initialize(x = 0, y = 0, boundaries = [])
       super x, y, SHIP_IMAGE_PATH
