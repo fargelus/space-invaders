@@ -29,5 +29,3 @@ module SpaceInvaders
     end
   end
 end
-
-SpaceInvaders::AliensPack.new
