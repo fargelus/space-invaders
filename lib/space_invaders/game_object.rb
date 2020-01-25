@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'gosu'
-require_relative 'settings/settings'
 
 module SpaceInvaders
   class GameObject

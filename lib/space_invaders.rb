@@ -3,6 +3,7 @@
 require 'gosu'
 require_relative 'space_invaders/settings/settings'
 require_relative 'space_invaders/ship'
+require_relative 'space_invaders/alien'
 require_relative 'space_invaders/aliens_pack'
 
 module SpaceInvaders
@@ -65,18 +66,20 @@ module SpaceInvaders
 
     def setup_aliens
       alien_y = margin = AliensSettings::MARGIN
-      aliens_pack = DefaultAliensPack.new
       AliensSettings::ROWS.times do
-        alien_x = @screen_width * 0.05
-
-        AliensSettings::PER_ROW.times do
-          alien_path = aliens_pack.next_alien
-          alien = Alien.new(alien_x, alien_y, alien_path)
-          alien_x += alien.w + margin
-          @aliens << alien
-        end
-
+        place_aliens_in_row(alien_y)
         alien_y += AliensSettings::HEIGHT + margin
+      end
+    end
+
+    def place_aliens_in_row(alien_y)
+      alien_x = @screen_width * 0.05
+      aliens_pack = DefaultAliensPack.new
+      AliensSettings::PER_ROW.times do
+        alien_path = aliens_pack.next_alien
+        alien = Alien.new(alien_x, alien_y, alien_path)
+        alien_x += alien.w + AliensSettings::MARGIN
+        @aliens << alien
       end
     end
   end

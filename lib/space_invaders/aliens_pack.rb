@@ -2,7 +2,6 @@
 
 require 'pathname'
 require_relative 'settings/settings'
-require_relative 'alien'
 
 module SpaceInvaders
   class AliensPack
