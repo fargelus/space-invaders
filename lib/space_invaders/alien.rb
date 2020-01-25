@@ -1,18 +1,15 @@
 # frozen_string_literal: true
 
 require 'gosu'
-require_relative 'settings'
+require_relative 'settings/settings'
+require_relative 'game_object'
 
 module SpaceInvaders
   class Alien < GameObject
-    @@amount = 0
+    DEFAULT_ALIEN = AssetsSettings::ALIENS_DIR / 'invader_0.png'
 
-    def initialize(x = 0, y = 0)
-      prefix = @@amount % Settings::ALIENS_TYPES_COUNT
-      alien_path = Settings::IMAGES_PATH / "invader_#{prefix}.png"
-
+    def initialize(x = 0, y = 0, alien_path = DEFAULT_ALIEN)
       super x, y, alien_path
-      @@amount += 1
       @init_draw = true
     end
 

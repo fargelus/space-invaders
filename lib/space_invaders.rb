@@ -1,15 +1,16 @@
 # frozen_string_literal: true
 
 require 'gosu'
+require_relative 'space_invaders/settings/settings'
 require_relative 'space_invaders/ship'
-require_relative 'space_invaders/alien'
+require_relative 'space_invaders/aliens_pack'
 
 module SpaceInvaders
   class Game < Gosu::Window
-    def initialize(width = Settings::WIDTH,
-                   height = Settings::HEIGHT)
+    def initialize(width = ScreenSettings::WIDTH,
+                   height = ScreenSettings::HEIGHT)
       super
-      self.caption = Settings::CAPTION
+      self.caption = ScreenSettings::CAPTION
       @screen_width = width
       @screen_height = height
 
@@ -45,7 +46,7 @@ module SpaceInvaders
     private
 
     def setup_bg
-      bg_image = Settings::IMAGES_PATH / 'space.png'
+      bg_image = AssetsSettings::IMAGES_PATH / 'space.png'
       @bg = Gosu::Image.new(bg_image.to_s)
     end
 
@@ -63,17 +64,19 @@ module SpaceInvaders
     end
 
     def setup_aliens
-      alien_y = margin = Settings::ALIENS_MARGIN
-      Settings::ALIENS_ROWS.times do
+      alien_y = margin = AliensSettings::MARGIN
+      aliens_pack = DefaultAliensPack.new
+      AliensSettings::ROWS.times do
         alien_x = @screen_width * 0.05
 
-        Settings::ALIENS_PER_ROW.times do
-          alien = Alien.new(alien_x, alien_y)
+        AliensSettings::PER_ROW.times do
+          alien_path = aliens_pack.next_alien
+          alien = Alien.new(alien_x, alien_y, alien_path)
           alien_x += alien.w + margin
           @aliens << alien
         end
 
-        alien_y += Settings::ALIEN_HEIGHT + margin
+        alien_y += AliensSettings::HEIGHT + margin
       end
     end
   end
