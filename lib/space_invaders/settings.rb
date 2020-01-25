@@ -17,6 +17,16 @@ module SpaceInvaders
     ASSETS_DIR = Pathname.new(__FILE__).join('../../') / 'assets'
     IMAGES_PATH = ASSETS_DIR / 'images'
     ALIENS_DIR = IMAGES_PATH / 'invaders'
-    ALL_ALIENS = Pathname.new(ALIENS_DIR).children.map { |file| file }
+    ALIEN_TYPES = {
+      predator: 'predator.png',
+      octopus: 'octopus.png',
+      mad_robot: 'mad_robot.png',
+      robot: 'robot.png',
+      skull: 'skull.png',
+      smiley: 'smiley.png'
+    }.freeze
+    ALL_ALIENS = ALIEN_TYPES.values.map do |image_name|
+      Pathname.new(ALIENS_DIR / image_name)
+    end
   end
 end
