@@ -2,28 +2,22 @@
 
 require 'gosu'
 require_relative 'settings'
+require_relative 'game_object'
 
 module SpaceInvaders
-  class Ship
-    attr_reader :x, :y, :w, :h
-
+  class Ship < GameObject
     SHIP_IMAGE_PATH = Settings::IMAGES_PATH / 'ship.png'
 
     def initialize(x = 0, y = 0, boundaries = [])
-      @x = x
-      @y = y
+      super x, y, SHIP_IMAGE_PATH
+
       @boundaries = boundaries
       @speed = Settings::SPACESHIP_SPEED
-
-      @ship = Gosu::Image.new(SHIP_IMAGE_PATH.to_s)
-      @w = @ship.width
-      @h = @ship.height
       @position_changed = false
     end
 
     def set(x, y, boundaries)
-      @x = x
-      @y = y
+      super x, y
       @boundaries = boundaries
       @position_changed = true
     end
@@ -33,7 +27,7 @@ module SpaceInvaders
     end
 
     def draw
-      @ship.draw(@x, @y, 0)
+      super
       @position_changed = false
     end
 

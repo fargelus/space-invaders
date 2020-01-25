@@ -4,12 +4,29 @@ require 'pathname'
 
 module SpaceInvaders
   module Settings
-    VERSION = '0.1.0'
     WIDTH = 640
     HEIGHT = 480
     CAPTION = 'Space Invaders'
-    ASSETS_PATH = Pathname.pwd.join('assets')
-    IMAGES_PATH = ASSETS_PATH / 'images'
+    VERSION = '0.1.0'
     SPACESHIP_SPEED = 3
+    ALIENS_TYPES_COUNT = 6
+    ALIENS_ROWS = 4
+    ALIENS_PER_ROW = 10
+    ALIENS_MARGIN = 10
+    ALIENS_HEIGHT = 32
+    ASSETS_DIR = Pathname.new(__FILE__).join('../../') / 'assets'
+    IMAGES_PATH = ASSETS_DIR / 'images'
+    ALIENS_DIR = IMAGES_PATH / 'invaders'
+    ALIEN_TYPES = {
+      predator: 'predator.png',
+      octopus: 'octopus.png',
+      mad_robot: 'mad_robot.png',
+      robot: 'robot.png',
+      skull: 'skull.png',
+      smiley: 'smiley.png'
+    }.freeze
+    ALL_ALIENS = ALIEN_TYPES.values.map do |image_name|
+      Pathname.new(ALIENS_DIR / image_name)
+    end
   end
 end
