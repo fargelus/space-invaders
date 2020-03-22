@@ -33,7 +33,7 @@ module SpaceInvaders
     def draw
       super
       @position_changed = false
-      @bullet.draw
+      @bullet.draw if @bullet.moves?
     end
 
     def move_left!

@@ -19,8 +19,8 @@ module SpaceInvaders
       @y = y
     end
 
-    def draw(z = 0)
-      @figure.draw(@x, @y, z)
+    def draw
+      @figure.draw(@x, @y, 0)
     end
   end
 end
