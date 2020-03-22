@@ -3,7 +3,7 @@
 require 'gosu'
 require_relative 'settings'
 require_relative 'game_object'
-require_relative 'bullet'
+require_relative 'gun'
 
 module SpaceInvaders
   class Ship < GameObject
@@ -16,24 +16,24 @@ module SpaceInvaders
       @speed = Settings::SPACESHIP_SPEED
       @position_changed = false
 
-      @bullet = Bullet.new
+      @gun = Gun.new
     end
 
     def set(x, y, boundaries)
       super x, y
       @boundaries = boundaries
       @position_changed = true
-      reload
+      @gun.set(x + @w / 2 - @gun.w / 2, y)
     end
 
     def needs_redraw?
-      @position_changed || @bullet.needs_redraw?
+      @position_changed || @gun.needs_redraw?
     end
 
     def draw
       super
       @position_changed = false
-      target? ? @bullet.draw : reload
+      @gun.draw
     end
 
     def move_left!
@@ -45,20 +45,7 @@ module SpaceInvaders
     end
 
     def shoot(target)
-      @bullet.moving = true
-      @target = target
-    end
-
-    private
-
-    def reload
-      @bullet.moving = false
-      @target = nil
-      @bullet.set(@x + @w / 2 - @bullet.w / 2, @y)
-    end
-
-    def target?
-      @bullet.moves? && @target < @bullet.y
+      @gun.shoot!(target)
     end
   end
 end
