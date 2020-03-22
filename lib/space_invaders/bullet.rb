@@ -2,9 +2,9 @@ require_relative 'settings'
 
 module SpaceInvaders
   class Bullet < GameObject
-    attr_reader :moving
+    attr_accessor :moving
     alias_method :moves?, :moving
-    
+
     BULLET_IMAGE_PATH = Settings::IMAGES_PATH / 'bullet.png'
 
     def initialize(x = 0, y = 0)
@@ -16,9 +16,9 @@ module SpaceInvaders
       @moving
     end
 
-    def move!
-      @moving = true
-      @y -= 10
+    def draw
+      @y -= Settings::BULLET_SPEED if @moving
+      super
     end
   end
 end

@@ -9,6 +9,7 @@ module SpaceInvaders
     CAPTION = 'Space Invaders'
     VERSION = '0.1.0'
     SPACESHIP_SPEED = 3
+    BULLET_SPEED = 5
     ALIENS_TYPES_COUNT = 6
     ALIENS_ROWS = 4
     ALIENS_PER_ROW = 10

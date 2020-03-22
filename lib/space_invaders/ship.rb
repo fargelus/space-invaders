@@ -23,7 +23,7 @@ module SpaceInvaders
       super x, y
       @boundaries = boundaries
       @position_changed = true
-      @bullet.set(x + @w / 2 - @bullet.w / 2, y)
+      reload
     end
 
     def needs_redraw?
@@ -33,7 +33,7 @@ module SpaceInvaders
     def draw
       super
       @position_changed = false
-      @bullet.draw if @bullet.moves?
+      target? ? @bullet.draw : reload
     end
 
     def move_left!
@@ -44,8 +44,21 @@ module SpaceInvaders
       set(@x + @speed, @y, @boundaries) if @x + @w < @boundaries.max
     end
 
-    def shoot
-      @bullet.move!
+    def shoot(target)
+      @bullet.moving = true
+      @target = target
+    end
+
+    private
+
+    def reload
+      @bullet.moving = false
+      @target = nil
+      @bullet.set(@x + @w / 2 - @bullet.w / 2, @y)
+    end
+
+    def target?
+      @bullet.moves? && @target < @bullet.y
     end
   end
 end

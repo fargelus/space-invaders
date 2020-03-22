@@ -26,7 +26,7 @@ module SpaceInvaders
     def update
       @ship.move_left! if button_down?(Gosu::KbLeft)
       @ship.move_right! if button_down?(Gosu::KbRight)
-      @ship.shoot if button_down?(Gosu::KbSpace)
+      @ship.shoot(@aliens.first_row) if button_down?(Gosu::KbSpace)
     end
 
     def button_down(id)
