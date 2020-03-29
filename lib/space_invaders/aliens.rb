@@ -8,14 +8,16 @@ module SpaceInvaders
   class Aliens
     HIT_ALIEN_SOUND = Settings::SOUNDS_PATH / 'alien_destroys.wav'
 
-    def initialize(edge_x)
+    def initialize(edge_x, edge_y)
       @aliens = []
       @edge_x = edge_x
+      @edge_y = edge_y
       @destroy_sound = Gosu::Sample.new(HIT_ALIEN_SOUND)
     end
 
     def setup
-      alien_y = margin = Settings::ALIENS_MARGIN
+      alien_y = @edge_y
+      margin = Settings::ALIENS_MARGIN
       Settings::ALIENS_ROWS.times do
         place_aliens_in_row(alien_y)
         alien_y += Settings::ALIENS_HEIGHT + margin

@@ -4,6 +4,8 @@ require 'gosu'
 require_relative 'space_invaders/settings'
 require_relative 'space_invaders/ship'
 require_relative 'space_invaders/aliens'
+require_relative 'space_invaders/scores/player_score'
+require_relative 'space_invaders/scores/hi_score'
 
 module SpaceInvaders
   class Game < Gosu::Window
@@ -16,10 +18,12 @@ module SpaceInvaders
 
       @draws = 0
       @ship = Ship.new
-      @aliens = Aliens.new(@screen_width * 0.05)
+      @aliens = Aliens.new(@screen_width * 0.1, @screen_height * 0.15)
       @bg = GameObject.new(0, 0, Settings::IMAGES_PATH / 'space.png')
       @game_objects = [@ship]
+      @scores = []
 
+      setup_scores
       setup_assets
     end
 
@@ -38,6 +42,7 @@ module SpaceInvaders
       @bg.draw
       @ship.draw
       @aliens.draw
+      @scores.each(&:draw)
     end
 
     def needs_redraw?
@@ -45,6 +50,12 @@ module SpaceInvaders
     end
 
     private
+
+    def setup_scores
+      scores_y = 15
+      @scores << PlayerScore.new(x: @screen_width * 0.05, y: scores_y, window: self)
+      @scores << HiScore.new(x: @screen_width * 0.7, y: scores_y, window: self)
+    end
 
     def setup_assets
       @aliens.setup
