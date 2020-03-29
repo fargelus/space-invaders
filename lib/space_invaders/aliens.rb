@@ -1,10 +1,10 @@
+# frozen_string_literal: true
+
 require_relative 'settings'
 require_relative 'alien'
 
 module SpaceInvaders
   class Aliens
-    attr_reader :first_row
-
     def initialize(edge_x)
       @aliens = []
       @edge_x = edge_x
@@ -16,7 +16,6 @@ module SpaceInvaders
         place_aliens_in_row(alien_y)
         alien_y += Settings::ALIENS_HEIGHT + margin
       end
-      @first_row = alien_y
     end
 
     def place_aliens_in_row(alien_y)
@@ -31,6 +30,16 @@ module SpaceInvaders
 
     def draw
       @aliens.each(&:draw)
+    end
+
+    def find(x)
+      @aliens
+        .select { |alien| alien.area?(x) }
+        .max_by(&:y)
+    end
+
+    def destroy(x, y)
+      @aliens.reject! { |alien| alien.x == x && alien.y == y }
     end
   end
 end

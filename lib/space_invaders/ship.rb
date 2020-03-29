@@ -8,6 +8,7 @@ require_relative 'gun'
 module SpaceInvaders
   class Ship < GameObject
     SHIP_IMAGE_PATH = Settings::IMAGES_PATH / 'ship.png'
+    attr_writer :enemies
 
     def initialize(x = 0, y = 0, boundaries = [])
       super x, y, SHIP_IMAGE_PATH
@@ -15,6 +16,7 @@ module SpaceInvaders
       @boundaries = boundaries
       @speed = Settings::SPACESHIP_SPEED
       @position_changed = false
+      @enemies = []
 
       @gun = Gun.new
     end
@@ -23,7 +25,7 @@ module SpaceInvaders
       super x, y
       @boundaries = boundaries
       @position_changed = true
-      @gun.set(x + @w / 2 - @gun.w / 2, y)
+      @gun.set(x + @w / 2 - @gun.w / 2, y, @enemies)
     end
 
     def needs_redraw?
@@ -44,8 +46,8 @@ module SpaceInvaders
       set(@x + @speed, @y, @boundaries) if @x + @w < @boundaries.max
     end
 
-    def shoot(target)
-      @gun.shoot!(target)
+    def shoot
+      @gun.shoot!
     end
   end
 end

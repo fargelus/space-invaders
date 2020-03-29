@@ -10,13 +10,10 @@ module SpaceInvaders
 
     def initialize(x = 0, y = 0, alien_path = DEFAULT_ALIEN)
       super x, y, alien_path
-      @init_draw = true
     end
 
-    def needs_redraw?
-      result = @init_draw
-      @init_draw = false
-      result
+    def area?(x)
+      @x < x && @x + @w + Settings::ALIENS_MARGIN > x
     end
   end
 end

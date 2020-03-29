@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 require_relative 'settings'
 
 module SpaceInvaders
   class Bullet < GameObject
     attr_accessor :moving
-    alias_method :moves?, :moving
+    alias moves? moving
 
     BULLET_IMAGE_PATH = Settings::IMAGES_PATH / 'bullet.png'
 

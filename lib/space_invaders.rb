@@ -26,7 +26,7 @@ module SpaceInvaders
     def update
       @ship.move_left! if button_down?(Gosu::KbLeft)
       @ship.move_right! if button_down?(Gosu::KbRight)
-      @ship.shoot(@aliens.first_row) if button_down?(Gosu::KbSpace)
+      @ship.shoot if button_down?(Gosu::KbSpace)
     end
 
     def button_down(id)
@@ -47,11 +47,12 @@ module SpaceInvaders
     private
 
     def setup_assets
-      setup_ship
       @aliens.setup
+      setup_ship
     end
 
     def setup_ship
+      @ship.enemies = @aliens
       @ship.set(
         @screen_width / 2 - @ship.w / 2,
         @screen_height * 0.9 - @ship.h / 2,
