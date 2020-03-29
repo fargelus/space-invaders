@@ -19,5 +19,9 @@ module SpaceInvaders
     def draw
       @score_obj.draw_text("#{@score_text}: #{@score}", @x, @y, 0)
     end
+
+    def up
+      @score += 10
+    end
   end
 end
