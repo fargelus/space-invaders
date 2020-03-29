@@ -41,7 +41,7 @@ module SpaceInvaders
     end
 
     def needs_redraw?
-      @draws == 0 || @game_objects.any?(&:needs_redraw?)
+      @draws.zero? || @game_objects.any?(&:needs_redraw?)
     end
 
     private

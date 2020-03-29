@@ -29,12 +29,12 @@ module SpaceInvaders
 
     def shoot!
       @prev_shoot_timestamp ||= Gosu.milliseconds
-      if ready_for_shoot?
-        @prev_shoot_timestamp = nil
-        bullet = Bullet.new(@x, @y)
-        bullet.moving = true
-        @ammo[bullet] = @targets.find(@x)
-      end
+      return unless ready_for_shoot?
+
+      @prev_shoot_timestamp = nil
+      bullet = Bullet.new(@x, @y)
+      bullet.moving = true
+      @ammo[bullet] = @targets.find(@x)
     end
 
     def w
