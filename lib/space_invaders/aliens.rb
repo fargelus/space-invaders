@@ -1,13 +1,17 @@
 # frozen_string_literal: true
 
+require 'gosu'
 require_relative 'settings'
 require_relative 'alien'
 
 module SpaceInvaders
   class Aliens
+    HIT_ALIEN_SOUND = Settings::SOUNDS_PATH / 'alien_destroys.wav'
+
     def initialize(edge_x)
       @aliens = []
       @edge_x = edge_x
+      @destroy_sound = Gosu::Sample.new(HIT_ALIEN_SOUND)
     end
 
     def setup
@@ -40,6 +44,7 @@ module SpaceInvaders
 
     def destroy(x, y)
       @aliens.reject! { |alien| alien.x == x && alien.y == y }
+      @destroy_sound.play(Settings::SOUNDS_VOLUME)
     end
   end
 end

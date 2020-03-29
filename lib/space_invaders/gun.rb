@@ -1,13 +1,17 @@
 # frozen_string_literal: true
 
+require 'gosu'
 require_relative 'bullet'
 
 module SpaceInvaders
   class Gun < GameObject
+    SHOT_SOUND = Settings::SOUNDS_PATH / 'gun.wav'
+
     def initialize
       @ammo = {}
       @reload_time_msec = 100
       @prev_shoot_timestamp = Gosu.milliseconds
+      @shot_sound = Gosu::Sample.new(SHOT_SOUND)
     end
 
     def needs_redraw?
@@ -35,6 +39,7 @@ module SpaceInvaders
       bullet = Bullet.new(@x, @y)
       bullet.moving = true
       @ammo[bullet] = @targets.find(@x)
+      @shot_sound.play(Settings::SOUNDS_VOLUME)
     end
 
     def w
@@ -45,7 +50,7 @@ module SpaceInvaders
 
     def target_reached?(bullet)
       target = @ammo[bullet]
-      target && bullet.y < target.y
+      target && bullet.y < target.start_y
     end
 
     def ready_for_shoot?

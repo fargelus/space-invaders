@@ -17,6 +17,8 @@ module SpaceInvaders
     ALIENS_HEIGHT = 32
     ASSETS_DIR = Pathname.new(__FILE__).join('../../') / 'assets'
     IMAGES_PATH = ASSETS_DIR / 'images'
+    SOUNDS_PATH = ASSETS_DIR / 'sounds'
+    SOUNDS_VOLUME = 8
     ALIENS_DIR = IMAGES_PATH / 'invaders'
     ALIEN_TYPES = {
       predator: 'predator.png',
