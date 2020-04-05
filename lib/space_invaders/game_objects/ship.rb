@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 
 require 'gosu'
-require_relative 'settings'
-require_relative 'game_object'
+%w[settings game_object].each do |fn|
+  require_relative "../base/#{fn}"
+end
 require_relative 'gun'
 
 module SpaceInvaders

@@ -1,17 +1,25 @@
 # frozen_string_literal: true
 
-require_relative 'settings'
-require_relative 'alien'
+require 'gosu'
+require_relative 'base/settings'
+require_relative 'game_objects/alien'
 
 module SpaceInvaders
   class Aliens
-    def initialize(edge_x)
+    HIT_ALIEN_SOUND = Settings::SOUNDS_PATH / 'alien_destroys.wav'
+    attr_reader :changed
+
+    def initialize(edge_x, edge_y)
       @aliens = []
       @edge_x = edge_x
+      @edge_y = edge_y
+      @destroy_sound = Gosu::Sample.new(HIT_ALIEN_SOUND)
+      @changed = false
     end
 
     def setup
-      alien_y = margin = Settings::ALIENS_MARGIN
+      alien_y = @edge_y
+      margin = Settings::ALIENS_MARGIN
       Settings::ALIENS_ROWS.times do
         place_aliens_in_row(alien_y)
         alien_y += Settings::ALIENS_HEIGHT + margin
@@ -30,6 +38,7 @@ module SpaceInvaders
 
     def draw
       @aliens.each(&:draw)
+      @changed = false
     end
 
     def find(x)
@@ -40,6 +49,8 @@ module SpaceInvaders
 
     def destroy(x, y)
       @aliens.reject! { |alien| alien.x == x && alien.y == y }
+      @destroy_sound.play(Settings::SOUNDS_VOLUME)
+      @changed = true
     end
   end
 end
