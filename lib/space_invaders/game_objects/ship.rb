@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
 require 'gosu'
-require_relative 'settings'
-require_relative 'game_object'
+require_relative '../settings'
+require_relative 'basic_object'
 require_relative 'gun'
 
 module SpaceInvaders
-  class Ship < GameObject
+  class Ship < BasicObject
     SHIP_IMAGE_PATH = Settings::IMAGES_PATH / 'ship.png'
     attr_writer :enemies
 

@@ -4,7 +4,7 @@ require 'gosu'
 require_relative 'bullet'
 
 module SpaceInvaders
-  class Gun < GameObject
+  class Gun < BasicObject
     SHOT_SOUND = Settings::SOUNDS_PATH / 'gun.wav'
 
     def initialize
