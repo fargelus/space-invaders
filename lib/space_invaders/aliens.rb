@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 require 'gosu'
-require_relative '../settings'
-require_relative 'alien'
+require_relative 'base/settings'
+require_relative 'game_objects/alien'
 
 module SpaceInvaders
   class Aliens

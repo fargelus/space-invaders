@@ -1,10 +1,11 @@
 # frozen_string_literal: true
 
 require 'gosu'
-require_relative 'settings'
-%w[ship aliens scores/player_score scores/hi_score].each do |fn|
-  require_relative "game_objects/#{fn}"
-end
+require_relative 'base/settings'
+require_relative 'aliens'
+require_relative 'scores/player_score'
+require_relative 'scores/hi_score'
+require_relative 'game_objects/ship'
 
 module SpaceInvaders
   class Game < Gosu::Window
@@ -18,7 +19,7 @@ module SpaceInvaders
       @draws = 0
       @ship = Ship.new
       @aliens = Aliens.new(@screen_width * 0.1, @screen_height * 0.15)
-      @bg = BasicObject.new(0, 0, Settings::IMAGES_PATH / 'space.png')
+      @bg = GameObject.new(0, 0, Settings::IMAGES_PATH / 'space.png')
       @game_objects = [@ship]
       @scores = []
 

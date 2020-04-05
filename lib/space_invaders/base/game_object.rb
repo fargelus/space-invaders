@@ -3,7 +3,7 @@
 require 'gosu'
 
 module SpaceInvaders
-  class BasicObject
+  class GameObject
     attr_reader :x, :y, :w, :h
 
     def initialize(x, y, image_path)

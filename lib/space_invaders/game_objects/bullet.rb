@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require_relative '../settings'
+require_relative '../base/settings'
 
 module SpaceInvaders
-  class Bullet < BasicObject
+  class Bullet < GameObject
     attr_accessor :moving
     alias moves? moving
 
