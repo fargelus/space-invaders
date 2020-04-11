@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'mongo'
 require 'pathname'
 
 module SpaceInvaders
@@ -8,6 +9,11 @@ module SpaceInvaders
     HEIGHT = 600
     CAPTION = 'Space Invaders'
     VERSION = '0.1.0'
+    DB = Mongo::Client.new(
+      ["#{ENV['MONGO_HOST']}:#{ENV['MONGO_PORT']}"],
+      database: ENV['MONGO_DB']
+    )
+    SCORES_COLLECTION = DB[:scores]
     SPACESHIP_SPEED = 3
     BULLET_SPEED = 5
     ALIENS_TYPES_COUNT = 6

@@ -34,7 +34,7 @@ module SpaceInvaders
     end
 
     def button_down(id)
-      close if id == Gosu::KbEscape
+      save_score_and_close if id == Gosu::KbEscape
     end
 
     def draw
@@ -71,6 +71,12 @@ module SpaceInvaders
         @screen_height * 0.9 - @ship.h / 2,
         [0, @screen_width]
       )
+    end
+
+    def save_score_and_close
+      document = { score: @player_score.current }
+      Settings::SCORES_COLLECTION.insert_one(document)
+      close
     end
   end
 end

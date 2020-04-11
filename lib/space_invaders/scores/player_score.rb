@@ -9,5 +9,9 @@ module SpaceInvaders
       @score_text = 'SCORE'
       @score = 0
     end
+
+    def current
+      @score
+    end
   end
 end
