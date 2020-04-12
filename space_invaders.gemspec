@@ -2,11 +2,11 @@
 
 lib = File.expand_path('lib', __dir__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'space_invaders/version'
+require 'space_invaders/base/settings'
 
 Gem::Specification.new do |spec|
   spec.name          = 'space_invaders'
-  spec.version       = SpaceInvaders::VERSION
+  spec.version       = SpaceInvaders::Settings::VERSION
   spec.authors       = ['fargelus']
   spec.email         = ['ddraudred@gmail.com']
 
@@ -29,7 +29,9 @@ Gem::Specification.new do |spec|
   spec.require_paths = ['lib']
 
   spec.add_development_dependency 'bundler', '~> 2.0'
+  spec.add_development_dependency 'dotenv'
   spec.add_development_dependency 'gosu'
+  spec.add_development_dependency 'mongo', '~> 2.2.5'
   spec.add_development_dependency 'rake', '~> 10.0'
   spec.add_development_dependency 'rspec', '~> 3.0'
 end

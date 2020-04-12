@@ -2,6 +2,7 @@
 
 require 'gosu'
 require_relative 'base/settings'
+require_relative 'db/setup'
 require_relative 'aliens'
 require_relative 'scores/player_score'
 require_relative 'scores/hi_score'
@@ -18,7 +19,7 @@ module SpaceInvaders
 
       @draws = 0
       @ship = Ship.new
-      @aliens = Aliens.new(@screen_width * 0.1, @screen_height * 0.15)
+      @aliens = Aliens.new(@screen_width * 0.1, @screen_height * 0.12)
       @bg = GameObject.new(0, 0, Settings::IMAGES_PATH / 'space.png')
       @game_objects = [@ship]
       @scores = []
@@ -34,14 +35,14 @@ module SpaceInvaders
     end
 
     def button_down(id)
-      close if id == Gosu::KbEscape
+      save_score_and_close if id == Gosu::KbEscape
     end
 
     def draw
       @draws += 1
       @bg.draw
       @ship.draw
-      @player_score.up if @aliens.changed
+      @player_score.up(@aliens.last_killed) if @aliens.changed
       @aliens.draw
       @scores.each(&:draw)
     end
@@ -71,6 +72,15 @@ module SpaceInvaders
         @screen_height * 0.9 - @ship.h / 2,
         [0, @screen_width]
       )
+    end
+
+    def save_score_and_close
+      document = { score: @player_score.current }
+      DB::SCORES_COLLECTION.insert_one(document)
+    rescue Mongo::Error::OperationFailure
+      nil
+    ensure
+      close
     end
   end
 end

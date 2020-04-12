@@ -7,10 +7,12 @@ end
 
 module SpaceInvaders
   class Alien < GameObject
-    DEFAULT_ALIEN = Settings::ALIENS_DIR / 'invader_0.png'
+    DEFAULT_ALIEN = Settings::ALIENS_DIR / 'predator.png'
+    attr_reader :type
 
     def initialize(x = 0, y = 0, alien_path = DEFAULT_ALIEN)
       super x, y, alien_path
+      @type = Settings::ALIENS_PATH_TO_TYPE[alien_path]
     end
 
     def area?(x)

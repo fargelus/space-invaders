@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'gosu'
+require_relative '../base/settings'
 
 module SpaceInvaders
   class Score
@@ -20,8 +21,8 @@ module SpaceInvaders
       @score_obj.draw_text("#{@score_text}: #{@score}", @x, @y, 0)
     end
 
-    def up
-      @score += 10
+    def up(alien_type)
+      @score += Settings::ALIENS_SCOREBOARD[alien_type]
     end
   end
 end
