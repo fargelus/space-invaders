@@ -20,17 +20,17 @@ module SpaceInvaders
     def setup
       alien_y = @edge_y
       margin = Settings::ALIENS_MARGIN
-      Settings::ALIENS_ROWS.times do
-        place_aliens_in_row(alien_y)
+      Settings::ALIENS_ROWS.times do |i|
+        place_aliens_in_row(i, alien_y)
         alien_y += Settings::ALIENS_HEIGHT + margin
       end
     end
 
-    def place_aliens_in_row(alien_y)
+    def place_aliens_in_row(i, alien_y)
       alien_x = @edge_x
-      all_aliens = Settings::ALL_ALIENS.cycle
+      alien_path = Settings::ALL_ALIENS[i]
       Settings::ALIENS_PER_ROW.times do
-        alien = Alien.new(alien_x, alien_y, all_aliens.next)
+        alien = Alien.new(alien_x, alien_y, alien_path)
         alien_x += alien.w + Settings::ALIENS_MARGIN
         @aliens << alien
       end
