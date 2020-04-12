@@ -15,7 +15,8 @@ module SpaceInvaders
     private
 
     def fetch_score_from_db
-      Settings::SCORES_COLLECTION.find().sort(scores: -1).first()[:score]
+      doc = DB::SCORES_COLLECTION.find({}).sort(score: -1).first
+      doc[:score] if doc
     end
   end
 end

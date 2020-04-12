@@ -2,6 +2,7 @@
 
 require 'gosu'
 require_relative 'base/settings'
+require_relative 'db/setup'
 require_relative 'aliens'
 require_relative 'scores/player_score'
 require_relative 'scores/hi_score'
@@ -75,7 +76,10 @@ module SpaceInvaders
 
     def save_score_and_close
       document = { score: @player_score.current }
-      Settings::SCORES_COLLECTION.insert_one(document)
+      DB::SCORES_COLLECTION.insert_one(document)
+    rescue Mongo::Error::OperationFailure
+      nil
+    ensure
       close
     end
   end
