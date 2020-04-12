@@ -21,7 +21,7 @@ module SpaceInvaders
       @ship = Ship.new
       @aliens = Aliens.new(@screen_width * 0.1, @screen_height * 0.12)
       @bg = GameObject.new(0, 0, Settings::IMAGES_PATH / 'space.png')
-      @game_objects = [@ship]
+      @game_objects = [@ship, @aliens]
       @scores = []
 
       setup_scores
