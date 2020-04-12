@@ -7,6 +7,8 @@ require_relative 'game_objects/alien'
 module SpaceInvaders
   class Aliens
     HIT_ALIEN_SOUND = Settings::SOUNDS_PATH / 'alien_destroys.wav'
+    INVASION_SOUND = Settings::SOUNDS_PATH / 'invasion.wav'
+
     DELAY_DRAW_MSEC = 1000
     attr_reader :changed, :last_killed
 
@@ -14,10 +16,14 @@ module SpaceInvaders
       @aliens = []
       @place_x = place_x
       @place_y = place_y
+
       @destroy_sound = Gosu::Sample.new(HIT_ALIEN_SOUND)
+      @invasion_sound = Gosu::Sample.new(INVASION_SOUND)
+
       @changed = false
       @move_direction = :right
       @move_step = Settings::ALIENS_MARGIN
+      @last_move_time = Gosu.milliseconds
     end
 
     def setup
@@ -42,17 +48,18 @@ module SpaceInvaders
     def draw
       @aliens.each(&:draw)
       @changed = false
-      @last_draw_time = Gosu.milliseconds
     end
 
     def needs_redraw?
-      return false if Gosu.milliseconds - @last_draw_time < DELAY_DRAW_MSEC
+      return false if Gosu.milliseconds - @last_move_time < DELAY_DRAW_MSEC
 
       @aliens.each do |alien|
         move_x, move_y = next_move_coords_for(alien.x, alien.y)
         alien.set(move_x, move_y)
       end
+      @invasion_sound.play
       next_move_direction
+      @last_move_time = Gosu.milliseconds
 
       true
     end
