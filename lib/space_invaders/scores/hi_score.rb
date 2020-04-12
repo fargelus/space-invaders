@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
-require 'mongo'
 require_relative 'score'
-require_relative '../base/settings'
+require_relative '../db/setup'
 
 module SpaceInvaders
   class HiScore < Score
