@@ -7,7 +7,7 @@ require_relative 'game_objects/alien'
 module SpaceInvaders
   class Aliens
     HIT_ALIEN_SOUND = Settings::SOUNDS_PATH / 'alien_destroys.wav'
-    attr_reader :changed
+    attr_reader :changed, :last_killed
 
     def initialize(edge_x, edge_y)
       @aliens = []
@@ -48,7 +48,9 @@ module SpaceInvaders
     end
 
     def destroy(x, y)
-      @aliens.reject! { |alien| alien.x == x && alien.y == y }
+      killed_alien = @aliens.find { |alien| alien.x == x && alien.y == y }
+      @aliens.delete(killed_alien)
+      @last_killed = killed_alien.type
       @destroy_sound.play(Settings::SOUNDS_VOLUME)
       @changed = true
     end

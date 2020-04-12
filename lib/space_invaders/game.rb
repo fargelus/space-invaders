@@ -42,7 +42,7 @@ module SpaceInvaders
       @draws += 1
       @bg.draw
       @ship.draw
-      @player_score.up if @aliens.changed
+      @player_score.up(@aliens.last_killed) if @aliens.changed
       @aliens.draw
       @scores.each(&:draw)
     end
