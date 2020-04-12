@@ -22,5 +22,11 @@ module SpaceInvaders
     def draw
       @figure.draw(@x, @y, 0)
     end
+
+    protected
+
+    def figure=(path)
+      @figure = Gosu::Image.new(path.to_s)
+    end
   end
 end

@@ -22,5 +22,9 @@ module SpaceInvaders
     def start_y
       @y + @h
     end
+
+    def on_move
+      # TODO: with tiles
+    end
   end
 end

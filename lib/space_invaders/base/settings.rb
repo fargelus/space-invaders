@@ -24,7 +24,10 @@ module SpaceInvaders
       Pathname.new(ALIENS_DIR / 'spider.png') => :spider,
       Pathname.new(ALIENS_DIR / 'skull.png') => :skull,
       Pathname.new(ALIENS_DIR / 'robot.png') => :robot,
-      Pathname.new(ALIENS_DIR / 'predator.png') => :predator
+      Pathname.new(ALIENS_DIR / 'predator.png') => :predator,
+      Pathname.new(ALIENS_DIR / 'octopus.png') => :predator,
+      Pathname.new(ALIENS_DIR / 'smiley.png') => :skull,
+      Pathname.new(ALIENS_DIR / 'mad_robot.png') => :robot
     }.freeze
     ALL_ALIENS = ALIENS_PATH_TO_TYPE.keys + [ALIENS_PATH_TO_TYPE.keys.last]
     ALIENS_SCOREBOARD = {

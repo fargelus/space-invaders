@@ -56,6 +56,7 @@ module SpaceInvaders
       @aliens.each do |alien|
         move_x, move_y = next_move_coords_for(alien.x, alien.y)
         alien.set(move_x, move_y)
+        alien.on_move
       end
       @invasion_sound.play
       next_move_direction
