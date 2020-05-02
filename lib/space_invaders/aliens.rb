@@ -35,9 +35,9 @@ module SpaceInvaders
       end
     end
 
-    def place_aliens_in_row(i, alien_y)
+    def place_aliens_in_row(index, alien_y)
       alien_x = @place_x
-      alien_path = Settings::ALL_ALIENS[i]
+      alien_path = Settings::ALL_ALIENS[index]
       Settings::ALIENS_PER_ROW.times do
         alien = Alien.new(alien_x, alien_y, alien_path)
         alien_x += alien.w + Settings::ALIENS_MARGIN
@@ -63,18 +63,18 @@ module SpaceInvaders
       @last_move_time = Gosu.milliseconds
     end
 
-    def find(x)
+    def find(coord_x)
       @aliens
-        .select { |alien| alien.area?(x) }
+        .select { |alien| alien.area?(coord_x) }
         .max_by(&:y)
     end
 
-    def destroy(x, y)
-      killed_alien = @aliens.find { |alien| alien.x == x && alien.y == y }
-      return unless killed_alien
+    def destroy(coord_x, coord_y)
+      killed = @aliens.find { |alien| alien.x == coord_x && alien.y == coord_y }
+      return unless killed
 
-      @aliens.delete(killed_alien)
-      @last_killed = killed_alien.type
+      @aliens.delete(killed)
+      @last_killed = killed.type
       @destroy_sound.play(Settings::SOUNDS_VOLUME)
       @changed = true
     end
@@ -93,12 +93,7 @@ module SpaceInvaders
     end
 
     def next_move_direction
-      max_x_alien = @aliens.max_by(&:x).x
-      min_x_alien = @aliens.min_by(&:x).x
-      directions = {
-        right: min_x_alien < @move_step,
-        left: max_x_alien > Settings::WIDTH - Settings::ALIENS_WIDTH - @move_step
-      }
+      directions = available_directions
       return if directions.values.all?(&:!)
 
       @move_direction = if @move_direction == :bottom
@@ -106,6 +101,16 @@ module SpaceInvaders
                         else
                           :bottom
                         end
+    end
+
+    def available_directions
+      max_x_alien = @aliens.max_by(&:x).x
+      min_x_alien = @aliens.min_by(&:x).x
+      alien_width = Settings::ALIENS_WIDTH
+      {
+        right: min_x_alien < @move_step,
+        left: max_x_alien > Settings::WIDTH - alien_width - @move_step
+      }
     end
   end
 end
