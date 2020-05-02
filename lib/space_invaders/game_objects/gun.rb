@@ -51,7 +51,7 @@ module SpaceInvaders
     def take_new_target(target)
       @targets.destroy(target.x, target.y)
       expired_ammos(target).each_key do |bullet|
-        @ammo[bullet] = @targets.find(@x)
+        @ammo[bullet] = @targets.find(bullet.x)
       end
     end
 

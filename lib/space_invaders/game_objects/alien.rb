@@ -16,7 +16,7 @@ module SpaceInvaders
     end
 
     def area?(x)
-      @x < x && @x + @w + Settings::ALIENS_MARGIN > x
+      @x + @w + Settings::ALIENS_MARGIN > x && x > @x - Settings::ALIENS_MARGIN / 2
     end
 
     def start_y
