@@ -9,7 +9,8 @@ module SpaceInvaders
     def initialize(x, y, image_path)
       @x = x
       @y = y
-      @figure = Gosu::Image.new(image_path.to_s)
+      @image_path = image_path
+      @figure = Gosu::Image.new(@image_path.to_s)
       @w = @figure.width
       @h = @figure.height
     end
@@ -25,8 +26,9 @@ module SpaceInvaders
 
     protected
 
-    def figure=(path)
-      @figure = Gosu::Image.new(path.to_s)
+    def update_figure(path)
+      @image_path = path
+      @figure = Gosu::Image.new(@image_path.to_s)
     end
   end
 end

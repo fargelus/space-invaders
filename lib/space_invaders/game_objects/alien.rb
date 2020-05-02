@@ -24,7 +24,16 @@ module SpaceInvaders
     end
 
     def on_move
-      # TODO: with tiles
+      path_to_type = Settings::ALIENS_PATH_TO_TYPE
+      target_path_to_type = path_to_type.select do |path, type|
+        type == @type && path != @image_path
+      end
+      new_path = target_path_to_type.keys[0]
+      update_figure(new_path) if new_path
+    end
+
+    def same?(alien)
+      alien.x == @x && alien.y == @y
     end
   end
 end
