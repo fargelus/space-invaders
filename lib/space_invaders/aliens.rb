@@ -9,7 +9,7 @@ module SpaceInvaders
     HIT_ALIEN_SOUND = Settings::SOUNDS_PATH / 'alien_destroys.wav'
     INVASION_SOUND = Settings::SOUNDS_PATH / 'invasion.mp3'
 
-    DELAY_DRAW_MSEC = 1000
+    DELAY_DRAW_MSEC = 700
     attr_reader :changed, :last_killed
 
     def initialize(place_x, place_y)
@@ -61,8 +61,6 @@ module SpaceInvaders
       @invasion_sound.play
       next_move_direction
       @last_move_time = Gosu.milliseconds
-
-      true
     end
 
     def find(x)

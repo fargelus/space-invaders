@@ -24,8 +24,7 @@ module SpaceInvaders
     end
 
     def on_move
-      path_to_type = Settings::ALIENS_PATH_TO_TYPE
-      target_path_to_type = path_to_type.select do |path, type|
+      target_path_to_type = Settings::ALIENS_PATH_TO_TYPE.select do |path, type|
         type == @type && path != @image_path
       end
       new_path = target_path_to_type.keys[0]
