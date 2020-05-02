@@ -22,7 +22,7 @@ module SpaceInvaders
       @ammo.delete_if { |bullet, *| target_reached?(bullet) }
       @ammo.each_pair do |bullet, target|
         bullet.draw unless target_reached?(bullet)
-        @targets.destroy(target.x, target.y) if target_reached?(bullet)
+        take_new_target(target) if target_reached?(bullet)
       end
     end
 
@@ -47,6 +47,18 @@ module SpaceInvaders
     end
 
     private
+
+    def take_new_target(target)
+      @targets.destroy(target.x, target.y)
+      expired_ammos(target).each_key do |bullet|
+        @ammo[bullet] = @targets.find(bullet.x)
+      end
+    end
+
+    def expired_ammos(target)
+      @ammo.reject { |bullet, *| target_reached?(bullet) }
+           .select { |*, aim| aim&.same?(target) }
+    end
 
     def target_reached?(bullet)
       target = @ammo[bullet]
