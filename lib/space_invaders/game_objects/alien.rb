@@ -10,13 +10,29 @@ module SpaceInvaders
     DEFAULT_ALIEN = Settings::ALIENS_DIR / 'predator.png'
     attr_reader :type
 
-    def initialize(x = 0, y = 0, alien_path = DEFAULT_ALIEN)
-      super x, y, alien_path
+    def initialize(coord_x = 0, coord_y = 0, alien_path = DEFAULT_ALIEN)
+      super coord_x, coord_y, alien_path
       @type = Settings::ALIENS_PATH_TO_TYPE[alien_path]
+      @figure = Gosu::Image.load_tiles(
+        alien_path.to_s,
+        Settings::ALIENS_WIDTH,
+        Settings::ALIENS_HEIGHT
+      )
+      @tile_num = 0
     end
 
-    def area?(x)
-      @x + @w + Settings::ALIENS_MARGIN > x && x > @x - Settings::ALIENS_MARGIN / 2
+    def w
+      @w / 2
+    end
+
+    def draw
+      @figure[@tile_num % 2].draw(@x, @y, 0)
+    end
+
+    def area?(coord_x)
+      max_x_coord = @x + w + Settings::ALIENS_MARGIN
+      min_x_coord = @x - Settings::ALIENS_MARGIN / 2
+      max_x_coord > coord_x && coord_x > min_x_coord
     end
 
     def start_y
@@ -24,11 +40,7 @@ module SpaceInvaders
     end
 
     def on_move
-      target_path_to_type = Settings::ALIENS_PATH_TO_TYPE.select do |path, type|
-        type == @type && path != @image_path
-      end
-      new_path = target_path_to_type.keys[0]
-      update_figure(new_path) if new_path
+      @tile_num += 1
     end
 
     def same?(alien)

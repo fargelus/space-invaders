@@ -11,8 +11,8 @@ module SpaceInvaders
     SHIP_IMAGE_PATH = Settings::IMAGES_PATH / 'ship.png'
     attr_writer :enemies
 
-    def initialize(x = 0, y = 0, boundaries = [])
-      super x, y, SHIP_IMAGE_PATH
+    def initialize(coord_x = 0, coord_y = 0, boundaries = [])
+      super coord_x, coord_y, SHIP_IMAGE_PATH
 
       @boundaries = boundaries
       @speed = Settings::SPACESHIP_SPEED
@@ -22,11 +22,11 @@ module SpaceInvaders
       @gun = Gun.new
     end
 
-    def set(x, y, boundaries)
-      super x, y
+    def set(coord_x, coord_y, boundaries)
+      super coord_x, coord_y
       @boundaries = boundaries
       @position_changed = true
-      @gun.set(x + @w / 2 - @gun.w / 2, y, @enemies)
+      @gun.set(coord_x + @w / 2 - @gun.w / 2, coord_y, @enemies)
     end
 
     def needs_redraw?

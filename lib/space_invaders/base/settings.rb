@@ -21,13 +21,10 @@ module SpaceInvaders
     SOUNDS_VOLUME = 8
     ALIENS_DIR = IMAGES_PATH / 'invaders'
     ALIENS_PATH_TO_TYPE = {
-      Pathname.new(ALIENS_DIR / 'spider.png') => :spider,
-      Pathname.new(ALIENS_DIR / 'skull.png') => :skull,
-      Pathname.new(ALIENS_DIR / 'robot.png') => :robot,
-      Pathname.new(ALIENS_DIR / 'predator.png') => :predator,
-      Pathname.new(ALIENS_DIR / 'octopus.png') => :predator,
-      Pathname.new(ALIENS_DIR / 'smiley.png') => :skull,
-      Pathname.new(ALIENS_DIR / 'mad_robot.png') => :robot
+      Pathname.new(ALIENS_DIR / 'spider_tiles.png') => :spider,
+      Pathname.new(ALIENS_DIR / 'robot_tiles.png') => :robot,
+      Pathname.new(ALIENS_DIR / 'skull_tiles.png') => :skull,
+      Pathname.new(ALIENS_DIR / 'predator_tiles.png') => :predator
     }.freeze
     ALL_ALIENS = ALIENS_PATH_TO_TYPE.keys + [ALIENS_PATH_TO_TYPE.keys.last]
     ALIENS_SCOREBOARD = {

@@ -17,12 +17,10 @@ module SpaceInvaders
       @screen_width = width
       @screen_height = height
 
-      @draws = 0
       @ship = Ship.new
       @aliens = Aliens.new(@screen_width * 0.1, @screen_height * 0.12)
       @bg = GameObject.new(0, 0, Settings::IMAGES_PATH / 'space.png')
       @game_objects = [@ship, @aliens]
-      @scores = []
 
       setup_scores
       setup_assets
@@ -39,7 +37,6 @@ module SpaceInvaders
     end
 
     def draw
-      @draws += 1
       @bg.draw
       @ship.draw
       @player_score.up(@aliens.last_killed) if @aliens.changed
@@ -48,14 +45,19 @@ module SpaceInvaders
     end
 
     def needs_redraw?
-      @draws.zero? || @game_objects.collect(&:needs_redraw?).any?
+      @game_objects.collect(&:needs_redraw?).any?
     end
 
     private
 
     def setup_scores
       scores_y = 15
-      @player_score = PlayerScore.new(x: @screen_width * 0.05, y: scores_y, window: self)
+      @scores = []
+      @player_score = PlayerScore.new(
+        x: @screen_width * 0.05,
+        y: scores_y,
+        window: self
+      )
       @scores << @player_score
       @scores << HiScore.new(x: @screen_width * 0.7, y: scores_y, window: self)
     end
