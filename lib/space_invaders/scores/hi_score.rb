@@ -16,6 +16,7 @@ module SpaceInvaders
     def fetch_score_from_db
       # rubocop:disable Style/UnneededSort
       doc = DB::SCORES_COLLECTION.find({}).sort(score: -1).first
+      # rubocop:enable Style/UnneededSort
       doc[:score] if doc
     end
   end

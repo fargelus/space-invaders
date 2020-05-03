@@ -9,8 +9,8 @@ module SpaceInvaders
 
     BULLET_IMAGE_PATH = Settings::IMAGES_PATH / 'bullet.png'
 
-    def initialize(x = 0, y = 0)
-      super x, y, BULLET_IMAGE_PATH
+    def initialize(coord_x = 0, coord_y = 0)
+      super coord_x, coord_y, BULLET_IMAGE_PATH
       @moving = false
     end
 

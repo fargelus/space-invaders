@@ -26,8 +26,8 @@ module SpaceInvaders
       end
     end
 
-    def set(x, y, targets)
-      super x, y
+    def set(coord_x, coord_y, targets)
+      super coord_x, coord_y
       @targets = targets
     end
 
