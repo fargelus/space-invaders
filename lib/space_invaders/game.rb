@@ -80,11 +80,11 @@ module SpaceInvaders
     end
 
     def save_score_and_close
-    #   document = { score: @player_score.current }
-    #   DB::SCORES_COLLECTION.insert_one(document)
-    # rescue Mongo::Error::OperationFailure
-    #   nil
-    # ensure
+      #   document = { score: @player_score.current }
+      #   DB::SCORES_COLLECTION.insert_one(document)
+      # rescue Mongo::Error::OperationFailure
+      #   nil
+      # ensure
       close
     end
   end

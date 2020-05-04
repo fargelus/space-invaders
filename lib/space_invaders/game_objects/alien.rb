@@ -31,8 +31,8 @@ module SpaceInvaders
       @figure[@tile_num % 2].draw(@x, @y, 0)
     end
 
-    def area?(coord_x, coord_y)
-      return false if @y != coord_y
+    def area?(coord_x, coord_y)      
+      return false if coord_y > @y + @h || coord_y < @y
 
       max_x_coord = @x + w + Settings::ALIENS_MARGIN
       min_x_coord = @x - Settings::ALIENS_MARGIN / 2

@@ -23,7 +23,8 @@ module SpaceInvaders
 
       @gun = Gun.new(
         shot_sound_path: Settings::SOUNDS_PATH / 'spaceship_gun.wav',
-        bullet_image_path: Settings::BULLETS_DIR / 'bullet.png'
+        bullet_image_path: Settings::BULLETS_DIR / 'bullet.png',
+        direction: Settings::BULLET_DIRECTION_UP
       )
     end
 

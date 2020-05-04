@@ -4,10 +4,10 @@ require_relative '../base/settings'
 
 module SpaceInvaders
   class Bullet < GameObject
-    def initialize(coord_x, coord_y, bullet_path)
-      super coord_x, coord_y, bullet_path
+    def initialize(options)
+      super options[:x], options[:y], options[:image_path]
       @moving = false
-      @direction = Settings::BULLET_DIRECTION_UP
+      @direction = options[:direction]
     end
 
     def needs_redraw?
@@ -16,13 +16,8 @@ module SpaceInvaders
 
     def draw
       @y += (Settings::BULLET_SPEED * @direction) if @moving
-      if @target.area?(@x, @y)
-        @target.destroy
-        @moving = false
-        return
-      end
-
-      super
+      hit_target
+      super if @moving
     end
 
     def destroys?
@@ -32,7 +27,20 @@ module SpaceInvaders
     def move(target)
       @moving = true
       @target = target
-      @direction = Settings::BULLET_DIRECTION_DOWN if @y < @target.y
+    end
+
+    private
+
+    def hit_target
+      unless @target
+        @moving = false if @y < 0 || @y > Settings::HEIGHT
+        return
+      end
+
+      return unless @target.area?(@x, @y)
+
+      @target.destroy
+      @moving = false
     end
   end
 end

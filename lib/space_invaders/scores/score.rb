@@ -23,7 +23,7 @@ module SpaceInvaders
 
     def up(alien_type)
       return unless alien_type
-      
+
       @score += Settings::ALIENS_SCOREBOARD[alien_type]
     end
   end
