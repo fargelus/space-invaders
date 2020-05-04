@@ -7,6 +7,7 @@ require_relative 'aliens'
 require_relative 'scores/player_score'
 require_relative 'scores/hi_score'
 require_relative 'game_objects/ship'
+require_relative 'game_objects/lifes'
 
 module SpaceInvaders
   class Game < Gosu::Window
@@ -18,7 +19,7 @@ module SpaceInvaders
       @screen_height = height
 
       @ship = Ship.new
-      @aliens = Aliens.new(@screen_width * 0.1, @screen_height * 0.12)
+      @aliens = Aliens.new(@screen_width * 0.1, @screen_height * 0.1)
       @bg = GameObject.new(0, 0, Settings::IMAGES_PATH / 'space.png')
       @game_objects = [@ship, @aliens]
 
@@ -42,6 +43,7 @@ module SpaceInvaders
       @player_score.up(@aliens.last_killed) if @aliens.changed
       @aliens.draw
       @scores.each(&:draw)
+      @lifes.draw(@ship.lifes)
     end
 
     def needs_redraw?
@@ -71,9 +73,10 @@ module SpaceInvaders
       @ship.enemies = @aliens
       @ship.set(
         @screen_width / 2 - @ship.w / 2,
-        @screen_height * 0.9 - @ship.h / 2,
+        @screen_height * 0.85 - @ship.h / 2,
         [0, @screen_width]
       )
+      @lifes = Lifes.new(@screen_width * 0.05, @screen_height * 0.94)
     end
 
     def save_score_and_close

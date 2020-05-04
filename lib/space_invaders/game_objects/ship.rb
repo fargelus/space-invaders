@@ -10,6 +10,7 @@ module SpaceInvaders
   class Ship < GameObject
     SHIP_IMAGE_PATH = Settings::IMAGES_PATH / 'ship.png'
     attr_writer :enemies
+    attr_reader :lifes
 
     def initialize(coord_x = 0, coord_y = 0, boundaries = [])
       super coord_x, coord_y, SHIP_IMAGE_PATH
@@ -18,6 +19,7 @@ module SpaceInvaders
       @speed = Settings::SPACESHIP_SPEED
       @position_changed = false
       @enemies = []
+      @lifes = Settings::SPACESHIP_LIFES
 
       @gun = Gun.new
     end

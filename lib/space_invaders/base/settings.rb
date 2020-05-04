@@ -9,10 +9,12 @@ module SpaceInvaders
     CAPTION = 'Space Invaders'
     VERSION = '0.1.0'
     SPACESHIP_SPEED = 3
+    SPACESHIP_LIFES = 3
     BULLET_SPEED = 5
     ALIENS_ROWS = 5
     ALIENS_PER_ROW = 10
     ALIENS_MARGIN = 15
+    LIFES_MARGIN = 5
     ALIENS_HEIGHT = 32
     ALIENS_WIDTH = 48
     ASSETS_DIR = Pathname.new(__dir__).join('../../') / 'assets'
