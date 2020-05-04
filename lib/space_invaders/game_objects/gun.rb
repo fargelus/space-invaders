@@ -5,13 +5,12 @@ require_relative 'bullet'
 
 module SpaceInvaders
   class Gun < GameObject
-    SHOT_SOUND = Settings::SOUNDS_PATH / 'gun.wav'
-
-    def initialize
+    def initialize(options)
       @ammo = {}
       @reload_time_msec = 100
       @prev_shoot_timestamp = Gosu.milliseconds
-      @shot_sound = Gosu::Sample.new(SHOT_SOUND)
+      @shot_sound = Gosu::Sample.new(options[:shot_sound_path])
+      @bullet_path = options[:bullet_image_path]
     end
 
     def needs_redraw?
@@ -22,38 +21,33 @@ module SpaceInvaders
       @ammo.delete_if { |bullet, *| target_reached?(bullet) }
       @ammo.each_pair do |bullet, target|
         bullet.draw unless target_reached?(bullet)
-        take_new_target(target) if target_reached?(bullet)
+        #take_new_target(target) if target_reached?(bullet)
       end
     end
 
-    def set(coord_x, coord_y, targets)
-      super coord_x, coord_y
-      @targets = targets
-    end
-
-    def shoot!
+    def shoot!(target)
       @prev_shoot_timestamp ||= Gosu.milliseconds
       return unless ready_for_shoot?
 
       @prev_shoot_timestamp = nil
-      bullet = Bullet.new(@x, @y)
+      bullet = Bullet.new(@x, @y, @bullet_path)
       bullet.moving = true
-      @ammo[bullet] = @targets.find(@x)
+      @ammo[bullet] = target
       @shot_sound.play(Settings::SOUNDS_VOLUME)
     end
 
     def w
-      Bullet.new.w
+      Settings::BULLET_WIDTH
     end
 
     private
 
-    def take_new_target(target)
-      @targets.destroy(target.x, target.y)
-      expired_ammos(target).each_key do |bullet|
-        @ammo[bullet] = @targets.find(bullet.x)
-      end
-    end
+    # def take_new_target(target)
+    #   target.destroy(target.x, target.y)
+    #   expired_ammos(target).each_key do |bullet|
+    #     @ammo[bullet] = @targets.find(bullet.x)
+    #   end
+    # end
 
     def expired_ammos(target)
       @ammo.reject { |bullet, *| target_reached?(bullet) }

@@ -7,10 +7,8 @@ module SpaceInvaders
     attr_accessor :moving
     alias moves? moving
 
-    BULLET_IMAGE_PATH = Settings::IMAGES_PATH / 'bullet.png'
-
-    def initialize(coord_x = 0, coord_y = 0)
-      super coord_x, coord_y, BULLET_IMAGE_PATH
+    def initialize(coord_x, coord_y, bullet_path)
+      super coord_x, coord_y, bullet_path
       @moving = false
     end
 

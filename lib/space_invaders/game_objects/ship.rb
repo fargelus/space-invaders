@@ -21,14 +21,17 @@ module SpaceInvaders
       @enemies = []
       @lifes = Settings::SPACESHIP_LIFES
 
-      @gun = Gun.new
+      @gun = Gun.new(
+        shot_sound_path: Settings::SOUNDS_PATH / 'spaceship_gun.wav',
+        bullet_image_path: Settings::BULLETS_DIR / 'bullet.png'
+      )
     end
 
     def set(coord_x, coord_y, boundaries)
       super coord_x, coord_y
       @boundaries = boundaries
       @position_changed = true
-      @gun.set(coord_x + @w / 2 - @gun.w / 2, coord_y, @enemies)
+      @gun.set(coord_x + @w / 2 - @gun.w / 2, coord_y)
     end
 
     def needs_redraw?
@@ -50,7 +53,8 @@ module SpaceInvaders
     end
 
     def shoot
-      @gun.shoot!
+      target = @enemies.find(@x)
+      @gun.shoot!(target)
     end
   end
 end

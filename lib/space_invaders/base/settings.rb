@@ -17,8 +17,10 @@ module SpaceInvaders
     LIFES_MARGIN = 5
     ALIENS_HEIGHT = 32
     ALIENS_WIDTH = 48
+    BULLET_WIDTH = 6
     ASSETS_DIR = Pathname.new(__dir__).join('../../') / 'assets'
     IMAGES_PATH = ASSETS_DIR / 'images'
+    BULLETS_DIR = IMAGES_PATH / 'bullets'
     SOUNDS_PATH = ASSETS_DIR / 'sounds'
     SOUNDS_VOLUME = 8
     ALIENS_DIR = IMAGES_PATH / 'invaders'
