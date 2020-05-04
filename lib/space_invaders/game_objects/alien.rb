@@ -8,6 +8,7 @@ end
 module SpaceInvaders
   class Alien < GameObject
     DEFAULT_ALIEN = Settings::ALIENS_DIR / 'predator.png'
+    HIT_ALIEN_SOUND = Settings::SOUNDS_PATH / 'alien_destroys.wav'
     attr_reader :type
 
     def initialize(coord_x = 0, coord_y = 0, alien_path = DEFAULT_ALIEN)
@@ -19,6 +20,7 @@ module SpaceInvaders
         Settings::ALIENS_HEIGHT
       )
       @tile_num = 0
+      @destroy_sound = Gosu::Sample.new(HIT_ALIEN_SOUND)
     end
 
     def w
@@ -29,14 +31,12 @@ module SpaceInvaders
       @figure[@tile_num % 2].draw(@x, @y, 0)
     end
 
-    def area?(coord_x)
+    def area?(coord_x, coord_y)
+      return false if @y != coord_y
+
       max_x_coord = @x + w + Settings::ALIENS_MARGIN
       min_x_coord = @x - Settings::ALIENS_MARGIN / 2
       max_x_coord > coord_x && coord_x > min_x_coord
-    end
-
-    def start_y
-      @y + @h
     end
 
     def on_move
@@ -45,6 +45,15 @@ module SpaceInvaders
 
     def same?(alien)
       alien.x == @x && alien.y == @y
+    end
+
+    def destroy
+      @destroy_sound.play(Settings::SOUNDS_VOLUME)
+      @killed = true
+    end
+
+    def destroys?
+      @killed
     end
   end
 end

@@ -6,21 +6,16 @@ require_relative 'game_objects/alien'
 
 module SpaceInvaders
   class Aliens
-    HIT_ALIEN_SOUND = Settings::SOUNDS_PATH / 'alien_destroys.wav'
     INVASION_SOUND = Settings::SOUNDS_PATH / 'invasion.mp3'
-
     DELAY_DRAW_MSEC = 700
-    attr_reader :changed, :last_killed
 
     def initialize(place_x, place_y)
       @aliens = []
       @place_x = place_x
       @place_y = place_y
 
-      @destroy_sound = Gosu::Sample.new(HIT_ALIEN_SOUND)
       @invasion_sound = Gosu::Sample.new(INVASION_SOUND)
 
-      @changed = false
       @move_direction = :right
       @move_step = Settings::ALIENS_MARGIN
       @last_move_time = Gosu.milliseconds
@@ -46,8 +41,8 @@ module SpaceInvaders
     end
 
     def draw
+      @aliens.reject!(&:destroys?)
       @aliens.each(&:draw)
-      @changed = false
     end
 
     def needs_redraw?
@@ -64,19 +59,12 @@ module SpaceInvaders
     end
 
     def find(coord_x)
-      @aliens
-        .select { |alien| alien.area?(coord_x) }
-        .max_by(&:y)
+      closest = @aliens.max_by(&:y)
+      @aliens.find { |alien| alien.area?(coord_x, closest.y) }
     end
 
-    def destroy(coord_x, coord_y)
-      killed = @aliens.find { |alien| alien.x == coord_x && alien.y == coord_y }
-      return unless killed
-
-      @aliens.delete(killed)
-      @last_killed = killed.type
-      @destroy_sound.play(Settings::SOUNDS_VOLUME)
-      @changed = true
+    def last_killed
+      @aliens.find(&:destroys?)&.type
     end
 
     private

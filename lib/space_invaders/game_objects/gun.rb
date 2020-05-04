@@ -6,7 +6,7 @@ require_relative 'bullet'
 module SpaceInvaders
   class Gun < GameObject
     def initialize(options)
-      @ammo = {}
+      @ammo = []
       @reload_time_msec = 100
       @prev_shoot_timestamp = Gosu.milliseconds
       @shot_sound = Gosu::Sample.new(options[:shot_sound_path])
@@ -14,15 +14,17 @@ module SpaceInvaders
     end
 
     def needs_redraw?
-      @ammo.keys.any?(&:needs_redraw?)
+      @ammo.any?(&:needs_redraw?)
     end
 
     def draw
-      @ammo.delete_if { |bullet, *| target_reached?(bullet) }
-      @ammo.each_pair do |bullet, target|
-        bullet.draw unless target_reached?(bullet)
-        #take_new_target(target) if target_reached?(bullet)
-      end
+      @ammo.reject!(&:destroys?)
+      @ammo.each(&:draw)
+      # @ammo.delete_if { |bullet, *| target_reached?(bullet) }
+      # @ammo.each_pair do |bullet, target|
+      #   bullet.draw unless target_reached?(bullet)
+      #   #take_new_target(target) if target_reached?(bullet)
+      # end
     end
 
     def shoot!(target)
@@ -31,8 +33,8 @@ module SpaceInvaders
 
       @prev_shoot_timestamp = nil
       bullet = Bullet.new(@x, @y, @bullet_path)
-      bullet.moving = true
-      @ammo[bullet] = target
+      bullet.move(target)
+      @ammo << bullet
       @shot_sound.play(Settings::SOUNDS_VOLUME)
     end
 
@@ -49,15 +51,15 @@ module SpaceInvaders
     #   end
     # end
 
-    def expired_ammos(target)
-      @ammo.reject { |bullet, *| target_reached?(bullet) }
-           .select { |*, aim| aim&.same?(target) }
-    end
-
-    def target_reached?(bullet)
-      target = @ammo[bullet]
-      target && bullet.y < target.start_y
-    end
+    # def expired_ammos(target)
+    #   @ammo.reject { |bullet, *| target_reached?(bullet) }
+    #        .select { |*, aim| aim&.same?(target) }
+    # end
+    #
+    # def target_reached?(bullet)
+    #   target = @ammo[bullet]
+    #   target && bullet.y < target.start_y
+    # end
 
     def ready_for_shoot?
       Gosu.milliseconds - @prev_shoot_timestamp > @reload_time_msec
