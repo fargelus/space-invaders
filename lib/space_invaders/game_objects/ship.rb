@@ -54,8 +54,7 @@ module SpaceInvaders
     end
 
     def shoot
-      target = @enemies.find(@x)
-      @gun.shoot!(target)
+      @gun.shoot!(@enemies)
     end
   end
 end

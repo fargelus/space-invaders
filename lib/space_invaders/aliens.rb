@@ -48,19 +48,12 @@ module SpaceInvaders
     def needs_redraw?
       return false if Gosu.milliseconds - @last_move_time < DELAY_DRAW_MSEC
 
-      @aliens.each do |alien|
-        move_x, move_y = next_move_coords_for(alien.x, alien.y)
-        alien.set(move_x, move_y)
-        alien.on_move
-      end
-      @invasion_sound.play
-      next_move_direction
-      @last_move_time = Gosu.milliseconds
+      move
     end
 
     def find(coord_x)
-      closest = @aliens.max_by(&:y)
-      @aliens.find { |alien| alien.area?(coord_x, closest.y) }
+      @aliens.select { |alien| alien.area?(coord_x, alien.y) }
+             .max_by(&:y)
     end
 
     def last_killed
@@ -68,6 +61,18 @@ module SpaceInvaders
     end
 
     private
+
+    def move
+      @aliens.each do |alien|
+        move_x, move_y = next_move_coords_for(alien.x, alien.y)
+        alien.set(move_x, move_y)
+        alien.on_move
+      end
+
+      @invasion_sound.play
+      next_move_direction
+      @last_move_time = Gosu.milliseconds
+    end
 
     def next_move_coords_for(alien_x, alien_y)
       case @move_direction

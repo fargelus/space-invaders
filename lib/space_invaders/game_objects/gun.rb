@@ -23,7 +23,7 @@ module SpaceInvaders
       @ammo.each(&:draw)
     end
 
-    def shoot!(target)
+    def shoot!(enemies)
       @prev_shoot_timestamp ||= Gosu.milliseconds
       return unless ready_for_shoot?
 
@@ -34,6 +34,7 @@ module SpaceInvaders
         image_path: @bullet_image_path,
         direction: @direction
       )
+      target = enemies.find(@x)
       @ammo.last.move(target)
       @shot_sound.play(Settings::SOUNDS_VOLUME)
     end
