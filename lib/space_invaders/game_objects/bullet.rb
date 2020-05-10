@@ -4,6 +4,8 @@ require_relative '../base/settings'
 
 module SpaceInvaders
   class Bullet < GameObject
+    attr_reader :target
+
     def initialize(options)
       super options[:x], options[:y], options[:image_path]
       @moving = false
@@ -24,7 +26,7 @@ module SpaceInvaders
       !@moving
     end
 
-    def move(target)
+    def move_to(target)
       @moving = true
       @target = target
     end
