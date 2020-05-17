@@ -4,12 +4,13 @@ require_relative '../base/settings'
 
 module SpaceInvaders
   class Bullet < GameObject
-    attr_reader :target
+    attr_accessor :target
 
     def initialize(options)
       super options[:x], options[:y], options[:image_path]
-      @moving = false
+      @target = options[:target]
       @direction = options[:direction]
+      @moving = true
     end
 
     def needs_redraw?
@@ -22,13 +23,8 @@ module SpaceInvaders
       super if @moving
     end
 
-    def destroys?
+    def destroyed?
       !@moving
-    end
-
-    def move_to(target)
-      @moving = true
-      @target = target
     end
 
     private
@@ -39,9 +35,9 @@ module SpaceInvaders
         return
       end
 
-      return unless @target.area?(@x, @y)
-
-      @target.destroy
+      return
+      #
+      # @target.destroy
       @moving = false
     end
   end

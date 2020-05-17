@@ -22,6 +22,7 @@ module SpaceInvaders
       @aliens = Aliens.new(@screen_width * 0.1, @screen_height * 0.1)
       @bg = GameObject.new(0, 0, Settings::IMAGES_PATH / 'space.png')
       @game_objects = [@ship, @aliens]
+      @last_shoot_time = Gosu.milliseconds
 
       setup_scores
       setup_assets
@@ -44,6 +45,11 @@ module SpaceInvaders
       @aliens.draw
       @scores.each(&:draw)
       @lifes.draw(@ship.lifes)
+
+      if aliens_need_shoot?
+        @aliens.shoot(@ship)
+        @last_shoot_time = Gosu.milliseconds
+      end
     end
 
     def needs_redraw?
@@ -86,6 +92,10 @@ module SpaceInvaders
       #   nil
       # ensure
       close
+    end
+
+    def aliens_need_shoot?
+      Gosu.milliseconds - @last_shoot_time > Settings::ALIENS_DELAY_SHOOT_MSEC
     end
   end
 end

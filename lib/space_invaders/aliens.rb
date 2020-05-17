@@ -43,12 +43,11 @@ module SpaceInvaders
     def draw
       @aliens.reject!(&:destroys?)
       @aliens.each(&:draw)
+      move
     end
 
     def needs_redraw?
-      return false if Gosu.milliseconds - @last_move_time < DELAY_DRAW_MSEC
-
-      move
+      @aliens.any?(&:needs_redraw?)
     end
 
     def find(coord_x)
@@ -60,9 +59,15 @@ module SpaceInvaders
       @aliens.find(&:destroys?)&.type
     end
 
+    def shoot(enemy)
+      closest_alien_to(enemy).shoot(enemy)
+    end
+
     private
 
     def move
+      return if Gosu.milliseconds - @last_move_time < DELAY_DRAW_MSEC
+
       @aliens.each do |alien|
         move_x, move_y = next_move_coords_for(alien.x, alien.y)
         alien.set(move_x, move_y)
@@ -97,13 +102,28 @@ module SpaceInvaders
     end
 
     def available_directions
-      max_x_alien = @aliens.max_by(&:x).x
-      min_x_alien = @aliens.min_by(&:x).x
       alien_width = Settings::ALIENS_WIDTH
       {
-        right: min_x_alien < @move_step,
-        left: max_x_alien > Settings::WIDTH - alien_width - @move_step
+        right: first_column_x < @move_step,
+        left: last_column_x > Settings::WIDTH - alien_width - @move_step
       }
+    end
+
+    def last_column_x
+      @aliens.max_by(&:x).x
+    end
+
+    def first_column_x
+      @aliens.min_by(&:x).x
+    end
+
+    def closest_alien_to(target)
+      closest = find(target.x)
+      return closest if closest
+
+      return find(last_column_x) if last_column_x < target.x
+
+      find(first_column_x) if first_column_x > target.x
     end
   end
 end

@@ -21,17 +21,28 @@ module SpaceInvaders
       )
       @tile_num = 0
       @destroy_sound = Gosu::Sample.new(HIT_ALIEN_SOUND)
+      @gun = Gun.new(
+        shot_sound_path: Settings::SOUNDS_PATH / 'alien_gun.wav',
+        bullet_image_path: Settings::BULLETS_DIR / 'predator_bullet.png',
+        direction: Settings::BULLET_DIRECTION_DOWN
+      )
     end
 
     def w
       @w / 2
     end
 
-    def draw
-      @figure[@tile_num % 2].draw(@x, @y, 0)
+    def needs_redraw?
+      @gun.needs_redraw?
     end
 
-    def area?(coord_x, coord_y)      
+    def draw
+      @figure[@tile_num % 2].draw(@x, @y, 0)
+      @gun.set(@x + w/2, @y)
+      @gun.draw
+    end    
+
+    def area?(coord_x, coord_y)
       return false if coord_y > @y + @h || coord_y < @y
 
       max_x_coord = @x + w + Settings::ALIENS_MARGIN
@@ -43,10 +54,6 @@ module SpaceInvaders
       @tile_num += 1
     end
 
-    def same?(alien)
-      alien.x == @x && alien.y == @y
-    end
-
     def destroy
       @destroy_sound.play(Settings::SOUNDS_VOLUME)
       @killed = true
@@ -54,6 +61,10 @@ module SpaceInvaders
 
     def destroys?
       @killed
+    end
+
+    def shoot(enemy)
+      @gun.shoot!(enemy)
     end
   end
 end

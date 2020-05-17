@@ -19,24 +19,22 @@ module SpaceInvaders
     end
 
     def draw
-      reload
+      @ammo.reject!(&:destroyed?)
       @ammo.each(&:draw)
     end
 
-    def shoot!(enemies)
+    def shoot!(enemy)
       @prev_shoot_timestamp ||= Gosu.milliseconds
       return unless ready_for_shoot?
 
-      @enemies = enemies
       @prev_shoot_timestamp = nil
       @ammo << Bullet.new(
         x: @x,
         y: @y,
         image_path: @bullet_image_path,
-        direction: @direction
+        direction: @direction,
+        target: enemy
       )
-      target = enemies.find(@x)
-      @ammo.last.move_to(target)
       @shot_sound.play(Settings::SOUNDS_VOLUME)
     end
 
@@ -44,19 +42,19 @@ module SpaceInvaders
       Settings::BULLET_WIDTH
     end
 
+    def re_target!(new_enemy)
+      destroyed_targets = @ammo.select(&:destroyed?).collect(&:target)
+      @ammo.reject!(&:destroyed?)
+      return if destroyed_targets.empty?
+
+      @ammo.select { |bullet| destroyed_targets.include?(bullet.target) }
+           .each { |bullet| bullet.target = new_enemy }
+    end
+
     private
 
     def ready_for_shoot?
       Gosu.milliseconds - @prev_shoot_timestamp > @reload_time_msec
-    end
-
-    def reload
-      destroyed_target = @ammo.select(&:destroys?).collect(&:target)
-      @ammo.reject!(&:destroys?)
-      return if destroyed_target.empty?
-
-      @ammo.select { |bullet| destroyed_target.include?(bullet.target) }
-           .each { |bullet| bullet.move_to(@enemies.find(bullet.x)) }
     end
   end
 end

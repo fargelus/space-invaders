@@ -42,6 +42,7 @@ module SpaceInvaders
     def draw
       super
       @position_changed = false
+      @gun.re_target!(@enemies.find(@gun.x))
       @gun.draw
     end
 
@@ -54,7 +55,7 @@ module SpaceInvaders
     end
 
     def shoot
-      @gun.shoot!(@enemies)
+      @gun.shoot!(@enemies.find(@gun.x))
     end
   end
 end
