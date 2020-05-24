@@ -1,13 +1,9 @@
 # frozen_string_literal: true
 
-require 'gosu'
-
 module SpaceInvaders
   class Lifes < GameObject
-    IMAGE_PATH = Settings::IMAGES_PATH / 'heart.png'
-
     def initialize(coord_x, coord_y)
-      super coord_x, coord_y, IMAGE_PATH
+      super coord_x, coord_y, Settings::IMAGES_PATH / 'heart.png'
     end
 
     def draw(amount)

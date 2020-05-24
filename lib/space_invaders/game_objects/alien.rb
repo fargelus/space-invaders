@@ -38,7 +38,7 @@ module SpaceInvaders
 
     def draw
       @figure[@tile_num % 2].draw(@x, @y, 0)
-      @gun.set(@x + w/2, @y)
+      @gun.set(@x + w / 2, @y)
       @gun.draw
     end
 

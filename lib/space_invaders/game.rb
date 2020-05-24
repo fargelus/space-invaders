@@ -46,10 +46,10 @@ module SpaceInvaders
       @scores.each(&:draw)
       @lifes.draw(@ship.lifes)
 
-      if aliens_need_shoot?
-        @aliens.shoot(@ship)
-        @last_shoot_time = Gosu.milliseconds
-      end
+      return unless aliens_need_shoot?
+
+      @aliens.shoot(@ship)
+      @last_shoot_time = Gosu.milliseconds
     end
 
     def needs_redraw?

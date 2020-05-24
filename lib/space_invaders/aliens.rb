@@ -42,7 +42,7 @@ module SpaceInvaders
     def draw
       @aliens.reject!(&:destroys?)
       @aliens.each(&:draw)
-      move
+      move if can_move?
     end
 
     def needs_redraw?
@@ -65,8 +65,6 @@ module SpaceInvaders
     private
 
     def move
-      return if @last_move_time && Gosu.milliseconds - @last_move_time < DELAY_DRAW_MSEC
-
       @aliens.each do |alien|
         move_x, move_y = next_move_coords_for(alien.x, alien.y)
         alien.set(move_x, move_y)
@@ -75,7 +73,17 @@ module SpaceInvaders
 
       @invasion_sound.play
       next_move_direction
-      @last_move_time = Gosu.milliseconds
+    end
+
+    def can_move?
+      unless @last_move_time
+        @last_move_time = Gosu.milliseconds
+        return true
+      end
+
+      moving = Gosu.milliseconds - @last_move_time > DELAY_DRAW_MSEC
+      @last_move_time = Gosu.milliseconds if moving
+      moving
     end
 
     def next_move_coords_for(alien_x, alien_y)

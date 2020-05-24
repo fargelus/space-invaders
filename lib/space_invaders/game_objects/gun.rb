@@ -24,10 +24,8 @@ module SpaceInvaders
     end
 
     def shoot!(enemy)
-      @prev_shoot_timestamp ||= Gosu.milliseconds
       return unless ready_for_shoot?
 
-      @prev_shoot_timestamp = nil
       @ammo << Bullet.new(
         x: @x,
         y: @y,
@@ -44,9 +42,9 @@ module SpaceInvaders
 
     def re_target!(new_enemy)
       destroyed_targets = @ammo.select(&:destroyed?).collect(&:target)
-      @ammo.reject!(&:destroyed?)
       return if destroyed_targets.empty?
 
+      @ammo.reject!(&:destroyed?)
       @ammo.select { |bullet| destroyed_targets.include?(bullet.target) }
            .each { |bullet| bullet.target = new_enemy }
     end
@@ -54,7 +52,10 @@ module SpaceInvaders
     private
 
     def ready_for_shoot?
-      Gosu.milliseconds - @prev_shoot_timestamp > @reload_time_msec
+      @prev_shoot_timestamp ||= Gosu.milliseconds
+      ready = Gosu.milliseconds - @prev_shoot_timestamp > @reload_time_msec
+      @prev_shoot_timestamp = nil if ready
+      ready
     end
   end
 end

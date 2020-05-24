@@ -20,7 +20,7 @@ module SpaceInvaders
     def draw
       @y += (Settings::BULLET_SPEED * @direction) if @moving
       out_of_reach_bullet
-      hit_target if @target
+      hit_target
       super if @moving
     end
 
@@ -31,10 +31,11 @@ module SpaceInvaders
     private
 
     def out_of_reach_bullet
-      @moving = false if @y < 0 || @y > Settings::HEIGHT
+      @moving = false if @y.negative? || @y > Settings::HEIGHT
     end
 
     def hit_target
+      return unless @target
       return unless @target.area?(@x, @y)
 
       @target.destroy
