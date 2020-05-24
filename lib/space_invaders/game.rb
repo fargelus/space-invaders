@@ -8,6 +8,7 @@ require_relative 'scores/player_score'
 require_relative 'scores/hi_score'
 require_relative 'game_objects/ship'
 require_relative 'game_objects/lifes'
+require_relative 'output/printable_text'
 
 module SpaceInvaders
   class Game < Gosu::Window
@@ -39,18 +40,9 @@ module SpaceInvaders
     end
 
     def draw
-      [@bg, @ship].each(&:draw)
-      @player_score.up(@aliens.last_killed)
-      @aliens.draw
-      @scores.each(&:draw)
-
-      @lifes.draw(@ship.lifes)
-      save_score_and_close if @ship.lifes.zero?
-
-      return unless aliens_need_shoot?
-
-      @aliens.shoot(@ship)
-      @last_shoot_time = Gosu.milliseconds
+      # game_continues = !@game_was_over
+      # game_continues ? draw_the_game_field : draw_game_over
+      draw_game_over
     end
 
     def needs_redraw?
@@ -58,6 +50,31 @@ module SpaceInvaders
     end
 
     private
+
+    def draw_the_game_field
+      [@bg, @ship, @aliens].each(&:draw)
+      @player_score.up(@aliens.last_killed)
+      @scores.each(&:draw)
+
+      @lifes.draw(@ship.lifes)
+      @game_was_over = @ship.lifes.zero?
+
+      return unless aliens_need_shoot?
+
+      @aliens.shoot(@ship)
+      @last_shoot_time = Gosu.milliseconds
+    end
+
+    def draw_game_over
+      @bg.draw
+      @final_msg ||= PrintableText.new(
+        window: self,
+        x: @screen_width * 0.35,
+        y: @screen_height * 0.3,
+        text: 'Game Over'
+      )
+      @final_msg.draw
+    end
 
     def setup_scores
       scores_y = 15
@@ -87,16 +104,20 @@ module SpaceInvaders
     end
 
     def save_score_and_close
-      document = { score: @player_score.current }
-      DB::SCORES_COLLECTION.insert_one(document)
-    rescue Mongo::Error::OperationFailure
-      nil
-    ensure
+    #   document = { score: @player_score.current }
+    #   DB::SCORES_COLLECTION.insert_one(document)
+    # rescue Mongo::Error::OperationFailure
+    #   nil
+    # ensure
       close
     end
 
     def aliens_need_shoot?
       Gosu.milliseconds - @last_shoot_time > Settings::ALIENS_DELAY_SHOOT_MSEC
+    end
+
+    def game_over
+      @game_was_over = true
     end
   end
 end

@@ -9,6 +9,8 @@ module SpaceInvaders
     INVASION_SOUND = Settings::SOUNDS_PATH / 'invasion.mp3'
     DELAY_DRAW_MSEC = 700
 
+    attr_reader :last_killed
+
     def initialize(place_x, place_y)
       @aliens = []
       @place_x = place_x
@@ -40,6 +42,7 @@ module SpaceInvaders
     end
 
     def draw
+      @last_killed = @aliens.find(&:destroys?)&.type
       @aliens.reject!(&:destroys?)
       @aliens.each(&:draw)
       move if can_move?
@@ -52,10 +55,6 @@ module SpaceInvaders
     def find(coord_x)
       @aliens.select { |alien| alien.area?(coord_x, alien.y) }
              .max_by(&:y)
-    end
-
-    def last_killed
-      @aliens.find(&:destroys?)&.type
     end
 
     def shoot(enemy)
