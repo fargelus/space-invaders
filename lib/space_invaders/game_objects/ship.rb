@@ -9,6 +9,7 @@ require_relative 'gun'
 module SpaceInvaders
   class Ship < GameObject
     SHIP_IMAGE_PATH = Settings::IMAGES_PATH / 'ship.png'
+    HIT_SOUND = Settings::SOUNDS_PATH / 'ship_hit.wav'
     attr_writer :enemies
     attr_reader :lifes
 
@@ -20,6 +21,7 @@ module SpaceInvaders
       @position_changed = false
       @enemies = []
       @lifes = Settings::SPACESHIP_LIFES
+      @destroy_sound = Gosu::Sample.new(HIT_SOUND)
 
       @gun = Gun.new(
         shot_sound_path: Settings::SOUNDS_PATH / 'spaceship_gun.wav',
@@ -37,6 +39,16 @@ module SpaceInvaders
 
     def needs_redraw?
       @position_changed || @gun.needs_redraw?
+    end
+
+    def area?(coord_x, coord_y)
+      return false if @y + @h > coord_y
+
+      @x + w >= coord_x && coord_x > @x
+    end
+
+    def destroy
+      @destroy_sound.play(Settings::SOUNDS_VOLUME)
     end
 
     def draw

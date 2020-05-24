@@ -7,11 +7,10 @@ end
 
 module SpaceInvaders
   class Alien < GameObject
-    DEFAULT_ALIEN = Settings::ALIENS_DIR / 'predator.png'
     HIT_ALIEN_SOUND = Settings::SOUNDS_PATH / 'alien_destroys.wav'
     attr_reader :type
 
-    def initialize(coord_x = 0, coord_y = 0, alien_path = DEFAULT_ALIEN)
+    def initialize(coord_x, coord_y, alien_path)
       super coord_x, coord_y, alien_path
       @type = Settings::ALIENS_PATH_TO_TYPE[alien_path]
       @figure = Gosu::Image.load_tiles(
@@ -26,6 +25,7 @@ module SpaceInvaders
         bullet_image_path: Settings::BULLETS_DIR / 'predator_bullet.png',
         direction: Settings::BULLET_DIRECTION_DOWN
       )
+      @moving = false
     end
 
     def w
@@ -33,14 +33,14 @@ module SpaceInvaders
     end
 
     def needs_redraw?
-      @gun.needs_redraw?
+      @moving
     end
 
     def draw
       @figure[@tile_num % 2].draw(@x, @y, 0)
       @gun.set(@x + w/2, @y)
       @gun.draw
-    end    
+    end
 
     def area?(coord_x, coord_y)
       return false if coord_y > @y + @h || coord_y < @y
@@ -52,6 +52,7 @@ module SpaceInvaders
 
     def on_move
       @tile_num += 1
+      @moving = true
     end
 
     def destroy

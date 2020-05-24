@@ -18,7 +18,6 @@ module SpaceInvaders
 
       @move_direction = :right
       @move_step = Settings::ALIENS_MARGIN
-      @last_move_time = Gosu.milliseconds
     end
 
     def setup
@@ -66,7 +65,7 @@ module SpaceInvaders
     private
 
     def move
-      return if Gosu.milliseconds - @last_move_time < DELAY_DRAW_MSEC
+      return if @last_move_time && Gosu.milliseconds - @last_move_time < DELAY_DRAW_MSEC
 
       @aliens.each do |alien|
         move_x, move_y = next_move_coords_for(alien.x, alien.y)
