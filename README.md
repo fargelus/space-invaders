@@ -1,4 +1,5 @@
 # Classic Space Invaders Game
+![Game board](./doc/gameboard.png)
 
 ## Rules:
 1. Player moves gun horizontally by pressing on keyboard.
@@ -15,4 +16,3 @@
 - [Demo](https://www.youtube.com/watch?v=MU4psw3ccUI)
 - [Wiki](https://ru.wikipedia.org/wiki/Space_Invaders)
 - [Gosu tutorial](https://leanpub.com/developing-games-with-ruby/read)
-
