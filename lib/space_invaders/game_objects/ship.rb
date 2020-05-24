@@ -9,6 +9,8 @@ module SpaceInvaders
   class Ship < GameObject
     SHIP_IMAGE_PATH = Settings::IMAGES_PATH / 'ship.png'
     HIT_SOUND = Settings::SOUNDS_PATH / 'ship_hit.wav'
+    BLINK_DURATION_MSEC = 250
+
     attr_writer :enemies
     attr_reader :lifes
 
@@ -17,7 +19,7 @@ module SpaceInvaders
 
       @boundaries = boundaries
       @speed = Settings::SPACESHIP_SPEED
-      @position_changed = false
+      @redraw = false
       @enemies = []
       @lifes = Settings::SPACESHIP_LIFES
       @destroy_sound = Gosu::Sample.new(HIT_SOUND)
@@ -32,12 +34,12 @@ module SpaceInvaders
     def set(coord_x, coord_y, boundaries)
       super coord_x, coord_y
       @boundaries = boundaries
-      @position_changed = true
+      @redraw = true
       @gun.set(coord_x + @w / 2 - @gun.w / 2, coord_y)
     end
 
     def needs_redraw?
-      @position_changed || @gun.needs_redraw?
+      @redraw || @gun.needs_redraw?
     end
 
     def area?(coord_x, coord_y)
@@ -49,11 +51,15 @@ module SpaceInvaders
     def destroy
       @destroy_sound.play(Settings::SOUNDS_VOLUME)
       @lifes -= 1
+      @redraw = true
+      @destroyed_timestamp = Gosu.milliseconds
     end
 
     def draw
+      return if blinking?
+
       super
-      @position_changed = false
+      @redraw = false
       @gun.re_target!(@enemies.find(@gun.x))
       @gun.draw
     end
@@ -68,6 +74,17 @@ module SpaceInvaders
 
     def shoot
       @gun.shoot!(@enemies.find(@gun.x))
+    end
+
+    private
+
+    def blinking?
+      return false unless @destroyed_timestamp
+
+      now = Gosu.milliseconds
+      blink = now - @destroyed_timestamp < BLINK_DURATION_MSEC
+      @destroyed_timestamp = nil unless blink
+      blink
     end
   end
 end

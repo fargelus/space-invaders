@@ -128,6 +128,9 @@ module SpaceInvaders
       closest = find(target.x)
       return closest if closest
 
+      closest = find(target.x + target.w)
+      return closest if closest
+
       return find(last_column_x) if last_column_x < target.x
 
       find(first_column_x) if first_column_x > target.x
