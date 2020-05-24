@@ -39,8 +39,9 @@ module SpaceInvaders
     end
 
     def draw
-      [@bg, @ship, @aliens].each(&:draw)
+      [@bg, @ship].each(&:draw)
       @player_score.up(@aliens.last_killed)
+      @aliens.draw
       @scores.each(&:draw)
 
       @lifes.draw(@ship.lifes)
@@ -86,11 +87,11 @@ module SpaceInvaders
     end
 
     def save_score_and_close
-      #   document = { score: @player_score.current }
-      #   DB::SCORES_COLLECTION.insert_one(document)
-      # rescue Mongo::Error::OperationFailure
-      #   nil
-      # ensure
+      document = { score: @player_score.current }
+      DB::SCORES_COLLECTION.insert_one(document)
+    rescue Mongo::Error::OperationFailure
+      nil
+    ensure
       close
     end
 
