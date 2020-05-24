@@ -1,9 +1,8 @@
 # frozen_string_literal: true
 
 require 'gosu'
-%w[settings game_object].each do |fn|
-  require_relative "../base/#{fn}"
-end
+require_relative "../base/settings"
+require_relative "../base/game_object"
 require_relative 'gun'
 
 module SpaceInvaders
@@ -49,6 +48,7 @@ module SpaceInvaders
 
     def destroy
       @destroy_sound.play(Settings::SOUNDS_VOLUME)
+      @lifes -= 1
     end
 
     def draw

@@ -39,12 +39,12 @@ module SpaceInvaders
     end
 
     def draw
-      @bg.draw
-      @ship.draw
+      [@bg, @ship, @aliens].each(&:draw)
       @player_score.up(@aliens.last_killed)
-      @aliens.draw
       @scores.each(&:draw)
+
       @lifes.draw(@ship.lifes)
+      save_score_and_close if @ship.lifes.zero?
 
       return unless aliens_need_shoot?
 
