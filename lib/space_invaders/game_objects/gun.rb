@@ -5,68 +5,57 @@ require_relative 'bullet'
 
 module SpaceInvaders
   class Gun < GameObject
-    SHOT_SOUND = Settings::SOUNDS_PATH / 'gun.wav'
-
-    def initialize
-      @ammo = {}
+    def initialize(options)
+      @ammo = []
       @reload_time_msec = 100
       @prev_shoot_timestamp = Gosu.milliseconds
-      @shot_sound = Gosu::Sample.new(SHOT_SOUND)
+      @shot_sound = Gosu::Sample.new(options[:shot_sound_path])
+      @bullet_image_path = options[:bullet_image_path]
+      @direction = options[:direction]
     end
 
     def needs_redraw?
-      @ammo.keys.any?(&:needs_redraw?)
+      @ammo.any?(&:needs_redraw?)
     end
 
     def draw
-      @ammo.delete_if { |bullet, *| target_reached?(bullet) }
-      @ammo.each_pair do |bullet, target|
-        bullet.draw unless target_reached?(bullet)
-        take_new_target(target) if target_reached?(bullet)
-      end
+      @ammo.reject!(&:destroyed?)
+      @ammo.each(&:draw)
     end
 
-    def set(coord_x, coord_y, targets)
-      super coord_x, coord_y
-      @targets = targets
-    end
-
-    def shoot!
-      @prev_shoot_timestamp ||= Gosu.milliseconds
+    def shoot!(enemy)
       return unless ready_for_shoot?
 
-      @prev_shoot_timestamp = nil
-      bullet = Bullet.new(@x, @y)
-      bullet.moving = true
-      @ammo[bullet] = @targets.find(@x)
+      @ammo << Bullet.new(
+        x: @x,
+        y: @y,
+        image_path: @bullet_image_path,
+        direction: @direction,
+        target: enemy
+      )
       @shot_sound.play(Settings::SOUNDS_VOLUME)
     end
 
     def w
-      Bullet.new.w
+      Settings::BULLET_WIDTH
+    end
+
+    def re_target!(new_enemy)
+      destroyed_targets = @ammo.select(&:destroyed?).collect(&:target)
+      return if destroyed_targets.empty?
+
+      @ammo.reject!(&:destroyed?)
+      @ammo.select { |bullet| destroyed_targets.include?(bullet.target) }
+           .each { |bullet| bullet.target = new_enemy }
     end
 
     private
 
-    def take_new_target(target)
-      @targets.destroy(target.x, target.y)
-      expired_ammos(target).each_key do |bullet|
-        @ammo[bullet] = @targets.find(bullet.x)
-      end
-    end
-
-    def expired_ammos(target)
-      @ammo.reject { |bullet, *| target_reached?(bullet) }
-           .select { |*, aim| aim&.same?(target) }
-    end
-
-    def target_reached?(bullet)
-      target = @ammo[bullet]
-      target && bullet.y < target.start_y
-    end
-
     def ready_for_shoot?
-      Gosu.milliseconds - @prev_shoot_timestamp > @reload_time_msec
+      @prev_shoot_timestamp ||= Gosu.milliseconds
+      ready = Gosu.milliseconds - @prev_shoot_timestamp > @reload_time_msec
+      @prev_shoot_timestamp = nil if ready
+      ready
     end
   end
 end

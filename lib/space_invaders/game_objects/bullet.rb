@@ -4,14 +4,13 @@ require_relative '../base/settings'
 
 module SpaceInvaders
   class Bullet < GameObject
-    attr_accessor :moving
-    alias moves? moving
+    attr_accessor :target
 
-    BULLET_IMAGE_PATH = Settings::IMAGES_PATH / 'bullet.png'
-
-    def initialize(coord_x = 0, coord_y = 0)
-      super coord_x, coord_y, BULLET_IMAGE_PATH
-      @moving = false
+    def initialize(options)
+      super options[:x], options[:y], options[:image_path]
+      @target = options[:target]
+      @direction = options[:direction]
+      @moving = true
     end
 
     def needs_redraw?
@@ -19,8 +18,28 @@ module SpaceInvaders
     end
 
     def draw
-      @y -= Settings::BULLET_SPEED if @moving
-      super
+      @y += (Settings::BULLET_SPEED * @direction) if @moving
+      out_of_reach_bullet
+      hit_target
+      super if @moving
+    end
+
+    def destroyed?
+      !@moving
+    end
+
+    private
+
+    def out_of_reach_bullet
+      @moving = false if @y.negative? || @y > Settings::HEIGHT
+    end
+
+    def hit_target
+      return unless @target
+      return unless @target.area?(@x, @y)
+
+      @target.destroy
+      @moving = false
     end
   end
 end
