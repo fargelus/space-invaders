@@ -11,7 +11,7 @@ class PrintableText
     @draws = 0
     @x = options[:x]
     @y = options[:y]
-    @color = options[:color]
+    @color = options[:color] || Gosu::Color::WHITE
     @printable_obj = Gosu::Font.new(
       options[:window],
       Gosu.default_font_name,

@@ -40,9 +40,7 @@ module SpaceInvaders
     end
 
     def draw
-      # game_continues = !@game_was_over
-      # game_continues ? draw_the_game_field : draw_game_over
-      draw_game_over
+      !@game_was_over ? draw_the_game_field : draw_game_over
     end
 
     def needs_redraw?
@@ -116,10 +114,6 @@ module SpaceInvaders
 
     def aliens_need_shoot?
       Gosu.milliseconds - @last_shoot_time > Settings::ALIENS_DELAY_SHOOT_MSEC
-    end
-
-    def game_over
-      @game_was_over = true
     end
   end
 end

@@ -10,7 +10,7 @@ module SpaceInvaders
     CAPTION = 'Space Invaders'
     VERSION = '0.1.0'
     SPACESHIP_SPEED = 3
-    SPACESHIP_LIFES = 1
+    SPACESHIP_LIFES = 3
     BULLET_SPEED = 5
     BULLET_DIRECTION_UP = -1
     BULLET_DIRECTION_DOWN = 1

@@ -9,6 +9,7 @@ module SpaceInvaders
   class Ship < GameObject
     SHIP_IMAGE_PATH = Settings::IMAGES_PATH / 'ship.png'
     HIT_SOUND = Settings::SOUNDS_PATH / 'ship_hit.wav'
+    DESTROY_SOUND = Settings::SOUNDS_PATH / 'ship_destroys.wav'
     BLINK_DURATION_MSEC = 250
 
     attr_writer :enemies
@@ -22,7 +23,7 @@ module SpaceInvaders
       @redraw = false
       @enemies = []
       @lifes = Settings::SPACESHIP_LIFES
-      @destroy_sound = Gosu::Sample.new(HIT_SOUND)
+      @hit_sound = Gosu::Sample.new(HIT_SOUND)
 
       @gun = Gun.new(
         shot_sound_path: Settings::SOUNDS_PATH / 'spaceship_gun.wav',
@@ -49,8 +50,10 @@ module SpaceInvaders
     end
 
     def destroy
-      @destroy_sound.play(Settings::SOUNDS_VOLUME)
       @lifes -= 1
+      volume = Settings::SOUNDS_VOLUME
+      @lifes.positive? ? @hit_sound.play(volume)
+                       : Gosu::Sample.new(DESTROY_SOUND).play(volume)
       @redraw = true
       @destroyed_timestamp = Gosu.milliseconds
     end
