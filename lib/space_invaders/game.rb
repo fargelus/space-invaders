@@ -67,13 +67,15 @@ module SpaceInvaders
 
     def draw_game_over
       @bg.draw
-      @final_msg ||= PrintableText.new(
+      @game_over_msg ||= PrintableText.new(
         window: self,
         x: @screen_width * 0.35,
         y: @screen_height * 0.3,
-        text: 'Game Over'
+        text: 'Game Over',
+        color: Settings::RED_COLOR
       )
-      @final_msg.draw
+      @game_over_msg.draw
+      @game_objects = [@game_over_msg]
     end
 
     def setup_scores

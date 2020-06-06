@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'pathname'
+require 'gosu'
 
 module SpaceInvaders
   module Settings
@@ -40,5 +41,6 @@ module SpaceInvaders
       skull: 30,
       spider: 50
     }.freeze
+    RED_COLOR = Gosu::Color.new(214, 17, 17)
   end
 end

@@ -3,12 +3,15 @@
 require 'gosu'
 
 class PrintableText
+  DELAY_DRAW_MSEC = 40
+
   def initialize(options)
     @full_text = options[:text]
-    @text = @full_text[0]
+    @drawing_text = @full_text[0]
     @draws = 0
     @x = options[:x]
     @y = options[:y]
+    @color = options[:color]
     @printable_obj = Gosu::Font.new(
       options[:window],
       Gosu.default_font_name,
@@ -17,13 +20,15 @@ class PrintableText
   end
 
   def needs_redraw?
-    @text != @full_text
+    return false if @draws >= @full_text.size
+
+    Gosu.milliseconds - @last_draw_timestamp.to_i > DELAY_DRAW_MSEC
   end
 
   def draw
-    color = Gosu::Color.new(214, 17, 17)
-    @printable_obj.draw_text(@text, @x, @y, 0, 1.0, 1.0, color)
     @draws += 1
-    @text += @full_text[@draws] if @draws < @full_text.size
+    drawing_text = @full_text.slice(0, @draws)
+    @printable_obj.draw_text(drawing_text, @x, @y, 0, 1.0, 1.0, @color)
+    @last_draw_timestamp = Gosu.milliseconds
   end
 end
