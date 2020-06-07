@@ -1,0 +1,95 @@
+# frozen_string_literal: true
+
+require 'gosu'
+require_relative '../base/settings'
+require_relative '../aliens'
+require_relative '../scores/player_score'
+require_relative '../scores/hi_score'
+require_relative '../game_objects/ship'
+require_relative '../game_objects/lifes'
+
+module SpaceInvaders
+  class GameScene
+    attr_reader :game_over
+
+    def initialize(width:, height:, window:)
+      @screen_width = width
+      @screen_height = height
+      @window = window
+
+      @ship = Ship.new
+      @aliens = Aliens.new(
+        coord_x: @screen_width * 0.1,
+        coord_y: @screen_height * 0.1,
+        enemy: @ship
+      )
+      @bg = GameObject.new(0, 0, Settings::IMAGES_PATH / 'space.png')
+      @redraw_objects = [@ship, @aliens]
+      @last_shoot_time = Gosu.milliseconds
+
+      setup_scores
+      setup_assets
+    end
+
+    def update
+      @ship.move_left! if @window.button_down?(Gosu::KbLeft)
+      @ship.move_right! if @window.button_down?(Gosu::KbRight)
+      @ship.shoot if @window.button_down?(Gosu::KbSpace)
+    end
+
+    def button_down(id)
+      save_score_and_close if id == Gosu::KbEscape
+    end
+
+    def draw
+      [@bg, @ship, @aliens].each(&:draw)
+
+      @lifes.draw(@ship.lifes)
+      @game_over = @ship.lifes.zero?
+      @player_score.up(@aliens.last_killed)
+      @scores.each(&:draw)
+    end
+
+    def needs_redraw?
+      @redraw_objects.collect(&:needs_redraw?).any?
+    end
+
+    private
+
+    def setup_scores
+      scores_y = 15
+      @scores = []
+      @player_score = PlayerScore.new(
+        x: @screen_width * 0.05,
+        y: scores_y,
+        window: @window
+      )
+      @scores << @player_score
+      @scores << HiScore.new(x: @screen_width * 0.7, y: scores_y, window: @window)
+    end
+
+    def setup_assets
+      @aliens.setup
+      setup_ship
+    end
+
+    def setup_ship
+      @ship.enemies = @aliens
+      @ship.set(
+        @screen_width / 2 - @ship.w / 2,
+        @screen_height * 0.85 - @ship.h / 2,
+        [0, @screen_width]
+      )
+      @lifes = Lifes.new(@screen_width * 0.05, @screen_height * 0.94)
+    end
+
+    def save_score_and_close
+      document = { score: @player_score.current }
+      DB::SCORES_COLLECTION.insert_one(document)
+    rescue Mongo::Error::OperationFailure
+      nil
+    ensure
+      close
+    end
+  end
+end

@@ -8,18 +8,21 @@ module SpaceInvaders
   class Aliens
     INVASION_SOUND = Settings::SOUNDS_PATH / 'invasion.mp3'
     DELAY_DRAW_MSEC = 700
+    DELAY_SHOOT_MSEC = 1500
 
     attr_reader :last_killed
 
-    def initialize(place_x, place_y)
+    def initialize(coord_x:, coord_y:, enemy:)
       @aliens = []
-      @place_x = place_x
-      @place_y = place_y
+      @place_x = coord_x
+      @place_y = coord_y
+      @enemy = enemy
 
       @invasion_sound = Gosu::Sample.new(INVASION_SOUND)
 
       @move_direction = :right
       @move_step = Settings::ALIENS_MARGIN
+      @last_shoot_time = Gosu.milliseconds
     end
 
     def setup
@@ -46,6 +49,7 @@ module SpaceInvaders
       @aliens.reject!(&:destroys?)
       @aliens.each(&:draw)
       move if can_move?
+      shoot if need_shoot?
     end
 
     def needs_redraw?
@@ -55,10 +59,6 @@ module SpaceInvaders
     def find(coord_x)
       @aliens.select { |alien| alien.area?(coord_x, alien.y) }
              .max_by(&:y)
-    end
-
-    def shoot(enemy)
-      closest_alien_to(enemy).shoot(enemy)
     end
 
     private
@@ -72,6 +72,15 @@ module SpaceInvaders
 
       @invasion_sound.play
       next_move_direction
+    end
+
+    def shoot
+      closest_alien_to_enemy.shoot(@enemy)
+      @last_shoot_time = Gosu.milliseconds
+    end
+
+    def need_shoot?
+      Gosu.milliseconds - @last_shoot_time > DELAY_SHOOT_MSEC
     end
 
     def can_move?
@@ -123,16 +132,16 @@ module SpaceInvaders
       @aliens.min_by(&:x).x
     end
 
-    def closest_alien_to(target)
-      closest = find(target.x)
+    def closest_alien_to_enemy
+      closest = find(@enemy.x)
       return closest if closest
 
-      closest = find(target.x + target.w)
+      closest = find(@enemy.x + @enemy.w)
       return closest if closest
 
-      return find(last_column_x) if last_column_x < target.x
+      return find(last_column_x) if last_column_x < @enemy.x
 
-      find(first_column_x) if first_column_x > target.x
+      find(first_column_x) if first_column_x > @enemy.x
     end
   end
 end
