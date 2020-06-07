@@ -15,7 +15,7 @@ class PrintableText
     @printable_obj = Gosu::Font.new(
       options[:window],
       Gosu.default_font_name,
-      50
+      options[:size]
     )
   end
 

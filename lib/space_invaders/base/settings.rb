@@ -41,5 +41,6 @@ module SpaceInvaders
       spider: 50
     }.freeze
     RED_COLOR = Gosu::Color.new(214, 17, 17)
+    GREEN_COLOR = Gosu::Color.new(9, 222, 1)
   end
 end

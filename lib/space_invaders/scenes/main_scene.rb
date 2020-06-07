@@ -2,6 +2,7 @@
 
 require 'gosu'
 require_relative '../base/settings'
+require_relative '../base/game_scene'
 require_relative '../aliens'
 require_relative '../scores/player_score'
 require_relative '../scores/hi_score'
@@ -9,13 +10,12 @@ require_relative '../game_objects/ship'
 require_relative '../game_objects/lifes'
 
 module SpaceInvaders
-  class GameScene
-    attr_reader :game_over
-
+  class MainScene < GameScene
     def initialize(width:, height:, window:)
+      super
+
       @screen_width = width
       @screen_height = height
-      @window = window
 
       @ship = Ship.new
       @aliens = Aliens.new(
@@ -45,13 +45,16 @@ module SpaceInvaders
       [@bg, @ship, @aliens].each(&:draw)
 
       @lifes.draw(@ship.lifes)
-      @game_over = @ship.lifes.zero?
       @player_score.up(@aliens.last_killed)
       @scores.each(&:draw)
     end
 
     def needs_redraw?
       @redraw_objects.collect(&:needs_redraw?).any?
+    end
+
+    def over?
+      @ship.lifes.zero?
     end
 
     private
@@ -89,7 +92,7 @@ module SpaceInvaders
     rescue Mongo::Error::OperationFailure
       nil
     ensure
-      close
+      @window.close
     end
   end
 end
