@@ -23,7 +23,6 @@ module SpaceInvaders
         coord_y: @screen_height * 0.1,
         enemy: @ship
       )
-      @bg = GameObject.new(0, 0, Settings::IMAGES_PATH / 'space.png')
       @redraw_objects = [@ship, @aliens]
       @last_shoot_time = Gosu.milliseconds
 
@@ -42,7 +41,9 @@ module SpaceInvaders
     end
 
     def draw
-      [@bg, @ship, @aliens].each(&:draw)
+      super
+      
+      [@ship, @aliens].each(&:draw)
 
       @lifes.draw(@ship.lifes)
       @player_score.up(@aliens.last_killed)

@@ -10,16 +10,17 @@ module SpaceInvaders
       super
 
       @game_over_msg = PrintableText.new(
-        x: width * 0.35,
+        x: width * 0.33,
         y: height * 0.3,
         text: 'Game Over',
-        size: 50,
+        size: 55,
         color: Settings::RED_COLOR,
         window: window
       )
     end
 
     def draw
+      super
       @game_over_msg.draw
     end
 
