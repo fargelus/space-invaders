@@ -9,7 +9,6 @@ module SpaceInvaders
 
     def initialize(options)
       @full_text = options[:text].upcase
-      @drawing_text = @full_text[0]
       @draws = 0
       @x = options[:x]
       @y = options[:y]
@@ -22,9 +21,13 @@ module SpaceInvaders
     end
 
     def needs_redraw?
-      return false if @draws >= @full_text.size
+      return false if print_finished?
 
       Gosu.milliseconds - @last_draw_timestamp.to_i > DELAY_DRAW_MSEC
+    end
+
+    def print_finished?
+      @draws >= @full_text.size
     end
 
     def draw

@@ -43,5 +43,6 @@ module SpaceInvaders
     }.freeze
     RED_COLOR = Gosu::Color.new(214, 17, 17)
     GREEN_COLOR = Gosu::Color.new(9, 222, 1)
+    SUNNY_COLOR = Gosu::Color.new(217, 240, 8)
   end
 end

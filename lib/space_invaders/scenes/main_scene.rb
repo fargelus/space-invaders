@@ -42,7 +42,7 @@ module SpaceInvaders
 
     def draw
       super
-      
+
       [@ship, @aliens].each(&:draw)
 
       @lifes.draw(@ship.lifes)
