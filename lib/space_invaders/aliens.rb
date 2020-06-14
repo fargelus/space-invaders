@@ -22,7 +22,6 @@ module SpaceInvaders
 
       @move_direction = :right
       @move_step = Settings::ALIENS_MARGIN
-      @last_shoot_time = Gosu.milliseconds
     end
 
     def setup
@@ -80,6 +79,7 @@ module SpaceInvaders
     end
 
     def need_shoot?
+      @last_shoot_time ||= Gosu.milliseconds
       Gosu.milliseconds - @last_shoot_time > DELAY_SHOOT_MSEC
     end
 

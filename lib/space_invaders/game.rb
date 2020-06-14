@@ -11,10 +11,11 @@ module SpaceInvaders
       super
       self.caption = Settings::CAPTION
 
-      @menu_scene = MenuScene.new(width: width, height: height, window: self)
-      @main_scene = MainScene.new(width: width, height: height, window: self)
-      @game_over_scene = GameOverScene.new(width: width, height: height, window: self)
-      @current_scene = @menu_scene
+      menu_scene = MenuScene.new(width: width, height: height, window: self)
+      main_scene = MainScene.new(width: width, height: height, window: self)
+      game_over_scene = GameOverScene.new(width: width, height: height, window: self)
+      @current_scene = menu_scene
+      @frames = [menu_scene, main_scene, game_over_scene]
     end
 
     def needs_redraw?
@@ -22,7 +23,6 @@ module SpaceInvaders
     end
 
     def draw
-      # @current_scene = @game_over_scene if @main_scene.over?
       @current_scene.draw
     end
 
@@ -32,6 +32,10 @@ module SpaceInvaders
 
     def update
       @current_scene.update
+      return unless @current_scene.need_change?
+
+      next_scene_index = (@frames.index(@current_scene) + 1) % @frames.size
+      @current_scene = @frames[next_scene_index]
     end
   end
 end

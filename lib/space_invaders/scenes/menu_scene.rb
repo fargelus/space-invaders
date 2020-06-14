@@ -30,18 +30,23 @@ module SpaceInvaders
         text: CAPTION,
         window: window
       )
-      @score_table_title = Gosu::Font.new(
+      @default_font = Gosu::Font.new(
         @window,
         DEFAULT_FONT,
         @font_size
       )
+      @label_font = Gosu::Font.new(
+        @window,
+        DEFAULT_FONT,
+        18
+      )
       @aliens_draw_info = []
       @printable_aliens_scores = []
-      @redraw_objects = [@entrance_text, @game_title]
+      @change = false
     end
 
     def needs_redraw?
-      return true if @redraw_objects.any?(:needs_redraw?)
+      return true if [@entrance_text, @game_title].any?(:needs_redraw?)
 
       @printable_aliens_scores.empty? || @printable_aliens_scores.find(&:needs_redraw?)
     end
@@ -52,6 +57,19 @@ module SpaceInvaders
       @entrance_text.draw
       @game_title.draw unless @entrance_text.needs_redraw?
       draw_score_table if score_table_needs_draw?
+      @label_font.draw_text(
+        'Press <Enter> to continue',
+        @width * 0.35, @height * 0.95,
+        0, 1.0, 1.0,
+      )
+    end
+
+    def button_down(id)
+      @change = (id == Gosu::KbReturn)
+    end
+
+    def need_change?
+      @change
     end
 
     private
@@ -72,14 +90,14 @@ module SpaceInvaders
 
     def draw_instant_score_table_items
       render_height = @height * 0.43
-      @score_table_title.draw_text(
+      @default_font.draw_text(
         '*Score advance table*',
         @width * 0.23, render_height,
         0, 1.0, 1.0,
         SUNNY_COLOR
       )
 
-      aliens_render_x = @width * 0.3
+      aliens_render_x = @width * 0.33
       ALIENS_SCOREBOARD.each do |alien_type, score_points|
         alien_path = ALIENS_PATH_TO_TYPE.key(alien_type)
         render_height += ALIENS_HEIGHT + ALIENS_MARGIN + 5

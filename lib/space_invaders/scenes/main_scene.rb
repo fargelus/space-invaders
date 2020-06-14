@@ -53,7 +53,7 @@ module SpaceInvaders
       @redraw_objects.collect(&:needs_redraw?).any?
     end
 
-    def over?
+    def need_change?
       @ship.lifes.zero?
     end
 

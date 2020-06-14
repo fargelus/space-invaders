@@ -21,5 +21,7 @@ module SpaceInvaders
     end
 
     def update; end
+
+    def need_change?; end
   end
 end
