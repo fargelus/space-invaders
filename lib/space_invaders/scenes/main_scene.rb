@@ -24,7 +24,6 @@ module SpaceInvaders
         enemy: @ship
       )
       @redraw_objects = [@ship, @aliens]
-      @last_shoot_time = Gosu.milliseconds
 
       setup_scores
       setup_assets
@@ -43,11 +42,11 @@ module SpaceInvaders
     def draw
       super
 
-      [@ship, @aliens].each(&:draw)
-
+      @redraw_objects.each(&:draw)
       @lifes.draw(@ship.lifes)
-      @player_score.up(@aliens.last_killed)
       @scores.each(&:draw)
+
+      @player_score.up(@aliens.last_killed)
     end
 
     def needs_redraw?
@@ -88,12 +87,12 @@ module SpaceInvaders
     end
 
     def save_score_and_close
-      document = { score: @player_score.current }
-      DB::SCORES_COLLECTION.insert_one(document)
-    rescue Mongo::Error::OperationFailure
-      nil
-    ensure
-      @window.close
+      #   document = { score: @player_score.current }
+      #   DB::SCORES_COLLECTION.insert_one(document)
+      # rescue Mongo::Error::OperationFailure
+      #   nil
+      # ensure
+      #   @window.close
     end
   end
 end
