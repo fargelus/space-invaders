@@ -15,7 +15,7 @@ module SpaceInvaders
       @color = options[:color] || Gosu::Color::WHITE
       @printable_obj = Gosu::Font.new(
         options[:window],
-        Settings::DEFAULT_FONT,
+        Settings::FONT,
         options[:size]
       )
     end

@@ -25,7 +25,10 @@ module SpaceInvaders
     IMAGES_PATH = ASSETS_DIR / 'images'
     BULLETS_DIR = IMAGES_PATH / 'bullets'
     SOUNDS_PATH = ASSETS_DIR / 'sounds'
-    DEFAULT_FONT = ASSETS_DIR / 'fonts/default.ttf'
+    FONT = ASSETS_DIR / 'fonts/default.ttf'
+    INFO_FONT_SIZE = 40
+    LABEL_FONT_SIZE = 18
+    CAPTION_FONT_SIZE = 55
     SOUNDS_VOLUME = 8
     ALIENS_DIR = IMAGES_PATH / 'invaders'
     ALIENS_PATH_TO_TYPE = {

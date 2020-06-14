@@ -13,36 +13,10 @@ module SpaceInvaders
     def initialize(width:, height:, window:)
       super
 
-      @font_size = 40
-      @entrance_text = PrintableText.new(
-        x: width * 0.45,
-        y: height * 0.15,
-        text: 'Play',
-        window: @window,
-        color: GREEN_COLOR,
-        size: @font_size
-      )
-      @game_title = PrintableText.new(
-        x: width * 0.33,
-        y: height * 0.25,
-        size: @font_size,
-        color: GREEN_COLOR,
-        text: CAPTION,
-        window: window
-      )
-      @default_font = Gosu::Font.new(
-        @window,
-        DEFAULT_FONT,
-        @font_size
-      )
-      @label_font = Gosu::Font.new(
-        @window,
-        DEFAULT_FONT,
-        18
-      )
-      @aliens_draw_info = []
-      @printable_aliens_scores = []
-      @change = false
+      prepare_scene
+
+      @main_font = Gosu::Font.new(@window, FONT, INFO_FONT_SIZE)
+      @label_font = Gosu::Font.new(@window, FONT, LABEL_FONT_SIZE)
     end
 
     def needs_redraw?
@@ -60,7 +34,7 @@ module SpaceInvaders
       @label_font.draw_text(
         'Press <Enter> to continue',
         @width * 0.35, @height * 0.95,
-        0, 1.0, 1.0,
+        0, 1.0, 1.0
       )
     end
 
@@ -68,8 +42,27 @@ module SpaceInvaders
       @change = (id == Gosu::KbReturn)
     end
 
-    def need_change?
-      @change
+    def prepare_scene
+      super
+
+      @entrance_text = PrintableText.new(
+        x: @width * 0.45,
+        y: @height * 0.15,
+        text: 'Play',
+        window: @window,
+        color: GREEN_COLOR,
+        size: INFO_FONT_SIZE
+      )
+      @game_title = PrintableText.new(
+        x: @width * 0.33,
+        y: @height * 0.25,
+        size: INFO_FONT_SIZE,
+        color: GREEN_COLOR,
+        text: CAPTION,
+        window: @window
+      )
+      @printable_aliens_scores = []
+      @aliens_draw_info = []
     end
 
     private
@@ -90,7 +83,7 @@ module SpaceInvaders
 
     def draw_instant_score_table_items
       render_height = @height * 0.43
-      @default_font.draw_text(
+      @main_font.draw_text(
         '*Score advance table*',
         @width * 0.23, render_height,
         0, 1.0, 1.0,
@@ -117,7 +110,7 @@ module SpaceInvaders
           y: alien_info[:y],
           text: "= #{alien_info[:points]} points",
           window: @window,
-          size: @font_size
+          size: INFO_FONT_SIZE
         )
       end
     end

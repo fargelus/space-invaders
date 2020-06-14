@@ -15,7 +15,11 @@ module SpaceInvaders
       main_scene = MainScene.new(width: width, height: height, window: self)
       game_over_scene = GameOverScene.new(width: width, height: height, window: self)
       @current_scene = menu_scene
-      @frames = [menu_scene, main_scene, game_over_scene]
+      @frames = {
+        menu_scene => main_scene,
+        main_scene => game_over_scene,
+        game_over_scene => main_scene
+      }
     end
 
     def needs_redraw?
@@ -32,10 +36,11 @@ module SpaceInvaders
 
     def update
       @current_scene.update
-      return unless @current_scene.need_change?
+      return unless @current_scene.needs_change?
 
-      next_scene_index = (@frames.index(@current_scene) + 1) % @frames.size
-      @current_scene = @frames[next_scene_index]
+      previous_scene = @current_scene
+      previous_scene.prepare_scene
+      @current_scene = @frames[@current_scene]
     end
   end
 end

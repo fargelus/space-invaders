@@ -17,16 +17,7 @@ module SpaceInvaders
       @screen_width = width
       @screen_height = height
 
-      @ship = Ship.new
-      @aliens = Aliens.new(
-        coord_x: @screen_width * 0.1,
-        coord_y: @screen_height * 0.1,
-        enemy: @ship
-      )
-      @redraw_objects = [@ship, @aliens]
-
-      setup_scores
-      setup_assets
+      prepare_scene
     end
 
     def update
@@ -53,8 +44,24 @@ module SpaceInvaders
       @redraw_objects.collect(&:needs_redraw?).any?
     end
 
-    def need_change?
+    def needs_change?
       @ship.lifes.zero?
+    end
+
+    def prepare_scene
+      super
+
+      @ship = Ship.new
+      @aliens = Aliens.new(
+        coord_x: @screen_width * 0.1,
+        coord_y: @screen_height * 0.1,
+        enemy: @ship
+      )
+      @redraw_objects = [@ship, @aliens]
+
+      setup_scores
+      @aliens.setup
+      setup_ship
     end
 
     private
@@ -71,11 +78,6 @@ module SpaceInvaders
       @scores << HiScore.new(x: @screen_width * 0.7, y: scores_y, window: @window)
     end
 
-    def setup_assets
-      @aliens.setup
-      setup_ship
-    end
-
     def setup_ship
       @ship.enemies = @aliens
       @ship.set(
@@ -87,12 +89,12 @@ module SpaceInvaders
     end
 
     def save_score_and_close
-      #   document = { score: @player_score.current }
-      #   DB::SCORES_COLLECTION.insert_one(document)
-      # rescue Mongo::Error::OperationFailure
-      #   nil
-      # ensure
-      #   @window.close
+      document = { score: @player_score.current }
+      DB::SCORES_COLLECTION.insert_one(document)
+    rescue Mongo::Error::OperationFailure
+      nil
+    ensure
+      @window.close
     end
   end
 end

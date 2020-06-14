@@ -10,6 +10,7 @@ module SpaceInvaders
       @height = height
       @window = window
       @bg = GameObject.new(0, 0, Settings::IMAGES_PATH / 'space.png')
+      @change = false
     end
 
     def button_down(id)
@@ -20,8 +21,14 @@ module SpaceInvaders
       @bg.draw
     end
 
+    def needs_change?
+      @change
+    end
+
     def update; end
 
-    def need_change?; end
+    def prepare_scene
+      @change = false
+    end
   end
 end
