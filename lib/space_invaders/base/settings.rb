@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'pathname'
+require 'gosu'
 
 module SpaceInvaders
   module Settings
@@ -16,7 +17,6 @@ module SpaceInvaders
     ALIENS_ROWS = 5
     ALIENS_PER_ROW = 10
     ALIENS_MARGIN = 15
-    ALIENS_DELAY_SHOOT_MSEC = 1500
     LIFES_MARGIN = 5
     ALIENS_HEIGHT = 32
     ALIENS_WIDTH = 48
@@ -25,6 +25,10 @@ module SpaceInvaders
     IMAGES_PATH = ASSETS_DIR / 'images'
     BULLETS_DIR = IMAGES_PATH / 'bullets'
     SOUNDS_PATH = ASSETS_DIR / 'sounds'
+    FONT = ASSETS_DIR / 'fonts/default.ttf'
+    INFO_FONT_SIZE = 40
+    LABEL_FONT_SIZE = 18
+    CAPTION_FONT_SIZE = 55
     SOUNDS_VOLUME = 8
     ALIENS_DIR = IMAGES_PATH / 'invaders'
     ALIENS_PATH_TO_TYPE = {
@@ -40,5 +44,8 @@ module SpaceInvaders
       skull: 30,
       spider: 50
     }.freeze
+    RED_COLOR = Gosu::Color.new(214, 17, 17)
+    GREEN_COLOR = Gosu::Color.new(9, 222, 1)
+    SUNNY_COLOR = Gosu::Color.new(217, 240, 8)
   end
 end

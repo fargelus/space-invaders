@@ -1,13 +1,8 @@
 # frozen_string_literal: true
 
-require 'gosu'
-require_relative 'base/settings'
-require_relative 'db/setup'
-require_relative 'aliens'
-require_relative 'scores/player_score'
-require_relative 'scores/hi_score'
-require_relative 'game_objects/ship'
-require_relative 'game_objects/lifes'
+require_relative 'scenes/main_scene'
+require_relative 'scenes/game_over_scene'
+require_relative 'scenes/menu_scene'
 
 module SpaceInvaders
   class Game < Gosu::Window
@@ -15,88 +10,37 @@ module SpaceInvaders
                    height = Settings::HEIGHT)
       super
       self.caption = Settings::CAPTION
-      @screen_width = width
-      @screen_height = height
 
-      @ship = Ship.new
-      @aliens = Aliens.new(@screen_width * 0.1, @screen_height * 0.1)
-      @bg = GameObject.new(0, 0, Settings::IMAGES_PATH / 'space.png')
-      @game_objects = [@ship, @aliens]
-      @last_shoot_time = Gosu.milliseconds
-
-      setup_scores
-      setup_assets
-    end
-
-    def update
-      @ship.move_left! if button_down?(Gosu::KbLeft)
-      @ship.move_right! if button_down?(Gosu::KbRight)
-      @ship.shoot if button_down?(Gosu::KbSpace)
-    end
-
-    def button_down(id)
-      save_score_and_close if id == Gosu::KbEscape
-    end
-
-    def draw
-      [@bg, @ship].each(&:draw)
-      @player_score.up(@aliens.last_killed)
-      @aliens.draw
-      @scores.each(&:draw)
-
-      @lifes.draw(@ship.lifes)
-      save_score_and_close if @ship.lifes.zero?
-
-      return unless aliens_need_shoot?
-
-      @aliens.shoot(@ship)
-      @last_shoot_time = Gosu.milliseconds
+      menu_scene = MenuScene.new(width: width, height: height, window: self)
+      main_scene = MainScene.new(width: width, height: height, window: self)
+      game_over_scene = GameOverScene.new(width: width, height: height, window: self)
+      @current_scene = menu_scene
+      @frames = {
+        menu_scene => main_scene,
+        main_scene => game_over_scene,
+        game_over_scene => main_scene
+      }
     end
 
     def needs_redraw?
-      @game_objects.collect(&:needs_redraw?).any?
+      @current_scene.needs_redraw?
     end
 
-    private
-
-    def setup_scores
-      scores_y = 15
-      @scores = []
-      @player_score = PlayerScore.new(
-        x: @screen_width * 0.05,
-        y: scores_y,
-        window: self
-      )
-      @scores << @player_score
-      @scores << HiScore.new(x: @screen_width * 0.7, y: scores_y, window: self)
+    def draw
+      @current_scene.draw
     end
 
-    def setup_assets
-      @aliens.setup
-      setup_ship
+    def button_down(id)
+      @current_scene.button_down(id)
     end
 
-    def setup_ship
-      @ship.enemies = @aliens
-      @ship.set(
-        @screen_width / 2 - @ship.w / 2,
-        @screen_height * 0.85 - @ship.h / 2,
-        [0, @screen_width]
-      )
-      @lifes = Lifes.new(@screen_width * 0.05, @screen_height * 0.94)
-    end
+    def update
+      @current_scene.update
+      return unless @current_scene.needs_change?
 
-    def save_score_and_close
-      document = { score: @player_score.current }
-      DB::SCORES_COLLECTION.insert_one(document)
-    rescue Mongo::Error::OperationFailure
-      nil
-    ensure
-      close
-    end
-
-    def aliens_need_shoot?
-      Gosu.milliseconds - @last_shoot_time > Settings::ALIENS_DELAY_SHOOT_MSEC
+      previous_scene = @current_scene
+      previous_scene.prepare_scene
+      @current_scene = @frames[@current_scene]
     end
   end
 end
