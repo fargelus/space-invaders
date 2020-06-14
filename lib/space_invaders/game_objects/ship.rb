@@ -7,9 +7,11 @@ require_relative 'gun'
 
 module SpaceInvaders
   class Ship < GameObject
-    SHIP_IMAGE_PATH = Settings::IMAGES_PATH / 'ship.png'
-    HIT_SOUND = Settings::SOUNDS_PATH / 'ship_hit.wav'
-    DESTROY_SOUND = Settings::SOUNDS_PATH / 'ship_destroys.wav'
+    include Settings
+
+    SHIP_IMAGE_PATH = IMAGES_PATH / 'ship.png'
+    HIT_SOUND = SOUNDS_PATH / 'ship_hit.wav'
+    DESTROY_SOUND = SOUNDS_PATH / 'ship_destroys.wav'
     BLINK_DURATION_MSEC = 250
 
     attr_writer :enemies
@@ -19,17 +21,12 @@ module SpaceInvaders
       super coord_x, coord_y, SHIP_IMAGE_PATH
 
       @boundaries = boundaries
-      @speed = Settings::SPACESHIP_SPEED
       @redraw = false
       @enemies = []
-      @lifes = Settings::SPACESHIP_LIFES
+      @lifes = SPACESHIP_LIFES
       @hit_sound = Gosu::Sample.new(HIT_SOUND)
 
-      @gun = Gun.new(
-        shot_sound_path: Settings::SOUNDS_PATH / 'spaceship_gun.wav',
-        bullet_image_path: Settings::BULLETS_DIR / 'bullet.png',
-        direction: Settings::BULLET_DIRECTION_UP
-      )
+      @gun = Gun.new(gun_options)
     end
 
     def set(coord_x, coord_y, boundaries)
@@ -51,9 +48,9 @@ module SpaceInvaders
 
     def destroy
       @lifes -= 1
-      volume = Settings::SOUNDS_VOLUME
-      @lifes.positive? ? @hit_sound.play(volume)
-                       : Gosu::Sample.new(DESTROY_SOUND).play(volume)
+      @hit_sound.play(SOUNDS_VOLUME) if @lifes.positive?
+      Gosu::Sample.new(DESTROY_SOUND).play(SOUNDS_VOLUME) if @lifes.zero?
+
       @redraw = true
       @destroyed_timestamp = Gosu.milliseconds
     end
@@ -68,11 +65,11 @@ module SpaceInvaders
     end
 
     def move_left!
-      set(@x - @speed, @y, @boundaries) if @x > @boundaries.min
+      set(@x - SPACESHIP_SPEED, @y, @boundaries) if @x > @boundaries.min
     end
 
     def move_right!
-      set(@x + @speed, @y, @boundaries) if @x + @w < @boundaries.max
+      set(@x + SPACESHIP_SPEED, @y, @boundaries) if @x + @w < @boundaries.max
     end
 
     def shoot
@@ -80,6 +77,14 @@ module SpaceInvaders
     end
 
     private
+
+    def gun_options
+      {
+        shot_sound_path: SOUNDS_PATH / 'spaceship_gun.wav',
+        bullet_image_path: BULLETS_DIR / 'bullet.png',
+        direction: BULLET_DIRECTION_UP
+      }
+    end
 
     def blinking?
       return false unless @destroyed_timestamp

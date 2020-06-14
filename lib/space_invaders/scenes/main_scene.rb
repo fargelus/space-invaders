@@ -58,24 +58,26 @@ module SpaceInvaders
         enemy: @ship
       )
       @redraw_objects = [@ship, @aliens]
+      setup_assets
+    end
 
+    private
+
+    def setup_assets
       setup_scores
       @aliens.setup
       setup_ship
     end
 
-    private
-
     def setup_scores
       scores_y = 15
-      @scores = []
       @player_score = PlayerScore.new(
         x: @screen_width * 0.05,
         y: scores_y,
         window: @window
       )
-      @scores << @player_score
-      @scores << HiScore.new(x: @screen_width * 0.7, y: scores_y, window: @window)
+      hi_score_params = { x: @screen_width * 0.7, y: scores_y, window: @window }
+      @scores = [@player_score, HiScore.new(hi_score_params)]
     end
 
     def setup_ship

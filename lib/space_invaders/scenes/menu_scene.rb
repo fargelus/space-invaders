@@ -22,7 +22,7 @@ module SpaceInvaders
     def needs_redraw?
       return true if [@entrance_text, @game_title].any?(:needs_redraw?)
 
-      @printable_aliens_scores.empty? || @printable_aliens_scores.find(&:needs_redraw?)
+      @printable_scores.empty? || @printable_scores.find(&:needs_redraw?)
     end
 
     def draw
@@ -61,7 +61,7 @@ module SpaceInvaders
         text: CAPTION,
         window: @window
       )
-      @printable_aliens_scores = []
+      @printable_scores = []
       @aliens_draw_info = []
     end
 
@@ -69,43 +69,48 @@ module SpaceInvaders
 
     def score_table_needs_draw?
       return false if @game_title.needs_redraw?
-      return true if @printable_aliens_scores.any?
+      return true if @printable_scores.any?
 
       @delay_timestamp ||= Gosu.milliseconds
       Gosu.milliseconds - @delay_timestamp > SCORE_TABLE_RENDER_DELAY_MSEC
     end
 
     def draw_score_table
-      draw_instant_score_table_items
-      fill_printable_aliens_scores if @printable_aliens_scores.empty?
-      draw_aliens_score
-    end
-
-    def draw_instant_score_table_items
-      render_height = @height * 0.43
+      table_header_coord_y = @height * 0.43
       @main_font.draw_text(
         '*Score advance table*',
-        @width * 0.23, render_height,
+        @width * 0.23, table_header_coord_y,
         0, 1.0, 1.0,
         SUNNY_COLOR
       )
+      aliens_coord_y = table_header_coord_y + ALIENS_HEIGHT + ALIENS_MARGIN + 5
+      draw_aliens(@width * 0.33, aliens_coord_y)
+      draw_aliens_score
+    end
 
-      aliens_render_x = @width * 0.33
+    def draw_aliens(aliens_render_x, aliens_render_y)
       ALIENS_SCOREBOARD.each do |alien_type, score_points|
         alien_path = ALIENS_PATH_TO_TYPE.key(alien_type)
-        render_height += ALIENS_HEIGHT + ALIENS_MARGIN + 5
-        Alien.new(aliens_render_x, render_height, alien_path).draw
+        Alien.new(aliens_render_x, aliens_render_y, alien_path).draw
         @aliens_draw_info << {
           x: aliens_render_x,
-          y: render_height,
+          y: aliens_render_y,
           points: score_points
         }
+        aliens_render_y += ALIENS_HEIGHT + ALIENS_MARGIN + 5
       end
+    end
+
+    def draw_aliens_score
+      fill_printable_aliens_scores if @printable_scores.empty?
+
+      @printable_scores.reject(&:needs_redraw?).each(&:draw)
+      @printable_scores.find(&:needs_redraw?)&.draw
     end
 
     def fill_printable_aliens_scores
       @aliens_draw_info.each do |alien_info|
-        @printable_aliens_scores << PrintableText.new(
+        @printable_scores << PrintableText.new(
           x: alien_info[:x] + ALIENS_WIDTH + ALIENS_MARGIN,
           y: alien_info[:y],
           text: "= #{alien_info[:points]} points",
@@ -113,11 +118,6 @@ module SpaceInvaders
           size: INFO_FONT_SIZE
         )
       end
-    end
-
-    def draw_aliens_score
-      @printable_aliens_scores.reject(&:needs_redraw?).each(&:draw)
-      @printable_aliens_scores.find(&:needs_redraw?)&.draw
     end
   end
 end

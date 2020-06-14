@@ -78,6 +78,18 @@ module SpaceInvaders
       @last_shoot_time = Gosu.milliseconds
     end
 
+    def closest_alien_to_enemy
+      closest = find(@enemy.x)
+      return closest if closest
+
+      closest = find(@enemy.x + @enemy.w)
+      return closest if closest
+
+      return find(last_column_x) if last_column_x < @enemy.x
+
+      find(first_column_x)
+    end
+
     def need_shoot?
       @last_shoot_time ||= Gosu.milliseconds
       Gosu.milliseconds - @last_shoot_time > DELAY_SHOOT_MSEC
@@ -130,18 +142,6 @@ module SpaceInvaders
 
     def first_column_x
       @aliens.min_by(&:x).x
-    end
-
-    def closest_alien_to_enemy
-      closest = find(@enemy.x)
-      return closest if closest
-
-      closest = find(@enemy.x + @enemy.w)
-      return closest if closest
-
-      return find(last_column_x) if last_column_x < @enemy.x
-
-      find(first_column_x) if first_column_x > @enemy.x
     end
   end
 end

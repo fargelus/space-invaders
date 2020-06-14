@@ -10,7 +10,11 @@ module SpaceInvaders
       super
 
       prepare_scene
-      @label_font = Gosu::Font.new(@window, Settings::FONT, Settings::LABEL_FONT_SIZE)
+      @label_font = Gosu::Font.new(
+        @window,
+        Settings::FONT,
+        Settings::LABEL_FONT_SIZE
+      )
     end
 
     def draw
