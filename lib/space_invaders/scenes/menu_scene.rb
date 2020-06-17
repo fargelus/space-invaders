@@ -45,27 +45,35 @@ module SpaceInvaders
     def prepare_scene
       super
 
-      @entrance_text = PrintableText.new(
+      @entrance_text = PrintableText.new(entrance_text_options)
+      @game_title = PrintableText.new(game_title_options)
+      @printable_scores = []
+      @aliens_draw_info = []
+    end
+
+    private
+
+    def entrance_text_options
+      {
         x: @width * 0.45,
         y: @height * 0.15,
         text: 'Play',
         window: @window,
         color: GREEN_COLOR,
         size: INFO_FONT_SIZE
-      )
-      @game_title = PrintableText.new(
+      }
+    end
+
+    def game_title_options
+      {
         x: @width * 0.33,
         y: @height * 0.25,
         size: INFO_FONT_SIZE,
         color: GREEN_COLOR,
         text: CAPTION,
         window: @window
-      )
-      @printable_scores = []
-      @aliens_draw_info = []
+      }
     end
-
-    private
 
     def score_table_needs_draw?
       return false if @game_title.needs_redraw?
@@ -102,13 +110,13 @@ module SpaceInvaders
     end
 
     def draw_aliens_score
-      fill_printable_aliens_scores if @printable_scores.empty?
+      fill_printable_scores if @printable_scores.empty?
 
       @printable_scores.reject(&:needs_redraw?).each(&:draw)
       @printable_scores.find(&:needs_redraw?)&.draw
     end
 
-    def fill_printable_aliens_scores
+    def fill_printable_scores
       @aliens_draw_info.each do |alien_info|
         @printable_scores << PrintableText.new(
           x: alien_info[:x] + ALIENS_WIDTH + ALIENS_MARGIN,

@@ -11,6 +11,7 @@ module SpaceInvaders
 
     def initialize(coord_x, coord_y, alien_path)
       super coord_x, coord_y, alien_path
+
       @type = Settings::ALIENS_PATH_TO_TYPE[alien_path]
       @figure = Gosu::Image.load_tiles(
         alien_path.to_s,
@@ -19,12 +20,7 @@ module SpaceInvaders
       )
       @tile_num = 0
       @destroy_sound = Gosu::Sample.new(HIT_ALIEN_SOUND)
-      @gun = Gun.new(
-        shot_sound_path: Settings::SOUNDS_PATH / 'alien_gun.wav',
-        bullet_image_path: Settings::BULLETS_DIR / 'predator_bullet.png',
-        direction: Settings::BULLET_DIRECTION_DOWN
-      )
-      @moving = false
+      @gun = Gun.new(gun_options)
     end
 
     def w
@@ -65,6 +61,16 @@ module SpaceInvaders
 
     def shoot(enemy)
       @gun.shoot!(enemy)
+    end
+
+    private
+
+    def gun_options
+      {
+        shot_sound_path: Settings::SOUNDS_PATH / 'alien_gun.wav',
+        bullet_image_path: Settings::BULLETS_DIR / 'predator_bullet.png',
+        direction: Settings::BULLET_DIRECTION_DOWN
+      }
     end
   end
 end

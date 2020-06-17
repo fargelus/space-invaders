@@ -10,15 +10,7 @@ module SpaceInvaders
       super
       self.caption = Settings::CAPTION
 
-      menu_scene = MenuScene.new(width: width, height: height, window: self)
-      main_scene = MainScene.new(width: width, height: height, window: self)
-      last_scene = GameOverScene.new(width: width, height: height, window: self)
-      @current_scene = menu_scene
-      @frames = {
-        menu_scene => main_scene,
-        main_scene => last_scene,
-        last_scene => main_scene
-      }
+      init_frames
     end
 
     def needs_redraw?
@@ -40,6 +32,20 @@ module SpaceInvaders
       previous_scene = @current_scene
       previous_scene.prepare_scene
       @current_scene = @frames[@current_scene]
+    end
+
+    private
+
+    def init_frames
+      menu_scene = MenuScene.new(width: width, height: height, window: self)
+      main_scene = MainScene.new(width: width, height: height, window: self)
+      last_scene = GameOverScene.new(width: width, height: height, window: self)
+      @current_scene = menu_scene
+      @frames = {
+        menu_scene => main_scene,
+        main_scene => last_scene,
+        last_scene => main_scene
+      }
     end
   end
 end

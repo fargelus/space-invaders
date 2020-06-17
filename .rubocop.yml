@@ -1,0 +1,6 @@
+Documentation:
+  Enabled: false
+AllCops:
+  Exclude:
+    - bin/*
+    - space_invaders.gemspec
