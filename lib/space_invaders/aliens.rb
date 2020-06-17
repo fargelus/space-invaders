@@ -2,11 +2,15 @@
 
 require 'gosu'
 require_relative 'base/settings'
+require_relative 'base/helpers'
 require_relative 'game_objects/alien'
 
 module SpaceInvaders
   class Aliens
-    INVASION_SOUND = Settings::SOUNDS_PATH / 'invasion.mp3'
+    include Helpers
+    include Settings
+
+    INVASION_SOUND = SOUNDS_PATH / 'invasion.mp3'
     DELAY_DRAW_MSEC = 700
     DELAY_SHOOT_MSEC = 1500
 
@@ -21,24 +25,22 @@ module SpaceInvaders
       @invasion_sound = Gosu::Sample.new(INVASION_SOUND)
 
       @move_direction = :right
-      @move_step = Settings::ALIENS_MARGIN
     end
 
     def setup
       alien_y = @place_y
-      margin = Settings::ALIENS_MARGIN
-      Settings::ALIENS_ROWS.times do |i|
+      ALIENS_ROWS.times do |i|
         place_aliens_in_row(i, alien_y)
-        alien_y += Settings::ALIENS_HEIGHT + margin
+        alien_y += ALIENS_HEIGHT + ALIENS_MARGIN
       end
     end
 
     def place_aliens_in_row(index, alien_y)
       alien_x = @place_x
-      alien_path = Settings::ALL_ALIENS[index]
-      Settings::ALIENS_PER_ROW.times do
+      alien_path = ALL_ALIENS[index]
+      ALIENS_PER_ROW.times do
         alien = Alien.new(alien_x, alien_y, alien_path)
-        alien_x += alien.w + Settings::ALIENS_MARGIN
+        alien_x += alien.w + ALIENS_MARGIN
         @aliens << alien
       end
     end
@@ -47,8 +49,11 @@ module SpaceInvaders
       @last_killed = @aliens.find(&:destroys?)&.type
       @aliens.reject!(&:destroys?)
       @aliens.each(&:draw)
+
       move if can_move?
-      shoot if need_shoot?
+
+      @last_shoot_time ||= Gosu.milliseconds
+      shoot if timeout?(@last_shoot_time, DELAY_SHOOT_MSEC)
     end
 
     def needs_redraw?
@@ -71,6 +76,7 @@ module SpaceInvaders
 
       @invasion_sound.play
       next_move_direction
+      @last_move_time = Gosu.milliseconds
     end
 
     def shoot
@@ -78,30 +84,33 @@ module SpaceInvaders
       @last_shoot_time = Gosu.milliseconds
     end
 
-    def need_shoot?
-      @last_shoot_time ||= Gosu.milliseconds
-      Gosu.milliseconds - @last_shoot_time > DELAY_SHOOT_MSEC
+    def closest_alien_to_enemy
+      closest = find(@enemy.x)
+      return closest if closest
+
+      closest = find(@enemy.x + @enemy.w)
+      return closest if closest
+
+      further_x = last_column_x(@aliens)
+      return find(further_x) if further_x < @enemy.x
+
+      find(first_column_x(@aliens))
     end
 
     def can_move?
-      unless @last_move_time
-        @last_move_time = Gosu.milliseconds
-        return true
-      end
+      return true unless @last_move_time
 
-      moving = Gosu.milliseconds - @last_move_time > DELAY_DRAW_MSEC
-      @last_move_time = Gosu.milliseconds if moving
-      moving
+      timeout?(@last_move_time, DELAY_DRAW_MSEC)
     end
 
     def next_move_coords_for(alien_x, alien_y)
       case @move_direction
       when :right
-        [alien_x + @move_step, alien_y]
+        [alien_x + ALIENS_MARGIN, alien_y]
       when :left
-        [alien_x - @move_step, alien_y]
+        [alien_x - ALIENS_MARGIN, alien_y]
       when :bottom
-        [alien_x, alien_y + @move_step]
+        [alien_x, alien_y + ALIENS_MARGIN]
       end
     end
 
@@ -117,31 +126,11 @@ module SpaceInvaders
     end
 
     def available_directions
-      alien_width = Settings::ALIENS_WIDTH
+      extreme_right_aliens = WIDTH - ALIENS_WIDTH - ALIENS_MARGIN
       {
-        right: first_column_x < @move_step,
-        left: last_column_x > Settings::WIDTH - alien_width - @move_step
+        right: first_column_x(@aliens) < ALIENS_MARGIN,
+        left: last_column_x(@aliens) > extreme_right_aliens
       }
-    end
-
-    def last_column_x
-      @aliens.max_by(&:x).x
-    end
-
-    def first_column_x
-      @aliens.min_by(&:x).x
-    end
-
-    def closest_alien_to_enemy
-      closest = find(@enemy.x)
-      return closest if closest
-
-      closest = find(@enemy.x + @enemy.w)
-      return closest if closest
-
-      return find(last_column_x) if last_column_x < @enemy.x
-
-      find(first_column_x) if first_column_x > @enemy.x
     end
   end
 end
