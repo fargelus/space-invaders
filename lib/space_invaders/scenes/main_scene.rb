@@ -37,15 +37,23 @@ module SpaceInvaders
       @lifes.draw(@ship.lifes)
       @scores.each(&:draw)
 
+      @need_final_drawing = @aliens.first_row_y >= @ship.start_y
+
       @player_score.up(@aliens.last_killed)
     end
 
     def needs_redraw?
+      @aliens_reached_ship = @need_final_drawing
       @redraw_objects.collect(&:needs_redraw?).any?
     end
 
     def needs_change?
-      @ship.lifes.zero?
+      @ship.lifes.zero? || aliens_reached_ship?
+    end
+
+    def aliens_reached_ship?
+      @need_final_drawing = false if @aliens_reached_ship
+      @aliens_reached_ship
     end
 
     def prepare_scene

@@ -65,6 +65,10 @@ module SpaceInvaders
              .max_by(&:y)
     end
 
+    def first_row_y
+      @aliens.max_by(&:y)&.y
+    end
+
     private
 
     def move
@@ -80,11 +84,11 @@ module SpaceInvaders
     end
 
     def shoot
-      closest_alien_to_enemy.shoot(@enemy)
+      above_enemy_alien.shoot(@enemy)
       @last_shoot_time = Gosu.milliseconds
     end
 
-    def closest_alien_to_enemy
+    def above_enemy_alien
       closest = find(@enemy.x)
       return closest if closest
 
