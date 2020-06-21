@@ -13,12 +13,6 @@ module SpaceInvaders
       super coord_x, coord_y, alien_path
 
       @type = Settings::ALIENS_PATH_TO_TYPE[alien_path]
-      @figure = Gosu::Image.load_tiles(
-        alien_path.to_s,
-        Settings::ALIENS_WIDTH,
-        Settings::ALIENS_HEIGHT
-      )
-      @tile_num = 0
       @destroy_sound = Gosu::Sample.new(HIT_ALIEN_SOUND)
       @gun = Gun.new(gun_options)
     end
@@ -32,7 +26,7 @@ module SpaceInvaders
     end
 
     def draw
-      @figure[@tile_num % 2].draw(@x, @y, 0)
+      super
       @gun.set(@x + w / 2, @y)
       @gun.draw
     end
@@ -46,7 +40,6 @@ module SpaceInvaders
     end
 
     def on_move
-      @tile_num += 1
       @moving = true
     end
 

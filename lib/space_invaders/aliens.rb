@@ -3,7 +3,7 @@
 require 'gosu'
 require_relative 'base/settings'
 require_relative 'base/helpers'
-require_relative 'game_objects/alien'
+require_relative 'game_objects/animated_alien'
 
 module SpaceInvaders
   class Aliens
@@ -37,9 +37,9 @@ module SpaceInvaders
 
     def place_aliens_in_row(index, alien_y)
       alien_x = @place_x
-      alien_path = ALL_ALIENS[index]
+      alien_path = TILEABLE_ALIENS[index]
       ALIENS_PER_ROW.times do
-        alien = Alien.new(alien_x, alien_y, alien_path)
+        alien = AnimatedAlien.new(alien_x, alien_y, alien_path)
         alien_x += alien.w + ALIENS_MARGIN
         @aliens << alien
       end

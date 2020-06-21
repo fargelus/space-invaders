@@ -91,22 +91,30 @@ module SpaceInvaders
         0, 1.0, 1.0,
         SUNNY_COLOR
       )
-      aliens_coord_y = table_header_coord_y + ALIENS_HEIGHT + ALIENS_MARGIN + 5
-      draw_aliens(@width * 0.33, aliens_coord_y)
+      @aliens_render_coords = {
+        x: @width * 0.33,
+        y: table_header_coord_y + ALIENS_HEIGHT + ALIENS_MARGIN + 5
+      }
+      draw_aliens
       draw_aliens_score
     end
 
-    def draw_aliens(aliens_render_x, aliens_render_y)
-      ALIENS_SCOREBOARD.each do |alien_type, score_points|
+    def draw_aliens
+      %i[mistery predator robot skull spider].each do |alien_type|
         alien_path = ALIENS_PATH_TO_TYPE.key(alien_type)
-        Alien.new(aliens_render_x, aliens_render_y, alien_path).draw
+        coord_x, coord_y = @aliens_render_coords.values
+        Alien.new(coord_x, coord_y, alien_path).draw
         @aliens_draw_info << {
-          x: aliens_render_x,
-          y: aliens_render_y,
-          points: score_points
+          x: coord_x,
+          y: coord_y,
+          points: ALIENS_SCOREBOARD[alien_type]
         }
-        aliens_render_y += ALIENS_HEIGHT + ALIENS_MARGIN + 5
+        alien_rendered
       end
+    end
+
+    def alien_rendered
+      @aliens_render_coords[:y] += ALIENS_HEIGHT + ALIENS_MARGIN + 5
     end
 
     def draw_aliens_score
@@ -118,6 +126,7 @@ module SpaceInvaders
 
     def fill_printable_scores
       @aliens_draw_info.each do |alien_info|
+        alien_info[:points] ||= '?'
         @printable_scores << PrintableText.new(
           x: alien_info[:x] + ALIENS_WIDTH + ALIENS_MARGIN,
           y: alien_info[:y],
