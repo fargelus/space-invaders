@@ -36,14 +36,14 @@ module SpaceInvaders
       Pathname.new(ALIENS_DIR / 'robot.png') => :robot,
       Pathname.new(ALIENS_DIR / 'skull.png') => :skull,
       Pathname.new(ALIENS_DIR / 'predator.png') => :predator,
-      Pathname.new(ALIENS_DIR / 'mistery.png') => :mistery,
+      Pathname.new(ALIENS_DIR / 'mistery.png') => :mistery
     }.freeze
     TILEABLE_ALIENS_PATH_TO_TYPE = {
       Pathname.new(ALIENS_DIR / 'tiles/spider_tiles.png') => :spider,
       Pathname.new(ALIENS_DIR / 'tiles/robot_tiles.png') => :robot,
       Pathname.new(ALIENS_DIR / 'tiles/skull_tiles.png') => :skull,
-      Pathname.new(ALIENS_DIR / 'tiles/predator_tiles.png') => :predator,
-    }
+      Pathname.new(ALIENS_DIR / 'tiles/predator_tiles.png') => :predator
+    }.freeze
     TILEABLE_ALIENS = TILEABLE_ALIENS_PATH_TO_TYPE.keys + [TILEABLE_ALIENS_PATH_TO_TYPE.keys.last]
     ALIENS_SCOREBOARD = {
       predator: 10,
