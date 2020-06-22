@@ -56,7 +56,7 @@ module SpaceInvaders
     def entrance_text_options
       {
         x: @width * 0.45,
-        y: @height * 0.15,
+        y: @height * 0.1,
         text: 'Play',
         window: @window,
         color: GREEN_COLOR,
@@ -67,7 +67,7 @@ module SpaceInvaders
     def game_title_options
       {
         x: @width * 0.33,
-        y: @height * 0.25,
+        y: @height * 0.2,
         size: INFO_FONT_SIZE,
         color: GREEN_COLOR,
         text: CAPTION,
@@ -84,7 +84,7 @@ module SpaceInvaders
     end
 
     def draw_score_table
-      table_header_coord_y = @height * 0.43
+      table_header_coord_y = @height * 0.35
       @main_font.draw_text(
         '*Score advance table*',
         @width * 0.23, table_header_coord_y,
