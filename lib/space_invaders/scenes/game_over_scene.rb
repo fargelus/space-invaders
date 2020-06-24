@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'gosu'
 require_relative '../output/printable_text'
 require_relative '../base/settings'
 require_relative '../base/game_scene'
