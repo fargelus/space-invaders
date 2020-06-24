@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require 'gosu'
-require_relative '../base/settings'
+require_relative '../db/setup'
 require_relative '../base/game_scene'
 require_relative '../aliens'
 require_relative '../scores/player_score'
