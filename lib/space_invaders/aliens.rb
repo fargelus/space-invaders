@@ -29,6 +29,7 @@ module SpaceInvaders
 
     def setup
       alien_y = @place_y
+      @last_move_time = nil
       ALIENS_ROWS.times do |i|
         place_aliens_in_row(i, alien_y)
         alien_y += ALIENS_HEIGHT + ALIENS_MARGIN
@@ -46,14 +47,14 @@ module SpaceInvaders
     end
 
     def draw
-      @last_killed = @aliens.find(&:destroys?)&.type
-      @aliens.reject!(&:destroys?)
+      @last_killed = @aliens.find(&:destroyed?)&.type
+      @aliens.reject!(&:destroyed?)
       @aliens.each(&:draw)
 
       move if can_move?
 
       @last_shoot_time ||= Gosu.milliseconds
-      shoot if timeout?(@last_shoot_time, DELAY_SHOOT_MSEC)
+      shoot if need_shoot?
     end
 
     def needs_redraw?
@@ -69,6 +70,10 @@ module SpaceInvaders
       @aliens.max_by(&:y)&.y
     end
 
+    def destroyed?
+      @aliens.empty?
+    end
+
     private
 
     def move
@@ -81,6 +86,10 @@ module SpaceInvaders
       @invasion_sound.play
       next_move_direction
       @last_move_time = Gosu.milliseconds
+    end
+
+    def need_shoot?
+      @aliens.any? && Gosu.milliseconds - @last_shoot_time > DELAY_SHOOT_MSEC
     end
 
     def shoot
@@ -104,7 +113,7 @@ module SpaceInvaders
     def can_move?
       return true unless @last_move_time
 
-      timeout?(@last_move_time, DELAY_DRAW_MSEC)
+      @aliens.any? && Gosu.milliseconds - @last_move_time > DELAY_DRAW_MSEC
     end
 
     def next_move_coords_for(alien_x, alien_y)

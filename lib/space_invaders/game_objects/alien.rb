@@ -48,7 +48,7 @@ module SpaceInvaders
       @killed = true
     end
 
-    def destroys?
+    def destroyed?
       @killed
     end
 

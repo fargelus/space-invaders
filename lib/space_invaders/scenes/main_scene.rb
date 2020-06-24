@@ -11,6 +11,8 @@ require_relative '../game_objects/lifes'
 
 module SpaceInvaders
   class MainScene < GameScene
+    ALIENS_NEW_WAVE_RENDER_PAUSE = 400
+
     def initialize(width:, height:, window:)
       super
 
@@ -33,18 +35,21 @@ module SpaceInvaders
     def draw
       super
 
+      @aliens.setup if new_aliens_wave?
+
       @redraw_objects.each(&:draw)
       @lifes.draw(@ship.lifes)
       @scores.each(&:draw)
+      @player_score.up(@aliens.last_killed)
+
+      return if @aliens.destroyed?
 
       @need_final_drawing = @aliens.first_row_y >= @ship.start_y
-
-      @player_score.up(@aliens.last_killed)
     end
 
     def needs_redraw?
       @aliens_reached_ship = @need_final_drawing
-      @redraw_objects.collect(&:needs_redraw?).any?
+      @redraw_objects.collect(&:needs_redraw?).any? || @aliens.destroyed?
     end
 
     def needs_change?
@@ -105,6 +110,15 @@ module SpaceInvaders
       nil
     ensure
       @window.close
+    end
+
+    def new_aliens_wave?
+      return false unless @aliens.destroyed?
+
+      @aliens_render_pause ||= Gosu.milliseconds
+      result = Gosu.milliseconds - @aliens_render_pause > ALIENS_NEW_WAVE_RENDER_PAUSE
+      @aliens_render_pause = nil if result
+      result
     end
   end
 end

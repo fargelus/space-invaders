@@ -9,10 +9,6 @@ module SpaceInvaders
       Settings::WIDTH / 2 - obj.w / 2
     end
 
-    def timeout?(timestamp, duration)
-      Gosu.milliseconds - timestamp > duration
-    end
-
     def last_column_x(collection)
       collection.max_by(&:x).x
     end
