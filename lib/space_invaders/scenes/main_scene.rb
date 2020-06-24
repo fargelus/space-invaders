@@ -39,8 +39,8 @@ module SpaceInvaders
 
       @redraw_objects.each(&:draw)
       @lifes.draw(@ship.lifes)
-      @scores.each(&:draw)
       @player_score.up(@aliens.last_killed)
+      @scores.each(&:draw)
 
       return if @aliens.destroyed?
 

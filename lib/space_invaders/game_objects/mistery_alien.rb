@@ -10,6 +10,9 @@ module SpaceInvaders
 
     DELAY_DRAW_MSEC = 600
     MOVING_REDRAW_MSEC = 30
+    MISTERY_SOUND = SOUNDS_PATH / 'mistery.wav'
+
+    attr_reader :moving
 
     def initialize(coord_y)
       super -MISTERY_WIDTH, coord_y, ALIENS_PATH_TO_TYPE.key(:mistery)
@@ -18,6 +21,7 @@ module SpaceInvaders
       @moving = false
       @move_direction = :right
       @opposite_directions = { left: :right, right: :left }
+      @moving_sound = Gosu::Sample.new(MISTERY_SOUND)
     end
 
     def draw
@@ -37,6 +41,7 @@ module SpaceInvaders
       step = ALIENS_MARGIN
       step = -step if @move_direction == :left
       @x += step
+      @moving_sound.play
       on_last_moving_step
     end
 
