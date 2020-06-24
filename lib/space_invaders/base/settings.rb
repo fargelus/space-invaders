@@ -51,7 +51,7 @@ module SpaceInvaders
       skull: 30,
       spider: 50
     }.freeze
-    MISTERY_SCORES = [50, 100, 150]
+    MISTERY_SCORES = [50, 100, 150].freeze
     MISTERY_WIDTH = 57
     RED_COLOR = Gosu::Color.new(214, 17, 17)
     GREEN_COLOR = Gosu::Color.new(9, 222, 1)
