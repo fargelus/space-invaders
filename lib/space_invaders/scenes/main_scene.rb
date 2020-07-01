@@ -3,6 +3,7 @@
 require 'gosu'
 require_relative '../db/setup'
 require_relative '../base/game_scene'
+require_relative '../base/timer'
 require_relative '../aliens'
 require_relative '../scores/player_score'
 require_relative '../scores/hi_score'
@@ -113,12 +114,7 @@ module SpaceInvaders
     end
 
     def new_aliens_wave?
-      return false unless @aliens.destroyed?
-
-      @aliens_render_pause ||= Gosu.milliseconds
-      result = Gosu.milliseconds - @aliens_render_pause > ALIENS_NEW_WAVE_RENDER_PAUSE
-      @aliens_render_pause = nil if result
-      result
+      @aliens.destroyed? && Timer.overtime?(ALIENS_NEW_WAVE_RENDER_PAUSE)
     end
   end
 end

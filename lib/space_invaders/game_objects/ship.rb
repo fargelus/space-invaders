@@ -92,9 +92,7 @@ module SpaceInvaders
     end
 
     def blinking?
-      return false unless @destroyed_timestamp
-
-      invisible = Gosu.milliseconds - @destroyed_timestamp < BLINK_DURATION_MSEC
+      invisible = @destroyed_timestamp && !Timer.overtime?(BLINK_DURATION_MSEC)
       @destroyed_timestamp = nil unless invisible
       invisible
     end

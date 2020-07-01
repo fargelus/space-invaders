@@ -3,6 +3,7 @@
 require 'gosu'
 require_relative '../output/printable_text'
 require_relative '../base/settings'
+require_relative '../base/timer'
 require_relative '../game_objects/alien'
 
 module SpaceInvaders
@@ -79,8 +80,7 @@ module SpaceInvaders
       return false if @game_title.needs_redraw?
       return true if @printable_scores.any?
 
-      @delay_timestamp ||= Gosu.milliseconds
-      Gosu.milliseconds - @delay_timestamp > SCORE_TABLE_RENDER_DELAY_MSEC
+      Timer.overtime?(SCORE_TABLE_RENDER_DELAY_MSEC)
     end
 
     def draw_score_table

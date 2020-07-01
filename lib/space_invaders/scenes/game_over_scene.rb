@@ -3,6 +3,7 @@
 require 'gosu'
 require_relative '../output/printable_text'
 require_relative '../base/settings'
+require_relative '../base/timer'
 require_relative '../base/game_scene'
 
 module SpaceInvaders
@@ -20,15 +21,14 @@ module SpaceInvaders
       @game_over_msg.draw
       return if @game_over_msg.needs_redraw?
 
-      @timestamp ||= Gosu.milliseconds
-      if Gosu.milliseconds - @timestamp > LABEL_DRAW_DELAY
-        @label_font.draw_text(
-          'Press <Enter> to restart game',
-          @width * 0.33, @height * 0.4,
-          0, 1.0, 1.0
-        )
-        @draw_continues
-      end
+      return unless Timer.overtime?(LABEL_DRAW_DELAY, freeze: true)
+
+      @label_font.draw_text(
+        'Press <Enter> to restart game',
+        @width * 0.33, @height * 0.4,
+        0, 1.0, 1.0
+      )
+      @draw_continues
     end
 
     def needs_redraw?
