@@ -39,7 +39,8 @@ module SpaceInvaders
       max_x_coord > coord_x && coord_x > min_x_coord
     end
 
-    def on_move
+    def move(x, y)
+      set x, y
       @moving = true
     end
 

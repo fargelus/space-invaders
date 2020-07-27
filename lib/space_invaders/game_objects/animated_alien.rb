@@ -18,13 +18,13 @@ module SpaceInvaders
       @tile_num = 0
     end
 
-    def draw
-      @figure = @tiles[@tile_num % 2]
-      super
+    def move(x, y)
+      super x, y
+      @tile_num += 1
     end
 
-    def on_move
-      @tile_num += 1
+    def draw
+      @figure = @tiles[@tile_num % 2]
       super
     end
   end

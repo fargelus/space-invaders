@@ -3,7 +3,9 @@
 require 'gosu'
 require_relative 'base/settings'
 require_relative 'base/helpers'
+require_relative 'base/timer'
 require_relative 'game_objects/animated_alien'
+require_relative 'game_objects/mistery_alien'
 
 module SpaceInvaders
   class Aliens
@@ -13,6 +15,7 @@ module SpaceInvaders
     INVASION_SOUND = SOUNDS_PATH / 'invasion.mp3'
     DELAY_DRAW_MSEC = 700
     DELAY_SHOOT_MSEC = 1500
+    MISTERY_DRAW_DELAY_MSEC = 30_000
 
     attr_reader :last_killed
 
@@ -34,6 +37,7 @@ module SpaceInvaders
         place_aliens_in_row(i, alien_y)
         alien_y += ALIENS_HEIGHT + ALIENS_MARGIN
       end
+      @mistery = MisteryAlien.new(@place_y)
     end
 
     def place_aliens_in_row(index, alien_y)
@@ -50,8 +54,8 @@ module SpaceInvaders
       @last_killed = @aliens.find(&:destroyed?)&.type
       @aliens.reject!(&:destroyed?)
       @aliens.each(&:draw)
-
       move if can_move?
+      @mistery.draw if mistery_appears?
 
       @last_shoot_time ||= Gosu.milliseconds
       shoot if need_shoot?
@@ -79,11 +83,10 @@ module SpaceInvaders
     def move
       @aliens.each do |alien|
         move_x, move_y = next_move_coords_for(alien.x, alien.y)
-        alien.set(move_x, move_y)
-        alien.on_move
+        alien.move(move_x, move_y)
       end
 
-      @invasion_sound.play
+      @invasion_sound.play if @mistery.on_start
       next_move_direction
       @last_move_time = Gosu.milliseconds
     end
@@ -113,7 +116,7 @@ module SpaceInvaders
     def can_move?
       return true unless @last_move_time
 
-      @aliens.any? && Gosu.milliseconds - @last_move_time > DELAY_DRAW_MSEC
+      Gosu.milliseconds - @last_move_time > DELAY_DRAW_MSEC
     end
 
     def next_move_coords_for(alien_x, alien_y)
@@ -144,6 +147,12 @@ module SpaceInvaders
         right: first_column_x(@aliens) < ALIENS_MARGIN,
         left: last_column_x(@aliens) > extreme_right_aliens
       }
+    end
+
+    def mistery_appears?
+      return true unless @mistery.on_start
+
+      Timer.overtime?(MISTERY_DRAW_DELAY_MSEC)
     end
   end
 end
