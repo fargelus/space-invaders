@@ -40,6 +40,11 @@ module SpaceInvaders
       @redraw || @gun.needs_redraw?
     end
 
+    def start_y
+      ship_margin_top = 5
+      y - h / 2 - ship_margin_top
+    end
+
     def area?(coord_x, coord_y)
       return false if @y + @h > coord_y
 
@@ -87,9 +92,7 @@ module SpaceInvaders
     end
 
     def blinking?
-      return false unless @destroyed_timestamp
-
-      invisible = Gosu.milliseconds - @destroyed_timestamp < BLINK_DURATION_MSEC
+      invisible = @destroyed_timestamp && !Timer.overtime?(BLINK_DURATION_MSEC)
       @destroyed_timestamp = nil unless invisible
       invisible
     end

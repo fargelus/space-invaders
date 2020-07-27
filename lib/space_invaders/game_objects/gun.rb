@@ -2,6 +2,7 @@
 
 require 'gosu'
 require_relative 'bullet'
+require_relative '../base/game_object'
 
 module SpaceInvaders
   class Gun < GameObject

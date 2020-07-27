@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 
 require 'gosu'
-require_relative '../base/settings'
+require_relative '../db/setup'
 require_relative '../base/game_scene'
+require_relative '../base/timer'
 require_relative '../aliens'
 require_relative '../scores/player_score'
 require_relative '../scores/hi_score'
@@ -11,6 +12,8 @@ require_relative '../game_objects/lifes'
 
 module SpaceInvaders
   class MainScene < GameScene
+    ALIENS_NEW_WAVE_RENDER_PAUSE = 400
+
     def initialize(width:, height:, window:)
       super
 
@@ -33,19 +36,30 @@ module SpaceInvaders
     def draw
       super
 
+      @aliens.setup if new_aliens_wave?
+
       @redraw_objects.each(&:draw)
       @lifes.draw(@ship.lifes)
+      @player_score.up(@aliens.last_killed)
       @scores.each(&:draw)
 
-      @player_score.up(@aliens.last_killed)
+      return if @aliens.destroyed?
+
+      @need_final_drawing = @aliens.first_row_y >= @ship.start_y
     end
 
     def needs_redraw?
-      @redraw_objects.collect(&:needs_redraw?).any?
+      @aliens_reached_ship = @need_final_drawing
+      @redraw_objects.collect(&:needs_redraw?).any? || @aliens.destroyed?
     end
 
     def needs_change?
-      @ship.lifes.zero?
+      @ship.lifes.zero? || aliens_reached_ship?
+    end
+
+    def aliens_reached_ship?
+      @need_final_drawing = false if @aliens_reached_ship
+      @aliens_reached_ship
     end
 
     def prepare_scene
@@ -97,6 +111,10 @@ module SpaceInvaders
       nil
     ensure
       @window.close
+    end
+
+    def new_aliens_wave?
+      @aliens.destroyed? && Timer.overtime?(ALIENS_NEW_WAVE_RENDER_PAUSE)
     end
   end
 end

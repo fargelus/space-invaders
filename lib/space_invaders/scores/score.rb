@@ -24,7 +24,12 @@ module SpaceInvaders
     def up(alien_type)
       return unless alien_type
 
-      @score += Settings::ALIENS_SCOREBOARD[alien_type]
+      up_score = if alien_type == :mistery
+                   Settings::MISTERY_SCORES.sample
+                 else
+                   Settings::ALIENS_SCOREBOARD[alien_type]
+                 end
+      @score += up_score
     end
   end
 end

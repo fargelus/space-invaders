@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+require_relative '../base/settings'
+require_relative '../base/game_object'
+
 module SpaceInvaders
   class Lifes < GameObject
     def initialize(coord_x, coord_y)

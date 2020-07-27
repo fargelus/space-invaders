@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative '../base/settings'
+require_relative '../base/game_object'
 
 module SpaceInvaders
   class Bullet < GameObject
