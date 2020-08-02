@@ -42,7 +42,7 @@ module SpaceInvaders
 
     def place_aliens_in_row(index, alien_y)
       alien_x = @place_x
-      alien_path = TILEABLE_ALIENS[index]
+      alien_path = RENDER_TILEABLE_ALIENS[index]
       ALIENS_PER_ROW.times do
         alien = AnimatedAlien.new(alien_x, alien_y, alien_path)
         alien_x += alien.w + ALIENS_MARGIN

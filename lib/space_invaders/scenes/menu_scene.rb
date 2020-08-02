@@ -91,26 +91,30 @@ module SpaceInvaders
         0, 1.0, 1.0,
         SUNNY_COLOR
       )
+      draw_aliens(table_header_coord_y)
+      draw_aliens_score
+    end
+
+    def draw_aliens(table_header_coord_y)
       @aliens_render_coords = {
         x: @width * 0.33,
         y: table_header_coord_y + ALIENS_HEIGHT + ALIENS_MARGIN + 5
       }
-      draw_aliens
-      draw_aliens_score
+      %i[mistery predator robot skull spider].each do |alien_type|
+        draw_alien(alien_type)
+      end
     end
 
-    def draw_aliens
-      %i[mistery predator robot skull spider].each do |alien_type|
-        alien_path = ALIENS_PATH_TO_TYPE.key(alien_type)
-        coord_x, coord_y = @aliens_render_coords.values
-        Alien.new(coord_x, coord_y, alien_path).draw
-        @aliens_draw_info << {
-          x: coord_x,
-          y: coord_y,
-          points: ALIENS_SCOREBOARD[alien_type]
-        }
-        alien_rendered
-      end
+    def draw_alien(alien_type)
+      alien_path = ALIENS_PATH_TO_TYPE.key(alien_type)
+      coord_x, coord_y = @aliens_render_coords.values
+      Alien.new(coord_x, coord_y, alien_path).draw
+      @aliens_draw_info << {
+        x: coord_x,
+        y: coord_y,
+        points: ALIENS_SCOREBOARD[alien_type]
+      }
+      alien_rendered
     end
 
     def alien_rendered

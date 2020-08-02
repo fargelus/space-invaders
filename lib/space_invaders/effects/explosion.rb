@@ -9,10 +9,10 @@ module SpaceInvaders
     SPRITE = Settings::EFFECTS_DIR / 'explosion.png'
     EXPLOSION_SIZE = 128
 
-    def initialize(x, y)
+    def initialize(coord_x, coord_y)
       @tile_num = 0
-      @x = x
-      @y = y
+      @x = coord_x
+      @y = coord_y
       @tiles = Gosu::Image.load_tiles(
         SPRITE.to_s,
         EXPLOSION_SIZE,

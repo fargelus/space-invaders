@@ -100,7 +100,8 @@ module SpaceInvaders
     end
 
     def blinking?
-      @destroyed_timestamp && Gosu.milliseconds - @destroyed_timestamp < BLINK_DURATION_MSEC
+      now = Gosu.milliseconds
+      @destroyed_timestamp && now - @destroyed_timestamp < BLINK_DURATION_MSEC
     end
   end
 end
