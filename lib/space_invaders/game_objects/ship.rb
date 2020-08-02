@@ -3,6 +3,7 @@
 require 'gosu'
 require_relative '../base/settings'
 require_relative '../base/game_object'
+require_relative '../effects/explosion'
 require_relative 'gun'
 
 module SpaceInvaders
@@ -58,9 +59,11 @@ module SpaceInvaders
 
       @redraw = true
       @destroyed_timestamp = Gosu.milliseconds
+      @explosion = Explosion.new(@x, @y) if @lifes.zero?
     end
 
     def draw
+      return @explosion.draw if @explosion
       return if blinking?
 
       super
@@ -80,6 +83,10 @@ module SpaceInvaders
 
     def shoot
       @gun.shoot!(@enemies.find(@gun.x))
+    end
+
+    def destroyed?
+      @explosion && !@explosion.needs_redraw?
     end
 
     private

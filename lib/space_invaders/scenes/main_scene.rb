@@ -54,7 +54,7 @@ module SpaceInvaders
     end
 
     def needs_change?
-      @ship.lifes.zero? || aliens_reached_ship?
+      @ship.destroyed? || aliens_reached_ship?
     end
 
     def aliens_reached_ship?

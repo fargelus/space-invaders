@@ -26,10 +26,12 @@ module SpaceInvaders
 
     def draw
       frame = @tiles[@tile_num]
-      frame.draw(
+
+      frame&.draw(
         @x - frame.width / 2.0,
         @y - frame.height / 2.0,
-        0) if frame
+        0
+      )
       @tile_num += 1 if Timer.overtime?(FRAME_DELAY_MSEC)
     end
   end
