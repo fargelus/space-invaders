@@ -1,7 +1,7 @@
 # Classic Space Invaders Game
 ![Game board](./doc/gameboard.png)
 
-## Rules:
+## Features:
 1. Player moves ship horizontally by pressing on keyboard. :heavy_check_mark:
 2. Player shoot aliens, which can move horizontally & vertically. :heavy_check_mark:
 3. When bullet reach alien, alien disappear & total score increase. :heavy_check_mark:
