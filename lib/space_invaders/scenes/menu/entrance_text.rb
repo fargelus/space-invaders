@@ -41,8 +41,8 @@ module SpaceInvaders
 
     def game_title_options
       entrance_text_options.merge(
-        x: @start_x - 95,
-        y: @start_y + 40,
+        x: @start_x - CAPTION_FONT_SIZE - INFO_FONT_SIZE,
+        y: @start_y + INFO_FONT_SIZE,
         text: CAPTION
       )
     end
