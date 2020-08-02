@@ -26,9 +26,8 @@ module SpaceInvaders
 
     def draw
       frame = @tiles[@tile_num]
-
       frame&.draw(
-        @x - frame.width / 2.0,
+        @x - frame.width / 3.0,
         @y - frame.height / 2.0,
         0
       )
