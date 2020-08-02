@@ -65,6 +65,7 @@ module SpaceInvaders
 
       super
       @redraw = false
+      @destroyed_timestamp = nil
       @gun.re_target!(@enemies.find(@gun.x))
       @gun.draw
     end
@@ -92,9 +93,7 @@ module SpaceInvaders
     end
 
     def blinking?
-      invisible = @destroyed_timestamp && !Timer.overtime?(BLINK_DURATION_MSEC)
-      @destroyed_timestamp = nil unless invisible
-      invisible
+      @destroyed_timestamp && Gosu.milliseconds - @destroyed_timestamp < BLINK_DURATION_MSEC
     end
   end
 end

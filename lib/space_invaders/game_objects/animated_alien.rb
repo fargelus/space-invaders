@@ -16,16 +16,38 @@ module SpaceInvaders
         Settings::ALIENS_HEIGHT
       )
       @tile_num = 0
+      @gun = Gun.new(gun_options)
     end
 
     def move(x, y)
-      super x, y
+      set x, y
       @tile_num += 1
+      @moving = true
+    end
+
+    def needs_redraw?
+      @moving
     end
 
     def draw
       @figure = @tiles[@tile_num % 2]
+      @gun.set(@x + w / 2, @y)
+      @gun.draw
       super
+    end
+
+    def shoot(enemy)
+      @gun.shoot!(enemy)
+    end
+
+    private
+
+    def gun_options
+      {
+        shot_sound_path: Settings::SOUNDS_PATH / 'alien_gun.wav',
+        bullet_image_path: Settings::BULLETS_DIR / "#{@type}_bullet.png",
+        direction: Settings::BULLET_DIRECTION_DOWN
+      }
     end
   end
 end
