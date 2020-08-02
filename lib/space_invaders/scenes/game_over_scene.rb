@@ -42,20 +42,26 @@ module SpaceInvaders
     def prepare_scene
       super
 
-      @game_over_msg = PrintableText.new(
-        x: @width * 0.33,
-        y: @height * 0.3,
-        text: 'Game Over',
-        size: 55,
-        color: Settings::RED_COLOR,
-        window: @window
-      )
+      @game_over_msg = PrintableText.new(game_over_msg_options)
       @label_font = Gosu::Font.new(
         @window,
         Settings::FONT,
         Settings::LABEL_FONT_SIZE
       )
       @draw_continues = true
+    end
+
+    private
+
+    def game_over_msg_options
+      {
+        x: @width * 0.33,
+        y: @height * 0.3,
+        text: 'Game Over',
+        size: 55,
+        color: Settings::RED_COLOR,
+        window: @window
+      }
     end
   end
 end

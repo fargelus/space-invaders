@@ -19,8 +19,8 @@ module SpaceInvaders
       @gun = Gun.new(gun_options)
     end
 
-    def move(x, y)
-      set x, y
+    def move(coord_x, coord_y)
+      set coord_x, coord_y
       @tile_num += 1
       @moving = true
     end

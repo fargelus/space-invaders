@@ -11,11 +11,12 @@ module SpaceInvaders
     MOVING_REDRAW_MSEC = 30
     MISTERY_SOUND = SOUNDS_PATH / 'mistery.wav'
     INITIAL_MOVE_DIRECTION = :right
+    MISTERY_INITIAL_COORD_X = -MISTERY_WIDTH
 
     attr_reader :on_start
 
     def initialize(coord_y)
-      super -MISTERY_WIDTH, coord_y, ALIENS_PATH_TO_TYPE.key(:mistery)
+      super MISTERY_INITIAL_COORD_X, coord_y, ALIENS_PATH_TO_TYPE.key(:mistery)
 
       @type = :mistery
       @move_direction = INITIAL_MOVE_DIRECTION
