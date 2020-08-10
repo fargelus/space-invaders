@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-require_relative '../base/settings'
-require_relative '../base/game_object'
+require_relative '../../base/settings'
+require_relative '../../base/image_object'
 
 module SpaceInvaders
-  class Bullet < GameObject
+  class Bullet < ImageObject
     attr_accessor :target
 
     def initialize(options)

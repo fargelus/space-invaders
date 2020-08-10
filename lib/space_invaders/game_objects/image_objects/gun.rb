@@ -2,10 +2,10 @@
 
 require 'gosu'
 require_relative 'bullet'
-require_relative '../base/game_object'
+require_relative '../../base/image_object'
 
 module SpaceInvaders
-  class Gun < GameObject
+  class Gun < ImageObject
     def initialize(options)
       @ammo = []
       @reload_time_msec = 100

@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
 require 'gosu'
-require_relative '../base/settings'
-require_relative '../base/game_object'
+require_relative '../../base/settings'
+require_relative '../../base/image_object'
 
 module SpaceInvaders
-  class Alien < GameObject
+  class Alien < ImageObject
     HIT_ALIEN_SOUND = Settings::SOUNDS_PATH / 'alien_destroys.wav'
     attr_reader :type
 

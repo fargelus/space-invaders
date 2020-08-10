@@ -4,7 +4,7 @@ require 'gosu'
 require_relative '../../output/printable_text'
 require_relative '../../base/settings'
 require_relative '../../base/timer'
-require_relative '../../game_objects/alien'
+require_relative '../../game_objects/image_objects/alien'
 require_relative 'entrance_text'
 
 module SpaceInvaders

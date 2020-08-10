@@ -4,8 +4,8 @@ require 'gosu'
 require_relative 'base/settings'
 require_relative 'base/helpers'
 require_relative 'base/timer'
-require_relative 'game_objects/animated_alien'
-require_relative 'game_objects/mistery_alien'
+require_relative 'game_objects/image_objects/animated_alien'
+require_relative 'game_objects/image_objects/mistery_alien'
 
 module SpaceInvaders
   class Aliens

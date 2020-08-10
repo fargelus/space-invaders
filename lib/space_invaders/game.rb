@@ -40,7 +40,7 @@ module SpaceInvaders
       menu_scene = MenuScene.new(width: width, height: height, window: self)
       main_scene = MainScene.new(width: width, height: height, window: self)
       last_scene = GameOverScene.new(width: width, height: height, window: self)
-      @current_scene = menu_scene
+      @current_scene = main_scene
       @frames = {
         menu_scene => main_scene,
         main_scene => last_scene,

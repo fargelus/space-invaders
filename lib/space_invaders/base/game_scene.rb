@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require_relative 'settings'
-require_relative 'game_object'
+require_relative 'image_object'
 
 module SpaceInvaders
   class GameScene
@@ -9,7 +9,7 @@ module SpaceInvaders
       @width = width
       @height = height
       @window = window
-      @bg = GameObject.new(0, 0, Settings::IMAGES_PATH / 'space.png')
+      @bg = ImageObject.new(0, 0, Settings::IMAGES_PATH / 'space.png')
       @change = false
     end
 
