@@ -8,6 +8,8 @@ module SpaceInvaders
     HEIGHT = 5
     COLOR = Gosu::Color.new(133, 104, 66)
 
+    attr_reader :x, :y
+
     def initialize(coord_x, coord_y)
       @x = coord_x
       @y = coord_y

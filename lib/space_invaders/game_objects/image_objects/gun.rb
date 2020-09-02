@@ -24,7 +24,7 @@ module SpaceInvaders
       @ammo.each(&:draw)
     end
 
-    def shoot!(enemy)
+    def shoot!(enemy, obstacle: nil)
       return unless ready_for_shoot?
 
       @ammo << Bullet.new(
@@ -32,7 +32,8 @@ module SpaceInvaders
         y: @y,
         image_path: @bullet_image_path,
         direction: @direction,
-        target: enemy
+        target: enemy,
+        obstacle: obstacle
       )
       @shot_sound.play(Settings::SOUNDS_VOLUME)
     end

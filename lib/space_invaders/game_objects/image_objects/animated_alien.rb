@@ -36,8 +36,8 @@ module SpaceInvaders
       super
     end
 
-    def shoot(enemy)
-      @gun.shoot!(enemy)
+    def shoot(enemy, obstacle)
+      @gun.shoot!(enemy, obstacle: obstacle)
     end
 
     private

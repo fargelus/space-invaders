@@ -56,9 +56,6 @@ module SpaceInvaders
       @aliens.each(&:draw)
       move if can_move?
       @mistery.draw if mistery_appears?
-
-      @last_shoot_time ||= Gosu.milliseconds
-      shoot if need_shoot?
     end
 
     def needs_redraw?
@@ -78,6 +75,16 @@ module SpaceInvaders
       @aliens.empty?
     end
 
+    def need_shoot?
+      @last_shoot_time ||= Gosu.milliseconds
+      @aliens.any? && Gosu.milliseconds - @last_shoot_time > DELAY_SHOOT_MSEC
+    end
+
+    def shoot(obstacle:)
+      above_enemy_alien.shoot(@enemy, obstacle)
+      @last_shoot_time = Gosu.milliseconds
+    end
+
     private
 
     def move
@@ -89,15 +96,6 @@ module SpaceInvaders
       @invasion_sound.play if @mistery.on_start
       next_move_direction
       @last_move_time = Gosu.milliseconds
-    end
-
-    def need_shoot?
-      @aliens.any? && Gosu.milliseconds - @last_shoot_time > DELAY_SHOOT_MSEC
-    end
-
-    def shoot
-      above_enemy_alien.shoot(@enemy)
-      @last_shoot_time = Gosu.milliseconds
     end
 
     def above_enemy_alien

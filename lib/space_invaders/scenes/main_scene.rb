@@ -28,6 +28,7 @@ module SpaceInvaders
       @ship.move_left! if @window.button_down?(Gosu::KbLeft)
       @ship.move_right! if @window.button_down?(Gosu::KbRight)
       @ship.shoot if @window.button_down?(Gosu::KbSpace)
+      @aliens.shoot(obstacle: @ground) if @aliens.need_shoot?
     end
 
     def button_down(id)
