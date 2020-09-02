@@ -40,6 +40,7 @@ module SpaceInvaders
     end
 
     def button_down(id)
+      super
       @change = (id == Gosu::KbReturn)
     end
 
