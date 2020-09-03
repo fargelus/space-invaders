@@ -7,8 +7,9 @@ require_relative '../base/timer'
 require_relative '../aliens'
 require_relative '../scores/player_score'
 require_relative '../scores/hi_score'
-require_relative '../game_objects/ship'
-require_relative '../game_objects/lifes'
+require_relative '../game_objects/image_objects/ship'
+require_relative '../game_objects/image_objects/lifes'
+require_relative '../game_objects/ground'
 
 module SpaceInvaders
   class MainScene < GameScene
@@ -27,6 +28,7 @@ module SpaceInvaders
       @ship.move_left! if @window.button_down?(Gosu::KbLeft)
       @ship.move_right! if @window.button_down?(Gosu::KbRight)
       @ship.shoot if @window.button_down?(Gosu::KbSpace)
+      @aliens.shoot(obstacle: @ground) if @aliens.need_shoot?
     end
 
     def button_down(id)
@@ -40,6 +42,7 @@ module SpaceInvaders
 
       @redraw_objects.each(&:draw)
       @lifes.draw(@ship.lifes)
+      @ground.draw
       @player_score.up(@aliens.last_killed)
       @scores.each(&:draw)
 
@@ -71,6 +74,7 @@ module SpaceInvaders
         coord_y: @screen_height * 0.1,
         enemy: @ship
       )
+      @ground = Ground.new(0, @screen_height * 0.93)
       @redraw_objects = [@ship, @aliens]
       setup_assets
     end
@@ -101,7 +105,7 @@ module SpaceInvaders
         @screen_height * 0.85 - @ship.h / 2,
         [0, @screen_width]
       )
-      @lifes = Lifes.new(@screen_width * 0.05, @screen_height * 0.94)
+      @lifes = Lifes.new(@screen_width * 0.05, @screen_height * 0.95)
     end
 
     def save_score_and_close

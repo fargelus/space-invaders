@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 require 'gosu'
-require_relative '../base/settings'
-require_relative '../base/timer'
+require_relative '../../base/settings'
+require_relative '../../base/timer'
 
 module SpaceInvaders
   class MisteryAlien < Alien

@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-require_relative '../base/settings'
-require_relative '../base/game_object'
+require_relative '../../base/settings'
+require_relative '../../base/image_object'
 
 module SpaceInvaders
-  class Lifes < GameObject
+  class Lifes < ImageObject
     def initialize(coord_x, coord_y)
       super coord_x, coord_y, Settings::IMAGES_PATH / 'heart.png'
     end

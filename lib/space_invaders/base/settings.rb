@@ -21,6 +21,7 @@ module SpaceInvaders
     ALIENS_HEIGHT = 32
     ALIENS_WIDTH = 48
     BULLET_WIDTH = 6
+    BULLET_HEIGHT = 17
     ASSETS_DIR = Pathname.new(__dir__).join('../../') / 'assets'
     IMAGES_PATH = ASSETS_DIR / 'images'
     BULLETS_DIR = IMAGES_PATH / 'bullets'
@@ -57,6 +58,7 @@ module SpaceInvaders
     RED_COLOR = Gosu::Color.new(214, 17, 17)
     GREEN_COLOR = Gosu::Color.new(9, 222, 1)
     SUNNY_COLOR = Gosu::Color.new(217, 240, 8)
+    BROWN_COLOR = Gosu::Color.new(133, 104, 66)
     EFFECTS_DIR = IMAGES_PATH / 'effects'
   end
 end
