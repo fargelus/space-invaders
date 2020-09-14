@@ -69,7 +69,7 @@ module SpaceInvaders
       super
       @redraw = false
       @destroyed_timestamp = nil
-      @gun.re_target!(@enemies.find(@gun.x))
+      retarget_gun!
       @gun.draw
     end
 
@@ -102,6 +102,12 @@ module SpaceInvaders
     def blinking?
       now = Gosu.milliseconds
       @destroyed_timestamp && now - @destroyed_timestamp < BLINK_DURATION_MSEC
+    end
+
+    def retarget_gun!
+      @gun.bullets_without_target do |bullet|
+        bullet.target = @enemies.find(bullet.target.x)
+      end
     end
   end
 end

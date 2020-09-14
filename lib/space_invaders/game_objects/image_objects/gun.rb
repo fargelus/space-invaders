@@ -42,13 +42,13 @@ module SpaceInvaders
       Settings::BULLET_WIDTH
     end
 
-    def re_target!(new_enemy)
+    def bullets_without_target
       destroyed_targets = @ammo.select(&:destroyed?).collect(&:target)
       return if destroyed_targets.empty?
 
       @ammo.reject!(&:destroyed?)
       @ammo.select { |bullet| destroyed_targets.include?(bullet.target) }
-           .each { |bullet| bullet.target = new_enemy }
+           .each { |bullet| yield bullet }
     end
 
     private
