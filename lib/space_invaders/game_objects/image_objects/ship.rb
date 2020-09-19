@@ -4,7 +4,6 @@ require 'gosu'
 require_relative '../../base/settings'
 require_relative '../../base/image_object'
 require_relative '../../effects/explosion'
-require_relative 'gun'
 
 module SpaceInvaders
   class Ship < ImageObject
@@ -18,23 +17,23 @@ module SpaceInvaders
     attr_writer :enemies
     attr_reader :lifes
 
-    def initialize(coord_x = 0, coord_y = 0, boundaries = [])
-      super coord_x, coord_y, SHIP_IMAGE_PATH
+    def initialize(options)
+      super options.fetch(:x, 0), options.fetch(:y, 0), SHIP_IMAGE_PATH
 
-      @boundaries = boundaries
+      @boundaries = options.fetch(:boundaries, [])
       @redraw = false
       @enemies = []
       @lifes = SPACESHIP_LIFES
       @hit_sound = Gosu::Sample.new(HIT_SOUND)
 
-      @gun = Gun.new(gun_options)
+      @gun = options[:ammo]
     end
 
     def set(coord_x, coord_y, boundaries)
       super coord_x, coord_y
       @boundaries = boundaries
       @redraw = true
-      @gun.set(coord_x + @w / 2 - @gun.w / 2, coord_y)
+      @gun.set(@x + @w / 2 - @gun.w / 2, @y)
     end
 
     def needs_redraw?
@@ -90,14 +89,6 @@ module SpaceInvaders
     end
 
     private
-
-    def gun_options
-      {
-        shot_sound_path: SOUNDS_PATH / 'spaceship_gun.wav',
-        bullet_image_path: BULLETS_DIR / 'bullet.png',
-        direction: BULLET_DIRECTION_UP
-      }
-    end
 
     def blinking?
       now = Gosu.milliseconds
