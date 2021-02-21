@@ -60,5 +60,21 @@ module SpaceInvaders
     SUNNY_COLOR = Gosu::Color.new(217, 240, 8)
     BROWN_COLOR = Gosu::Color.new(133, 104, 66)
     EFFECTS_DIR = IMAGES_PATH / 'effects'
+
+    def ship_ammo_options
+      {
+        shot_sound_path: SOUNDS_PATH / 'spaceship_gun.wav',
+        bullet_image_path: BULLETS_DIR / 'bullet.png',
+        direction: BULLET_DIRECTION_UP
+      }
+    end
+
+    def alien_ammo_options(type)
+      {
+        shot_sound_path: Settings::SOUNDS_PATH / 'alien_gun.wav',
+        bullet_image_path: Settings::BULLETS_DIR / "#{type}_bullet.png",
+        direction: Settings::BULLET_DIRECTION_DOWN
+      }
+    end
   end
 end

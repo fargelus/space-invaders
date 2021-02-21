@@ -4,16 +4,19 @@ require 'gosu'
 require_relative '../db/setup'
 require_relative '../base/game_scene'
 require_relative '../base/timer'
+require_relative '../base/settings'
 require_relative '../aliens'
 require_relative '../scores/player_score'
 require_relative '../scores/hi_score'
 require_relative '../game_objects/image_objects/ship'
 require_relative '../game_objects/image_objects/lifes'
 require_relative '../game_objects/ground'
+require_relative '../game_objects/image_objects/ammo'
 
 module SpaceInvaders
   class MainScene < GameScene
     ALIENS_NEW_WAVE_RENDER_PAUSE = 400
+    include Settings
 
     def initialize(width:, height:, window:)
       super
@@ -68,7 +71,11 @@ module SpaceInvaders
     def prepare_scene
       super
 
-      @ship = Ship.new
+      @ammos = {
+        ship: Ammo.new(ship_ammo_options),
+        aliens: []
+      }
+      @ship = Ship.new(ammo: @ammos[:ship])
       @aliens = Aliens.new(
         coord_x: @screen_width * 0.1,
         coord_y: @screen_height * 0.1,
@@ -83,7 +90,7 @@ module SpaceInvaders
 
     def setup_assets
       setup_scores
-      @aliens.setup
+      setup_aliens
       setup_ship
     end
 
@@ -96,6 +103,15 @@ module SpaceInvaders
       )
       hi_score_params = { x: @screen_width * 0.7, y: scores_y, window: @window }
       @scores = [@player_score, HiScore.new(hi_score_params)]
+    end
+
+    def setup_aliens
+      @aliens.setup
+      @aliens.each do |alien|
+        ammo = Ammo.new(alien_ammo_options(alien.type))
+        alien.gun = ammo
+        @ammos[:aliens] << ammo
+      end
     end
 
     def setup_ship

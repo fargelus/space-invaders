@@ -2,12 +2,13 @@
 
 require 'gosu'
 require_relative 'bullet'
+require_relative '../../base/settings'
 require_relative '../../base/image_object'
 
 module SpaceInvaders
-  class Gun < ImageObject
+  class Ammo < ImageObject
     def initialize(options)
-      @ammo = []
+      @bullets = []
       @reload_time_msec = 100
       @prev_shoot_timestamp = Gosu.milliseconds
       @shot_sound = Gosu::Sample.new(options[:shot_sound_path])
@@ -16,18 +17,18 @@ module SpaceInvaders
     end
 
     def needs_redraw?
-      @ammo.any?(&:needs_redraw?)
+      @bullets.any?(&:needs_redraw?)
     end
 
     def draw
-      @ammo.reject!(&:destroyed?)
-      @ammo.each(&:draw)
+      @bullets.reject!(&:destroyed?)
+      @bullets.each(&:draw)
     end
 
     def shoot!(enemy, obstacle: nil)
       return unless ready_for_shoot?
 
-      @ammo << Bullet.new(
+      @bullets << Bullet.new(
         x: @x,
         y: @y,
         image_path: @bullet_image_path,
@@ -43,11 +44,11 @@ module SpaceInvaders
     end
 
     def bullets_without_target
-      destroyed_targets = @ammo.select(&:destroyed?).collect(&:target)
+      destroyed_targets = @bullets.select(&:destroyed?).collect(&:target)
       return if destroyed_targets.empty?
 
-      @ammo.reject!(&:destroyed?)
-      @ammo.select { |bullet| destroyed_targets.include?(bullet.target) }
+      @bullets.reject!(&:destroyed?)
+      @bullets.select { |bullet| destroyed_targets.include?(bullet.target) }
            .each { |bullet| yield bullet }
     end
 

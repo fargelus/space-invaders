@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'gosu'
+require 'forwardable'
 require_relative 'base/settings'
 require_relative 'base/helpers'
 require_relative 'base/timer'
@@ -11,6 +12,7 @@ module SpaceInvaders
   class Aliens
     include Helpers
     include Settings
+    extend Forwardable
 
     INVASION_SOUND = SOUNDS_PATH / 'invasion.mp3'
     DELAY_DRAW_MSEC = 700
@@ -18,6 +20,8 @@ module SpaceInvaders
     MISTERY_DRAW_DELAY_MSEC = 30_000
 
     attr_reader :last_killed
+
+    def_delegator :@aliens, :each, :each
 
     def initialize(coord_x:, coord_y:, enemy:)
       @aliens = []
