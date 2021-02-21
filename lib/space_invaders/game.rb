@@ -2,7 +2,7 @@
 
 require_relative 'scenes/main_scene'
 require_relative 'scenes/game_over_scene'
-require_relative 'scenes/menu/menu_scene'
+require_relative 'scenes/menu_scene'
 
 module SpaceInvaders
   class Game < Gosu::Window

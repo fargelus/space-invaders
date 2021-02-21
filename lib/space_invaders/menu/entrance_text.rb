@@ -2,6 +2,7 @@
 
 require_relative '../base/settings'
 require_relative '../output/printable_text'
+require_relative '../base/image_object'
 
 module SpaceInvaders
   class MenuEntranceText
@@ -19,7 +20,9 @@ module SpaceInvaders
 
     def draw
       @entrance_phrases[0].draw
-      @entrance_phrases[1].draw unless @entrance_phrases.first.needs_redraw?
+      @entrance_phrases[1].draw unless @entrance_phrases[0].needs_redraw?
+
+      draw_logo unless @entrance_phrases[1].needs_redraw?
     end
 
     def needs_redraw?
@@ -45,6 +48,12 @@ module SpaceInvaders
         y: @start_y + INFO_FONT_SIZE,
         text: CAPTION
       )
+    end
+
+    def draw_logo
+      logo_x = game_title_options[:x]
+      logo_y = game_title_options[:y] + INFO_FONT_SIZE
+      ImageObject.new(logo_x, logo_y, ALIENS_DIR / 'invaders_logo.png').draw      
     end
   end
 end

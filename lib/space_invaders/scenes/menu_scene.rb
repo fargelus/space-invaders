@@ -1,11 +1,10 @@
 # frozen_string_literal: true
 
 require 'gosu'
-require_relative '../../output/printable_text'
-require_relative '../../base/settings'
-require_relative '../../base/timer'
-require_relative '../../menu/entrance_text'
-require_relative '../../menu/menu'
+require_relative '../base/settings'
+require_relative '../base/timer'
+require_relative '../menu/entrance_text'
+require_relative '../menu/menu'
 
 module SpaceInvaders
   class MenuScene < GameScene
@@ -24,11 +23,11 @@ module SpaceInvaders
       )
 
       @menu = Menu.new(window)
-      @menu.add_item(text: 'New Game', x: @width * 0.4, y: @height * 0.3)
-      @menu.add_item(text: 'Load Game', x: @width * 0.385, y: @height * 0.39)
-      @menu.add_item(text: 'Leaderboard', x: @width * 0.385, y: @height * 0.47)
-      @menu.add_item(text: 'Aliens', x: @width * 0.385, y: @height * 0.55)
-      @menu.add_item(text: 'Exit', x: @width * 0.385, y: @height * 0.63)
+      # @menu.add_item(text: 'New Game', x: @width * 0.4, y: @height * 0.3)
+      # @menu.add_item(text: 'Load Game', x: @width * 0.385, y: @height * 0.39)
+      # @menu.add_item(text: 'Leaderboard', x: @width * 0.385, y: @height * 0.47)
+      # @menu.add_item(text: 'Aliens', x: @width * 0.385, y: @height * 0.55)
+      # @menu.add_item(text: 'Exit', x: @width * 0.385, y: @height * 0.63)
     end
 
     def needs_redraw?
