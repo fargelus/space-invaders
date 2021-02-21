@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require_relative '../../base/settings'
-require_relative '../../output/printable_text'
+require_relative '../base/settings'
+require_relative '../output/printable_text'
 
 module SpaceInvaders
   class MenuEntranceText
