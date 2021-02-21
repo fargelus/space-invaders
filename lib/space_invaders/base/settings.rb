@@ -71,9 +71,9 @@ module SpaceInvaders
 
     def alien_ammo_options(type)
       {
-        shot_sound_path: Settings::SOUNDS_PATH / 'alien_gun.wav',
-        bullet_image_path: Settings::BULLETS_DIR / "#{type}_bullet.png",
-        direction: Settings::BULLET_DIRECTION_DOWN
+        shot_sound_path: SOUNDS_PATH / 'alien_gun.wav',
+        bullet_image_path: BULLETS_DIR / "#{type}_bullet.png",
+        direction: BULLET_DIRECTION_DOWN
       }
     end
   end

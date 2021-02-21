@@ -49,7 +49,7 @@ module SpaceInvaders
 
       @bullets.reject!(&:destroyed?)
       @bullets.select { |bullet| destroyed_targets.include?(bullet.target) }
-           .each { |bullet| yield bullet }
+              .each { |bullet| yield bullet }
     end
 
     private
