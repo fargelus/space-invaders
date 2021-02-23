@@ -3,7 +3,7 @@
 require 'gosu'
 require_relative '../base/settings'
 require_relative '../base/timer'
-require_relative '../menu/entrance_text'
+require_relative '../menu/menu_entrance_text'
 require_relative '../menu/menu'
 
 module SpaceInvaders
@@ -17,17 +17,18 @@ module SpaceInvaders
 
       prepare_scene
       @entrance_text = MenuEntranceText.new(
-        start_x: @width * 0.45,
-        start_y: @height * 0.1,
+        x: @width * 0.45,
+        y: @height * 0.1,
+        font_size: INFO_FONT_SIZE,
         window: @window
       )
 
-      @menu = Menu.new(window)
-      # @menu.add_item(text: 'New Game', x: @width * 0.4, y: @height * 0.3)
-      # @menu.add_item(text: 'Load Game', x: @width * 0.385, y: @height * 0.39)
-      # @menu.add_item(text: 'Leaderboard', x: @width * 0.385, y: @height * 0.47)
-      # @menu.add_item(text: 'Aliens', x: @width * 0.385, y: @height * 0.55)
-      # @menu.add_item(text: 'Exit', x: @width * 0.385, y: @height * 0.63)
+      @menu = Menu.new(window, INFO_FONT_SIZE)
+      @menu.add_item('New Game')
+      @menu.add_item('Load Game')
+      @menu.add_item('Leaderboard')
+      @menu.add_item('Aliens')
+      @menu.add_item('Exit')
     end
 
     def needs_redraw?
@@ -40,7 +41,12 @@ module SpaceInvaders
       super
 
       @entrance_text.draw
-      @menu.draw if menu_needs_to_draw?
+      if menu_needs_to_draw?
+        @menu.draw(
+          @width * 0.4,
+          @entrance_text.last_y + INFO_FONT_SIZE
+        )
+      end
     end
 
     private

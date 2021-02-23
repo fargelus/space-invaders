@@ -8,10 +8,13 @@ module SpaceInvaders
   class MenuEntranceText
     include Settings
 
-    def initialize(start_x:, start_y:, window:)
-      @start_x = start_x
-      @start_y = start_y
-      @window = window
+    attr_reader :last_y
+
+    def initialize(options)
+      @x = options.fetch(:x)
+      @y = options.fetch(:y)
+      @window = options.fetch(:window)
+      @font_size = options.fetch(:font_size)
       @entrance_phrases = [
         PrintableText.new(entrance_text_options),
         PrintableText.new(game_title_options)
@@ -33,19 +36,19 @@ module SpaceInvaders
 
     def entrance_text_options
       {
-        x: @start_x,
-        y: @start_y,
+        x: @x,
+        y: @y,
         text: 'Play',
         window: @window,
         color: GREEN_COLOR,
-        size: INFO_FONT_SIZE
+        size: @font_size
       }
     end
 
     def game_title_options
       entrance_text_options.merge(
-        x: @start_x - CAPTION_FONT_SIZE - INFO_FONT_SIZE,
-        y: @start_y + INFO_FONT_SIZE,
+        x: @x - CAPTION_FONT_SIZE - @font_size,
+        y: @y + @font_size,
         text: CAPTION
       )
     end
@@ -53,7 +56,8 @@ module SpaceInvaders
     def draw_logo
       logo_x = game_title_options[:x]
       logo_y = game_title_options[:y] + INFO_FONT_SIZE
-      ImageObject.new(logo_x, logo_y, ALIENS_DIR / 'invaders_logo.png').draw      
+      ImageObject.new(logo_x, logo_y, ALIENS_DIR / 'invaders_logo.png').draw
+      @last_y = logo_y + ALIENS_HEIGHT
     end
   end
 end
