@@ -55,7 +55,7 @@ module SpaceInvaders
 
     def draw_logo
       logo_x = game_title_options[:x]
-      logo_y = game_title_options[:y] + INFO_FONT_SIZE
+      logo_y = game_title_options[:y] + @font_size
       ImageObject.new(logo_x, logo_y, ALIENS_DIR / 'invaders_logo.png').draw
       @last_y = logo_y + ALIENS_HEIGHT
     end
