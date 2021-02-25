@@ -20,6 +20,7 @@ module SpaceInvaders
         options.fetch(:font_size)
       )
       @active = options.fetch(:active) { false }
+      @callback = options.fetch(:callback)
       @needs_redraw = true
     end
 
@@ -32,6 +33,10 @@ module SpaceInvaders
     def active=(state)
       @active = state
       @needs_redraw = true
+    end
+
+    def trigger
+      @callback.call
     end
   end
 end

@@ -1,49 +1,37 @@
 # frozen_string_literal: true
 
 require 'gosu'
-require_relative '../../output/printable_text'
-require_relative '../../base/timer'
+require_relative '../output/printable_text'
+require_relative '../base/timer'
 
 module SpaceInvaders
-  class AliensScene < GameScene
-    SCORE_TABLE_RENDER_DELAY_MSEC = 200
+  class AliensScoreboard
+    include Settings
 
-    def initialize(width:, height:, window:)
-      super
-
+    def initialize(window, font_size)
+      @window = window
+      @font_size = font_size
       @printable_scores = []
       @aliens_draw_info = []
+      @font = Gosu::Font.new(@window, FONT, @font_size)
     end
 
     def needs_redraw?
       @printable_scores.empty? || @printable_scores.find(&:needs_redraw?)
     end
 
-    def draw
-      super
-
-      draw_score_table if score_table_needs_draw?
-    end
-
-    private
-
-    def score_table_needs_draw?
-      return true if @printable_scores.any?
-
-      Timer.overtime?(SCORE_TABLE_RENDER_DELAY_MSEC)
-    end
-
-    def draw_score_table
-      table_header_coord_y = @height * 0.35
-      @main_font.draw_text(
+    def draw(x, y)
+      @font.draw_text(
         '*Score advance table*',
-        @width * 0.23, table_header_coord_y,
+        x, y,
         0, 1.0, 1.0,
         SUNNY_COLOR
       )
-      draw_aliens(table_header_coord_y)
-      draw_aliens_score
+      # draw_aliens(table_header_coord_y)
+      # draw_aliens_score
     end
+
+    private
 
     def draw_aliens(table_header_coord_y)
       @aliens_render_coords = {

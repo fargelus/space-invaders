@@ -5,6 +5,8 @@ require_relative '../base/settings'
 require_relative '../base/timer'
 require_relative '../menu/menu_entrance_text'
 require_relative '../menu/menu'
+require_relative '../menu/aliens_scoreboard'
+
 
 module SpaceInvaders
   class MenuScene < GameScene
@@ -22,19 +24,21 @@ module SpaceInvaders
         font_size: INFO_FONT_SIZE,
         window: @window
       )
-
       @menu = Menu.new(window, INFO_FONT_SIZE)
-      @menu.add_item('New Game')
-      @menu.add_item('Load Game')
-      @menu.add_item('Leaderboard')
-      @menu.add_item('Aliens')
-      @menu.add_item('Exit')
+      # @menu.add_item('New Game')
+      # @menu.add_item('Load Game')
+      # @menu.add_item('Leaderboard')
+      @menu.add_item('Aliens', callback: method(:show_aliens_scoreboard))
+      @menu.add_item('Exit', callback: method(:exit_game))
+
+      @aliens_scoreboard = AliensScoreboard.new(@window, INFO_FONT_SIZE)
+      @content = [@menu]
     end
 
     def needs_redraw?
       return true if @entrance_text.needs_redraw?
 
-      @menu.needs_redraw?
+      @content.last.needs_redraw?
     end
 
     def draw
@@ -43,10 +47,7 @@ module SpaceInvaders
       @entrance_text.draw
       return unless menu_needs_to_draw?
 
-      @menu.draw(
-        @width * 0.4,
-        @entrance_text.last_y + INFO_FONT_SIZE * 1.5
-      )
+      draw_content
       @drawed = true
     end
 
@@ -55,6 +56,8 @@ module SpaceInvaders
 
       @menu.next_item if id == Gosu::KbDown
       @menu.previous_item if id == Gosu::KbUp
+      @menu.run_command if id == Gosu::KbReturn      
+      @content.push(@menu) if id == Gosu::KbBackspace
     end
 
     private
@@ -64,6 +67,25 @@ module SpaceInvaders
       return true if @drawed
 
       Timer.overtime?(MAIN_MENU_RENDER_DELAY_MSEC)
+    end
+
+    def draw_content
+      @content.last.draw(*content_drawing_options)
+    end
+
+    def exit_game
+      @window.close
+    end
+
+    def show_aliens_scoreboard
+      @content.push(@aliens_scoreboard)
+    end
+
+    def content_drawing_options
+      [
+        @width * 0.4,
+        @entrance_text.last_y + INFO_FONT_SIZE * 1.5
+      ]
     end
   end
 end
