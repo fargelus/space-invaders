@@ -47,12 +47,21 @@ module SpaceInvaders
         @width * 0.4,
         @entrance_text.last_y + INFO_FONT_SIZE * 1.5
       )
+      @drawed = true
+    end
+
+    def button_down(id)
+      return if @menu.needs_redraw?
+
+      @menu.next_item if id == Gosu::KbDown
+      @menu.previous_item if id == Gosu::KbUp
     end
 
     private
 
     def menu_needs_to_draw?
       return false if @entrance_text.needs_redraw?
+      return true if @drawed
 
       Timer.overtime?(MAIN_MENU_RENDER_DELAY_MSEC)
     end

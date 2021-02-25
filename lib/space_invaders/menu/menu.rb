@@ -12,7 +12,30 @@ module SpaceInvaders
     end
 
     def add_item(text)
-      @items << MenuItem.new(@window, text, @font_size)
+      @items << MenuItem.new(
+        @window,
+        text: text,
+        font_size: @font_size,
+        active: @items.empty?
+      )
+    end
+
+    def next_item
+      active_item = @items.detect(&:active)
+      active_index = @items.index(active_item)
+      return if active_index + 1 == @items.size
+
+      active_item.active = false
+      @items[active_index + 1].active = true
+    end
+
+    def previous_item
+      active_item = @items.detect(&:active)
+      active_index = @items.index(active_item)
+      return if active_index.zero?
+
+      active_item.active = false
+      @items[active_index - 1].active = true
     end
 
     def needs_redraw?
