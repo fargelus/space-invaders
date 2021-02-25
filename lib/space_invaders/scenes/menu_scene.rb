@@ -41,12 +41,12 @@ module SpaceInvaders
       super
 
       @entrance_text.draw
-      if menu_needs_to_draw?
-        @menu.draw(
-          @width * 0.4,
-          @entrance_text.last_y + INFO_FONT_SIZE
-        )
-      end
+      return unless menu_needs_to_draw?
+
+      @menu.draw(
+        @width * 0.4,
+        @entrance_text.last_y + INFO_FONT_SIZE * 1.5
+      )
     end
 
     private

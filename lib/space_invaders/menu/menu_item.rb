@@ -5,7 +5,7 @@ require_relative '../base/settings'
 
 module SpaceInvaders
   class MenuItem
-    attr_reader :needs_redraw
+    attr_reader :needs_redraw, :text
     alias needs_redraw? needs_redraw
 
     def initialize(window, text, font_size)
