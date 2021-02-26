@@ -6,6 +6,8 @@ require_relative '../base/timer'
 require_relative '../menu/menu_entrance_text'
 require_relative '../menu/menu'
 require_relative '../menu/aliens_scoreboard'
+require_relative '../menu/new_game'
+
 
 module SpaceInvaders
   class MenuScene < GameScene
@@ -34,6 +36,7 @@ module SpaceInvaders
       @aliens_scoreboard = AliensScoreboard.new(@window, INFO_FONT_SIZE)
       @frames = [@menu]
       @label_font = Gosu::Font.new(@window, FONT, LABEL_FONT_SIZE)
+      @new_game = NewGame.new(window, INFO_FONT_SIZE - 10)
     end
 
     def needs_redraw?
@@ -53,6 +56,7 @@ module SpaceInvaders
     end
 
     def button_down(id)
+      return @new_game.button_down(id) if @frames.last == @new_game && id != Gosu::KbBackspace
       return if @menu.needs_redraw?
 
       @menu.next_item if id == Gosu::KbDown
@@ -73,13 +77,13 @@ module SpaceInvaders
     def draw_current_frame
       @frames.last.draw(*frames_drawing_options)
       @frames.shift if @frames.size > FRAMES_MAX_SIZE
-      if @frames.last != @menu
-        @label_font.draw_text(
-          'Press <Backspace> for return to menu',
-          @width * 0.3, @height * 0.95,
-          0, 1.0, 1.0
-        )
-      end
+      return if @frames.last == @menu
+
+      @label_font.draw_text(
+        'Press <Backspace> for return to menu',
+        @width * 0.3, @height * 0.95,
+        0, 1.0, 1.0
+      )
     end
 
     def exit_game
@@ -97,12 +101,14 @@ module SpaceInvaders
                   @width * 0.4
                 when @aliens_scoreboard
                   @width * 0.25
+                when @new_game
+                  @width * 0.35
                 end
       [coord_x, coord_y]
     end
 
     def new_game
-      puts 'NEW GAME!!!'
+      @frames.push(@new_game)
     end
 
     def load_game

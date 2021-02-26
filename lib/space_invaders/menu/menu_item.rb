@@ -8,8 +8,7 @@ module SpaceInvaders
     ACTIVE_COLOR = Gosu::Color.argb(0xff_de2f2f)
     DEFAULT_COLOR = Gosu::Color::WHITE
 
-    attr_accessor :active
-    attr_reader :needs_redraw, :text
+    attr_reader :needs_redraw, :text, :active
     alias needs_redraw? needs_redraw
 
     def initialize(window, options)
