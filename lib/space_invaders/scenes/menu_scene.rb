@@ -33,6 +33,7 @@ module SpaceInvaders
 
       @aliens_scoreboard = AliensScoreboard.new(@window, INFO_FONT_SIZE)
       @frames = [@menu]
+      @label_font = Gosu::Font.new(@window, FONT, LABEL_FONT_SIZE)
     end
 
     def needs_redraw?
@@ -72,6 +73,13 @@ module SpaceInvaders
     def draw_current_frame
       @frames.last.draw(*frames_drawing_options)
       @frames.shift if @frames.size > FRAMES_MAX_SIZE
+      if @frames.last != @menu
+        @label_font.draw_text(
+          'Press <Backspace> for return to menu',
+          @width * 0.3, @height * 0.95,
+          0, 1.0, 1.0
+        )
+      end
     end
 
     def exit_game
