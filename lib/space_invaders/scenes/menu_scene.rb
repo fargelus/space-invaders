@@ -12,6 +12,7 @@ module SpaceInvaders
     include Settings
 
     MAIN_MENU_RENDER_DELAY_MSEC = 200
+    FRAMES_MAX_SIZE = 2
 
     def initialize(width:, height:, window:)
       super
@@ -31,13 +32,13 @@ module SpaceInvaders
       @menu.add_item('Exit', callback: method(:exit_game))
 
       @aliens_scoreboard = AliensScoreboard.new(@window, INFO_FONT_SIZE)
-      @content = [@menu]
+      @frames = [@menu]
     end
 
     def needs_redraw?
       return true if @entrance_text.needs_redraw?
 
-      @content.last.needs_redraw?
+      @frames.last.needs_redraw? || @frames.size > FRAMES_MAX_SIZE
     end
 
     def draw
@@ -46,7 +47,7 @@ module SpaceInvaders
       @entrance_text.draw
       return unless menu_needs_to_draw?
 
-      draw_content
+      draw_current_frame
       @drawed = true
     end
 
@@ -56,7 +57,7 @@ module SpaceInvaders
       @menu.next_item if id == Gosu::KbDown
       @menu.previous_item if id == Gosu::KbUp
       @menu.run_command if id == Gosu::KbReturn
-      @content.push(@menu) if id == Gosu::KbBackspace
+      @frames.push(@menu) if id == Gosu::KbBackspace
     end
 
     private
@@ -68,8 +69,9 @@ module SpaceInvaders
       Timer.overtime?(MAIN_MENU_RENDER_DELAY_MSEC)
     end
 
-    def draw_content
-      @content.last.draw(*content_drawing_options)
+    def draw_current_frame
+      @frames.last.draw(*frames_drawing_options)
+      @frames.shift if @frames.size > FRAMES_MAX_SIZE
     end
 
     def exit_game
@@ -77,12 +79,12 @@ module SpaceInvaders
     end
 
     def show_aliens_scoreboard
-      @content.push(@aliens_scoreboard)
+      @frames.push(@aliens_scoreboard)
     end
 
-    def content_drawing_options
+    def frames_drawing_options
       coord_y = @entrance_text.last_y + INFO_FONT_SIZE * 1.5
-      coord_x = case @content.last
+      coord_x = case @frames.last
                 when @menu
                   @width * 0.4
                 when @aliens_scoreboard

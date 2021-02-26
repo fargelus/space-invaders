@@ -8,6 +8,8 @@ module SpaceInvaders
   class AliensScoreboard
     include Settings
 
+    ALIENS_TABLE_OFFSET_X = 65
+
     def initialize(window, font_size)
       @window = window
       @font_size = font_size
@@ -21,22 +23,24 @@ module SpaceInvaders
     end
 
     def draw(x, y)
+      @x = x
+      @y = y
       @font.draw_text(
         '*Score advance table*',
         x, y,
         0, 1.0, 1.0,
         SUNNY_COLOR
       )
-      # draw_aliens(table_header_coord_y)
-      # draw_aliens_score
+      draw_aliens
+      draw_aliens_score
     end
 
     private
 
-    def draw_aliens(table_header_coord_y)
+    def draw_aliens
       @aliens_render_coords = {
-        x: @width * 0.33,
-        y: table_header_coord_y + ALIENS_HEIGHT + ALIENS_MARGIN + 5
+        x: @x + ALIENS_TABLE_OFFSET_X,
+        y: @y + ALIENS_HEIGHT + ALIENS_MARGIN + 5
       }
       %i[mistery predator robot skull spider].each do |alien_type|
         draw_alien(alien_type)
