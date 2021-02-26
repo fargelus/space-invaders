@@ -7,7 +7,6 @@ require_relative '../menu/menu_entrance_text'
 require_relative '../menu/menu'
 require_relative '../menu/aliens_scoreboard'
 
-
 module SpaceInvaders
   class MenuScene < GameScene
     include Settings
@@ -25,9 +24,9 @@ module SpaceInvaders
         window: @window
       )
       @menu = Menu.new(window, INFO_FONT_SIZE)
-      # @menu.add_item('New Game')
-      # @menu.add_item('Load Game')
-      # @menu.add_item('Leaderboard')
+      @menu.add_item('New Game', callback: method(:new_game))
+      @menu.add_item('Load Game', callback: method(:load_game))
+      @menu.add_item('Leaderboard', callback: method(:show_leaderboard))
       @menu.add_item('Aliens', callback: method(:show_aliens_scoreboard))
       @menu.add_item('Exit', callback: method(:exit_game))
 
@@ -56,7 +55,7 @@ module SpaceInvaders
 
       @menu.next_item if id == Gosu::KbDown
       @menu.previous_item if id == Gosu::KbUp
-      @menu.run_command if id == Gosu::KbReturn      
+      @menu.run_command if id == Gosu::KbReturn
       @content.push(@menu) if id == Gosu::KbBackspace
     end
 
@@ -82,10 +81,26 @@ module SpaceInvaders
     end
 
     def content_drawing_options
-      [
-        @width * 0.4,
-        @entrance_text.last_y + INFO_FONT_SIZE * 1.5
-      ]
+      coord_y = @entrance_text.last_y + INFO_FONT_SIZE * 1.5
+      coord_x = case @content.last
+                when @menu
+                  @width * 0.4
+                when @aliens_scoreboard
+                  @width * 0.25
+                end
+      [coord_x, coord_y]
+    end
+
+    def new_game
+      puts 'NEW GAME!!!'
+    end
+
+    def load_game
+      puts 'LOAD GAME!!!'
+    end
+
+    def show_leaderboard
+      puts 'LEADERBOARD!!!'
     end
   end
 end

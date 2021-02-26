@@ -11,7 +11,7 @@ module SpaceInvaders
       @font_size = size
     end
 
-    def add_item(text, callback: nil)
+    def add_item(text, callback:)
       @items << MenuItem.new(
         @window,
         text: text,
