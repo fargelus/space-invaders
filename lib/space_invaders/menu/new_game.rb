@@ -2,20 +2,22 @@
 
 require 'gosu'
 require_relative '../base/settings'
+require_relative '../base/text_field'
 
 module SpaceInvaders
   class NewGame
     include Settings
 
     def initialize(window, size)
+      @window = window
       @font = Gosu::Font.new(window, FONT, size)
-      @text_input = Gosu::TextInput.new
-      @text_input.text = 'Type new game name'
-      @printed = false
+      @input = TextField.new(window)
+      @input.text = 'Type new game name'
+      @input.restrict = /[^a-z]/i
     end
 
     def draw(x, y)
-      @font.draw(@text_input.text, x, y, 0)
+      @font.draw(@input.text, x, y, 0)
     end
 
     def needs_redraw?
@@ -23,9 +25,7 @@ module SpaceInvaders
     end
 
     def button_down(id)
-      @text_input.text = '' unless @printed
-      @text_input.insert_text(id)
-      @printed = true
+      @input.button_down(id)
     end
   end
 end
