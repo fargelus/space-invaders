@@ -25,8 +25,10 @@ module SpaceInvaders
       return if restrict && filter?(input)
 
       self.text = '' unless @printed
-      insert_text(input)
       @printed = true
+      return insert_text(input) unless id == Gosu::KbBackspace
+
+      self.text = self.text[0..-2]
     end
   end
 end

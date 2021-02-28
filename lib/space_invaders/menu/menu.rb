@@ -21,6 +21,15 @@ module SpaceInvaders
       )
     end
 
+    def reset_selection
+      active_item, _ = active_item_with_index
+      active_item&.active = false
+    end
+
+    def run_selection
+      @items.first&.active = true
+    end
+
     def next_item
       active_item, active_index = active_item_with_index
       return if active_index + 1 == @items.size
