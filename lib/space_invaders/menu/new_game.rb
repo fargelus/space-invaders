@@ -4,6 +4,7 @@ require 'gosu'
 require_relative '../base/settings'
 require_relative '../base/text_field'
 require_relative 'menu'
+require_relative '../db/operations'
 
 module SpaceInvaders
   class NewGame
@@ -38,11 +39,17 @@ module SpaceInvaders
 
     def button_down(id)
       @input.button_down(id)
-      @input.text.empty? ? @menu.reset_selection : @menu.run_selection
+      if @input.text.empty?
+        @menu.reset_selection
+      else
+        @menu.run_selection
+        @menu.run_command if id == Gosu::KbReturn
+      end
     end
 
     def start_game
-      puts 'Start game'
+      data = { score: 0, user: @input.text }
+      DBOperations.insert_to_scores(data)
     end
 
     private

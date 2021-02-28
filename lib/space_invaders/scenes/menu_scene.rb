@@ -8,7 +8,6 @@ require_relative '../menu/menu'
 require_relative '../menu/aliens_scoreboard'
 require_relative '../menu/new_game'
 
-
 module SpaceInvaders
   class MenuScene < GameScene
     include Settings
@@ -56,7 +55,9 @@ module SpaceInvaders
     end
 
     def button_down(id)
-      return @new_game.button_down(id) if @frames.last == @new_game && id != Gosu::KbEscape
+      if @frames.last == @new_game && id != Gosu::KbEscape
+        return @new_game.button_down(id)
+      end
       return if @menu.needs_redraw?
 
       @menu.next_item if id == Gosu::KbDown

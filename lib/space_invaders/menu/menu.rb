@@ -22,7 +22,7 @@ module SpaceInvaders
     end
 
     def reset_selection
-      active_item, _ = active_item_with_index
+      active_item, = active_item_with_index
       active_item&.active = false
     end
 

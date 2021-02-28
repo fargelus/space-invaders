@@ -3,5 +3,4 @@
 require 'dotenv/load'
 require_relative 'space_invaders/game'
 
-game = SpaceInvaders::Game.new
-game.show
+SpaceInvaders::Game.new.show
