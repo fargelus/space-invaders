@@ -3,19 +3,17 @@
 require 'gosu'
 require_relative '../output/printable_text'
 require_relative '../base/timer'
+require_relative '../base/menu_component'
 
 module SpaceInvaders
-  class AliensScoreboard
-    include Settings
-
+  class AliensScoreboard < MenuComponent
     ALIENS_TABLE_OFFSET_X = 65
 
     def initialize(window, font_size)
-      @window = window
-      @font_size = font_size
+      super
+
       @printable_scores = []
       @aliens_draw_info = []
-      @font = Gosu::Font.new(@window, FONT, @font_size)
     end
 
     def needs_redraw?
@@ -78,7 +76,7 @@ module SpaceInvaders
           y: alien_info[:y],
           text: "= #{alien_info[:points]} points",
           window: @window,
-          size: INFO_FONT_SIZE
+          size: @font_size
         )
       end
     end

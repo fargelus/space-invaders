@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require 'gosu'
-require_relative '../db/setup'
+require_relative '../db/operations'
 require_relative '../base/game_scene'
 require_relative '../base/timer'
 require_relative '../base/settings'
@@ -125,12 +125,11 @@ module SpaceInvaders
     end
 
     def save_score_and_close
-      document = { score: @player_score.current }
-      DB::SCORES_COLLECTION.insert_one(document)
-    rescue Mongo::Error::OperationFailure
-      nil
-    ensure
-      @window.close
+      DBOperations.insert_to_scores({ score: @player_score.current })
+      rescue DBOperations::Errors::OperationFailure
+        nil
+      ensure
+        @window.close      
     end
 
     def new_aliens_wave?

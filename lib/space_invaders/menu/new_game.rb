@@ -1,20 +1,19 @@
 # frozen_string_literal: true
 
 require 'gosu'
-require_relative '../base/settings'
+require_relative '../base/menu_component'
 require_relative '../base/text_field'
 require_relative 'menu'
 require_relative '../db/operations'
 
 module SpaceInvaders
-  class NewGame
-    include Settings
+  class NewGame < MenuComponent
     CARET_COLOR = 0xffffffff
+    attr_reader :need_start
 
     def initialize(window, size)
-      @window = window
-      @font_size = size
-      @font = Gosu::Font.new(window, FONT, size)
+      super
+
       @input = TextField.new(window)
       @input.text = 'Type new game name'
       @input.restrict = /[^a-z]/i
@@ -22,6 +21,7 @@ module SpaceInvaders
       @menu = Menu.new(window, size)
       @menu.add_item('Continue', callback: method(:start_game))
       @menu.reset_selection
+      @need_start = false
     end
 
     def draw(x, y)
@@ -31,10 +31,6 @@ module SpaceInvaders
       @menu.draw(x + left_margin, y + @font_size + top_margin)
 
       draw_caret(x, y)
-    end
-
-    def needs_redraw?
-      true
     end
 
     def button_down(id)
@@ -48,8 +44,8 @@ module SpaceInvaders
     end
 
     def start_game
-      data = { score: 0, user: @input.text }
-      DBOperations.insert_to_scores(data)
+      DBOperations.insert_to_scores({ score: 0, user: @input.text })
+      @need_start = true
     end
 
     private
