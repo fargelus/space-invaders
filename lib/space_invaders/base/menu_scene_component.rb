@@ -4,7 +4,7 @@ require 'gosu'
 require_relative 'settings'
 
 module SpaceInvaders
-  class MenuComponent
+  class MenuSceneComponent
     include Settings
 
     def initialize(window, font_size)

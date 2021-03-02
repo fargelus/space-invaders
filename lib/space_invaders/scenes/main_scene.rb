@@ -125,11 +125,11 @@ module SpaceInvaders
     end
 
     def save_score_and_close
-      DBOperations.insert_to_scores({ score: @player_score.current })
-      rescue DBOperations::Errors::OperationFailure
-        nil
-      ensure
-        @window.close      
+      DBOperations.insert_to_scores(score: @player_score.current)
+    rescue DBOperations::Errors::OperationFailure
+      nil
+    ensure
+      @window.close
     end
 
     def new_aliens_wave?

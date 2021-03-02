@@ -3,10 +3,10 @@
 require 'gosu'
 require_relative '../output/printable_text'
 require_relative '../base/timer'
-require_relative '../base/menu_component'
+require_relative '../base/menu_scene_component'
 
 module SpaceInvaders
-  class AliensScoreboard < MenuComponent
+  class AliensScoreboard < MenuSceneComponent
     ALIENS_TABLE_OFFSET_X = 65
 
     def initialize(window, font_size)

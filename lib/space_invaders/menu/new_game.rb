@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
 require 'gosu'
-require_relative '../base/menu_component'
+require_relative '../base/menu_scene_component'
 require_relative '../base/text_field'
 require_relative 'menu'
 require_relative '../db/operations'
 
 module SpaceInvaders
-  class NewGame < MenuComponent
+  class NewGame < MenuSceneComponent
     CARET_COLOR = 0xffffffff
     attr_reader :need_start
 
@@ -44,7 +44,7 @@ module SpaceInvaders
     end
 
     def start_game
-      DBOperations.insert_to_scores({ score: 0, user: @input.text })
+      DBOperations.insert_to_scores(score: 0, user: @input.text)
       @need_start = true
     end
 
