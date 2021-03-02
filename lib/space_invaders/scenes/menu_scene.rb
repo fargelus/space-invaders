@@ -7,6 +7,7 @@ require_relative '../menu/menu_entrance_text'
 require_relative '../menu/menu'
 require_relative '../menu/aliens_scoreboard'
 require_relative '../menu/new_game'
+require_relative '../menu/leaderboard'
 
 module SpaceInvaders
   class MenuScene < GameScene
@@ -36,6 +37,7 @@ module SpaceInvaders
       @frames = [@menu]
       @label_font = Gosu::Font.new(@window, FONT, LABEL_FONT_SIZE)
       @new_game = NewGame.new(window, INFO_FONT_SIZE - 10)
+      @leaderboard = Leaderboard.new(window, INFO_FONT_SIZE - 10)
     end
 
     def needs_redraw?
@@ -104,7 +106,7 @@ module SpaceInvaders
                   @width * 0.4
                 when @aliens_scoreboard
                   @width * 0.25
-                when @new_game
+                else
                   @width * 0.35
                 end
       [coord_x, coord_y]
@@ -119,7 +121,7 @@ module SpaceInvaders
     end
 
     def show_leaderboard
-      puts 'LEADERBOARD!!!'
+      @frames.push(@leaderboard)
     end
   end
 end

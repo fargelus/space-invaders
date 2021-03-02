@@ -16,6 +16,10 @@ module SpaceInvaders
       rescue Mongo::Error::OperationFailure
         raise Errors::OperationFailure
       end
+
+      def find_max_scores(limit)
+        SCORES_COLLECTION.find.sort(score: -1).limit(limit)
+      end
     end
   end
 end
