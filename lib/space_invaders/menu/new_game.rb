@@ -44,7 +44,8 @@ module SpaceInvaders
     end
 
     def start_game
-      DBOperations.insert_to_scores(score: 0, user: @input.text)
+      DBOperations.reset_previous_session
+      DBOperations.insert(score: 0, user: @input.text, active: true)
       @need_start = true
     end
 

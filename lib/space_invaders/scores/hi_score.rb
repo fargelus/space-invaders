@@ -8,7 +8,7 @@ module SpaceInvaders
     def initialize(options)
       super
       @score = fetch_score_from_db || 0
-      @score_text = 'MAX SCORE'
+      @score_text = 'RECORD'
     end
 
     private

@@ -11,7 +11,7 @@ module SpaceInvaders
     class << self
       include DB
 
-      def insert_to_scores(data)
+      def insert(data)
         SCORES_COLLECTION.insert_one(data)
       rescue Mongo::Error::OperationFailure
         raise Errors::OperationFailure
@@ -19,6 +19,14 @@ module SpaceInvaders
 
       def find_max_scores(limit)
         SCORES_COLLECTION.find.sort(score: -1).limit(limit)
+      end
+
+      def reset_previous_session
+        SCORES_COLLECTION.find_one_and_update({ active: true }, '$set': { active: false })
+      end
+
+      def current_user
+        SCORES_COLLECTION.find(active: true)&.first[:user]
       end
     end
   end
