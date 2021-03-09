@@ -28,6 +28,10 @@ module SpaceInvaders
       def current_user
         SCORES_COLLECTION.find(active: true)&.first[:user]
       end
+
+      def user_record(user)
+        SCORES_COLLECTION.find(user: user).sort(score: -1).first[:score]
+      end
     end
   end
 end

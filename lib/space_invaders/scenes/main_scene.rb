@@ -41,13 +41,14 @@ module SpaceInvaders
     def draw
       super
 
+      @current_user ||= DBOperations.current_user
       @aliens.setup if new_aliens_wave?
 
       @redraw_objects.each(&:draw)
       @lifes.draw(@ship.lifes)
       @ground.draw
       @player_score.up(@aliens.last_killed)
-      @scores.each(&:draw)
+      @scores.each { |score| score.draw(@current_user) }
 
       return if @aliens.destroyed?
 
@@ -78,7 +79,7 @@ module SpaceInvaders
       @ship = Ship.new(ammo: @ammos[:ship])
       @aliens = Aliens.new(
         coord_x: @screen_width * 0.1,
-        coord_y: @screen_height * 0.1,
+        coord_y: @screen_height * 0.15,
         enemy: @ship
       )
       @ground = Ground.new(0, @screen_height * 0.93)
@@ -95,7 +96,7 @@ module SpaceInvaders
     end
 
     def setup_scores
-      scores_y = 15
+      scores_y = 10
       @player_score = PlayerScore.new(
         x: @screen_width * 0.05,
         y: scores_y,
@@ -125,7 +126,7 @@ module SpaceInvaders
     end
 
     def save_score_and_close
-      DBOperations.insert(score: @player_score.current)
+      DBOperations.insert(score: @player_score.current, user: @current_user)
     rescue DBOperations::Errors::OperationFailure
       nil
     ensure

@@ -2,24 +2,24 @@
 
 require 'gosu'
 require_relative '../base/settings'
+require_relative '../db/operations'
 
 module SpaceInvaders
   class Score
     def initialize(options)
       @x = options[:x] || 0
       @y = options[:y] || 0
+      @font_size = 25
       @score_obj = Gosu::Font.new(
         options[:window],
-        Gosu.default_font_name,
-        25
+        Settings::FONT,
+        @font_size
       )
       @score_text = ''
       @score = 0
     end
 
-    def draw
-      @score_obj.draw_text("#{@score_text}: #{@score}", @x, @y, 0)
-    end
+    def draw(*); end
 
     def up(alien_type)
       return unless alien_type
