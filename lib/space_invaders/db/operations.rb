@@ -20,14 +20,14 @@ module SpaceInvaders
       def update(data)
         SCORES_COLLECTION.update_one(
           { 'user' => data[:user] },
-          { "$set" => { score: data[:score] } }
+          { '$set' => { score: data[:score] } }
         )
       rescue Mongo::Error::OperationFailure => e
         raise Errors::OperationFailure e&.msg
       end
 
       def find_max_scores(limit)
-        SCORES_COLLECTION.find.sort(score: -1).limit(limit)
+        SCORES_COLLECTION.find.sort(score: -1).limit(limit + 1)
       end
 
       def reset_previous_session

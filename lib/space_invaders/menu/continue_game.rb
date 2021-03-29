@@ -6,10 +6,6 @@ require_relative '../db/operations'
 
 module SpaceInvaders
   class ContinueGame < MenuSceneComponent
-    def initialize(window, size)
-      super
-    end
-
     def visible?
       DBOperations.current_user
     end
