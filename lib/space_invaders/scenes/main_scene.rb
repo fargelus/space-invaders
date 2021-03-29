@@ -44,7 +44,7 @@ module SpaceInvaders
     def draw
       super
 
-      @current_user ||= DBOperations.current_user
+      @current_user = DBOperations.current_user
       @aliens.setup if new_aliens_wave?
 
       @redraw_objects.each(&:draw)
