@@ -10,7 +10,6 @@
 6. Game ends when player lifes become 0. :heavy_check_mark:
 7. Game has record table. :heavy_check_mark:
 8. Game has sounds effects. :heavy_check_mark:
-9. Game has ability of multiplayer.
 
 ### Resources:
 - [Demo](https://www.youtube.com/watch?v=MU4psw3ccUI)

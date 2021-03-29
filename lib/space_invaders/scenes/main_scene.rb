@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require 'gosu'
-require_relative '../db/setup'
+require_relative '../db/operations'
 require_relative '../base/game_scene'
 require_relative '../base/timer'
 require_relative '../base/settings'
@@ -35,19 +35,23 @@ module SpaceInvaders
     end
 
     def button_down(id)
-      save_score_and_close if id == Gosu::KbEscape
+      if id == Gosu::KbEscape
+        save_score_and_close if @hi_score.current < @player_score.current
+        @window.close
+      end
     end
 
     def draw
       super
 
+      @current_user ||= DBOperations.current_user
       @aliens.setup if new_aliens_wave?
 
       @redraw_objects.each(&:draw)
       @lifes.draw(@ship.lifes)
       @ground.draw
       @player_score.up(@aliens.last_killed)
-      @scores.each(&:draw)
+      @scores.each { |score| score.draw(@current_user) }
 
       return if @aliens.destroyed?
 
@@ -78,7 +82,7 @@ module SpaceInvaders
       @ship = Ship.new(ammo: @ammos[:ship])
       @aliens = Aliens.new(
         coord_x: @screen_width * 0.1,
-        coord_y: @screen_height * 0.1,
+        coord_y: @screen_height * 0.15,
         enemy: @ship
       )
       @ground = Ground.new(0, @screen_height * 0.93)
@@ -95,14 +99,15 @@ module SpaceInvaders
     end
 
     def setup_scores
-      scores_y = 15
+      scores_y = 10
       @player_score = PlayerScore.new(
         x: @screen_width * 0.05,
         y: scores_y,
         window: @window
       )
       hi_score_params = { x: @screen_width * 0.7, y: scores_y, window: @window }
-      @scores = [@player_score, HiScore.new(hi_score_params)]
+      @hi_score = HiScore.new(hi_score_params)
+      @scores = [@player_score, @hi_score]
     end
 
     def setup_aliens
@@ -125,9 +130,8 @@ module SpaceInvaders
     end
 
     def save_score_and_close
-      document = { score: @player_score.current }
-      DB::SCORES_COLLECTION.insert_one(document)
-    rescue Mongo::Error::OperationFailure
+      DBOperations.update(score: @player_score.current, user: @current_user)
+    rescue DBOperations::Errors::OperationFailure
       nil
     ensure
       @window.close

@@ -9,6 +9,6 @@ module SpaceInvaders
       database: ENV['MONGO_DB']
     )
     SCORES_COLLECTION = CONNECTION[:scores]
-    SCORES_COLLECTION.indexes.create_one({ score: 1 }, unique: true)
+    SCORES_COLLECTION.indexes.create_one({ user: 1 }, unique: true)
   end
 end
