@@ -13,8 +13,17 @@ module SpaceInvaders
 
       def insert(data)
         SCORES_COLLECTION.insert_one(data)
-      rescue Mongo::Error::OperationFailure
-        raise Errors::OperationFailure
+      rescue Mongo::Error::OperationFailure => e
+        raise Errors::OperationFailure e.msg
+      end
+
+      def update(data)
+        SCORES_COLLECTION.update_one(
+          { 'user' => data[:user] },
+          { "$set" => { score: data[:score] } }
+        )
+      rescue Mongo::Error::OperationFailure => e
+        raise Errors::OperationFailure e.msg
       end
 
       def find_max_scores(limit)

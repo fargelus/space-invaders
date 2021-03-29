@@ -35,7 +35,10 @@ module SpaceInvaders
     end
 
     def button_down(id)
-      save_score_and_close if id == Gosu::KbEscape
+      if id == Gosu::KbEscape
+        save_score_and_close if @hi_score.current < @player_score.current
+        @window.close
+      end
     end
 
     def draw
@@ -103,7 +106,8 @@ module SpaceInvaders
         window: @window
       )
       hi_score_params = { x: @screen_width * 0.7, y: scores_y, window: @window }
-      @scores = [@player_score, HiScore.new(hi_score_params)]
+      @hi_score = HiScore.new(hi_score_params)
+      @scores = [@player_score, @hi_score]
     end
 
     def setup_aliens
@@ -126,7 +130,7 @@ module SpaceInvaders
     end
 
     def save_score_and_close
-      DBOperations.insert(score: @player_score.current, user: @current_user)
+      DBOperations.update(score: @player_score.current, user: @current_user)
     rescue DBOperations::Errors::OperationFailure
       nil
     ensure

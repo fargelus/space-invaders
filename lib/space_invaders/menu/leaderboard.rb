@@ -9,7 +9,7 @@ module SpaceInvaders
     def initialize(window, font_size)
       super
 
-      @leaders = DBOperations.find_max_scores(10)
+      @leaders = DBOperations.find_max_scores(6)
     end
 
     def draw(x, y)

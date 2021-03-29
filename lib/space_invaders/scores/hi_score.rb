@@ -5,6 +5,9 @@ require_relative '../db/operations'
 
 module SpaceInvaders
   class HiScore < Score
+    attr_reader :hi_score
+    alias current hi_score
+
     def initialize(options)
       super
       @score_text = 'RECORD'
