@@ -8,6 +8,7 @@ require_relative '../menu/menu'
 require_relative '../menu/aliens_scoreboard'
 require_relative '../menu/new_game'
 require_relative '../menu/leaderboard'
+require_relative '../menu/continue_game'
 
 module SpaceInvaders
   class MenuScene < GameScene
@@ -18,26 +19,32 @@ module SpaceInvaders
 
     def initialize(width:, height:, window:)
       super
-
       prepare_scene
+
       @entrance_text = MenuEntranceText.new(
         x: @width * 0.45,
         y: @height * 0.1,
         font_size: INFO_FONT_SIZE,
         window: @window
       )
+
+      @aliens_scoreboard = AliensScoreboard.new(window, INFO_FONT_SIZE)
+      @label_font = Gosu::Font.new(window, FONT, LABEL_FONT_SIZE)
+      @new_game = NewGame.new(window, INFO_FONT_SIZE - 10)
+      @leaderboard = Leaderboard.new(window, INFO_FONT_SIZE - 10)
+      @continue_game = ContinueGame.new(window, INFO_FONT_SIZE)
+
       @menu = Menu.new(window, INFO_FONT_SIZE)
+      if @continue_game.visible?
+        @menu.add_item('Continue', callback: method(:continue_game))
+      end
       @menu.add_item('New Game', callback: method(:new_game))
       @menu.add_item('Load Game', callback: method(:load_game))
       @menu.add_item('Leaderboard', callback: method(:show_leaderboard))
       @menu.add_item('Aliens', callback: method(:show_aliens_scoreboard))
       @menu.add_item('Exit', callback: method(:exit_game))
 
-      @aliens_scoreboard = AliensScoreboard.new(@window, INFO_FONT_SIZE)
       @frames = [@menu]
-      @label_font = Gosu::Font.new(@window, FONT, LABEL_FONT_SIZE)
-      @new_game = NewGame.new(window, INFO_FONT_SIZE - 10)
-      @leaderboard = Leaderboard.new(window, INFO_FONT_SIZE - 10)
     end
 
     def needs_redraw?
@@ -110,6 +117,10 @@ module SpaceInvaders
                   @width * 0.35
                 end
       [coord_x, coord_y]
+    end
+
+    def continue_game
+      @change = true
     end
 
     def new_game
