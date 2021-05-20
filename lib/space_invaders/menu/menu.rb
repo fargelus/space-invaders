@@ -68,9 +68,8 @@ module SpaceInvaders
     private
 
     def menu_item_offset_x(mi)
-      char_offset_ratio = 3.6
       first_item_text_len = @items.first.text.size
-      (first_item_text_len - mi.text.size) * @font_size / char_offset_ratio
+      (first_item_text_len - mi.text.size) * @font_size / Settings::CHAR_OFFSET_RATIO
     end
 
     def active_item_with_index

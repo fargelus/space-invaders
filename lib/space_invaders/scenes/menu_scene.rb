@@ -31,7 +31,7 @@ module SpaceInvaders
       @aliens_scoreboard = AliensScoreboard.new(window, INFO_FONT_SIZE)
       @label_font = Gosu::Font.new(window, FONT, LABEL_FONT_SIZE)
       @new_game = NewGame.new(window, INFO_FONT_SIZE - 10)
-      @leaderboard = Leaderboard.new(window, INFO_FONT_SIZE - 10)
+      @leaderboard = Leaderboard.new(window, INFO_FONT_SIZE - 15)
       @continue_game = ContinueGame.new(window, INFO_FONT_SIZE)
 
       @menu = Menu.new(window, INFO_FONT_SIZE)
