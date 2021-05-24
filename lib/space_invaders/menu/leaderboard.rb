@@ -13,12 +13,13 @@ module SpaceInvaders
     end
 
     def draw(x, y)
-      top_margin = 10
       @leaders.each do |leader|
         coord_x = x + leader_offset_x(leader)
         @font.draw(leader_record(leader), coord_x, y, 0)
-        y += @font_size + top_margin
+        y += @font_size + Settings::VERTICAL_MARGIN_FOR_ITEM
       end
+
+      @was_draw = true
     end
 
     def leader_offset_x(leader)

@@ -41,6 +41,10 @@ module SpaceInvaders
       def user_record(user)
         SCORES_COLLECTION.find(user: user).sort(score: -1).first[:score]
       end
+
+      def all_records
+        SCORES_COLLECTION.find({})
+      end
     end
   end
 end

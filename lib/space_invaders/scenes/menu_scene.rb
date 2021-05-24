@@ -9,6 +9,7 @@ require_relative '../menu/aliens_scoreboard'
 require_relative '../menu/new_game'
 require_relative '../menu/leaderboard'
 require_relative '../menu/continue_game'
+require_relative '../menu/load_game'
 
 module SpaceInvaders
   class MenuScene < GameScene
@@ -33,6 +34,7 @@ module SpaceInvaders
       @new_game = NewGame.new(window, INFO_FONT_SIZE - 10)
       @leaderboard = Leaderboard.new(window, INFO_FONT_SIZE - 15)
       @continue_game = ContinueGame.new(window, INFO_FONT_SIZE)
+      @load_game = LoadGame.new(window, INFO_FONT_SIZE - 10)
 
       @menu = Menu.new(window, INFO_FONT_SIZE)
       if @continue_game.visible?
@@ -113,6 +115,8 @@ module SpaceInvaders
                   @width * 0.4
                 when @aliens_scoreboard
                   @width * 0.25
+                when @load_game
+                  @width * 0.45
                 else
                   @width * 0.35
                 end
@@ -128,7 +132,7 @@ module SpaceInvaders
     end
 
     def load_game
-      puts 'LOAD GAME!!!'
+      @frames.push(@load_game)
     end
 
     def show_leaderboard

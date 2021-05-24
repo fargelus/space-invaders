@@ -55,13 +55,11 @@ module SpaceInvaders
     end
 
     def draw(start_x, start_y)
-      top_margin = 10
-
       @items.each do |mi|
         coord_x = start_x + menu_item_offset_x(mi)
         item_y = start_y + @items.index(mi) * @font_size
         mi.draw(coord_x, item_y)
-        start_y += top_margin
+        start_y += Settings::VERTICAL_MARGIN_FOR_ITEM
       end
     end
 
