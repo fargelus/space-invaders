@@ -3,6 +3,7 @@
 require 'gosu'
 require_relative '../base/menu_scene_component'
 require_relative '../db/operations'
+require_relative 'menu'
 
 module SpaceInvaders
   class LoadGame < MenuSceneComponent
@@ -10,19 +11,26 @@ module SpaceInvaders
       super
 
       @games = DBOperations.all_records
+      @window = window
+      @menu = Menu.new(window, font_size)
+      @games.each { |game| @menu.add_item(game[:user], callback: method(:test)) }
     end
 
     def draw(x, y)
-      @games.each do |game|
-        coord_x = x + game_offset_x(game)
-        @font.draw(game[:user], coord_x, y, 0)
-        y += Settings::VERTICAL_MARGIN_FOR_ITEM / 2 + @font_size
-      end
-
+      @menu.draw(x, y)
       @was_draw = true
     end
 
+    def button_down(id)
+      @was_draw = false
+      @menu.button_down(id)
+    end
+
     private
+
+    def test
+      puts 'TEEEEESSSSTTTTT'
+    end
 
     def game_offset_x(game)
       users = @games.collect { |game| game[:user] }

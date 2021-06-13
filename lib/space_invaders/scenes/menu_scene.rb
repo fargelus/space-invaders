@@ -66,20 +66,29 @@ module SpaceInvaders
     end
 
     def button_down(id)
-      if @frames.last == @new_game && id != Gosu::KbEscape
-        @new_game.button_down(id)
-        @change = @new_game.need_start
-        return
-      end
-      return if @menu.needs_redraw?
+      return if button_down_for_frames_handle?(id) || @menu.needs_redraw?
 
-      @menu.next_item if id == Gosu::KbDown
-      @menu.previous_item if id == Gosu::KbUp
-      @menu.run_command if id == Gosu::KbReturn
+      @menu.button_down(id)
       @frames.push(@menu) if id == Gosu::KbEscape
     end
 
     private
+
+    def button_down_for_frames_handle?(id)
+      return false if id == Gosu::KbEscape
+
+      case @frames.last
+      when @new_game
+        @new_game.button_down(id)
+        @change = @new_game.need_start
+        true
+      when @load_game
+        @load_game.button_down(id)
+        true
+      else
+        false
+      end
+    end
 
     def menu_needs_to_draw?
       return false if @entrance_text.needs_redraw?
