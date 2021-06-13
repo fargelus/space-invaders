@@ -30,12 +30,6 @@ module SpaceInvaders
 
     def test
       puts 'TEEEEESSSSTTTTT'
-    end
-
-    def game_offset_x(game)
-      users = @games.collect { |game| game[:user] }
-      first_item_text_len = users.first.size
-      (first_item_text_len - game[:user].size) * @font_size / Settings::CHAR_OFFSET_RATIO
-    end
+    end    
   end
 end
