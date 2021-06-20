@@ -3,7 +3,7 @@
 require 'gosu'
 require_relative '../base/menu_scene_component'
 require_relative '../db/operations'
-require_relative 'menu'
+require_relative 'scrollable_menu'
 
 module SpaceInvaders
   class LoadGame < MenuSceneComponent
@@ -12,7 +12,7 @@ module SpaceInvaders
 
       @games = DBOperations.all_records
       @window = window
-      @menu = Menu.new(window, font_size)
+      @menu = ScrollableMenu.new(window, font_size)
       @games.each { |game| @menu.add_item(game[:user], callback: method(:test)) }
     end
 
@@ -30,6 +30,6 @@ module SpaceInvaders
 
     def test
       puts 'TEEEEESSSSTTTTT'
-    end    
+    end
   end
 end

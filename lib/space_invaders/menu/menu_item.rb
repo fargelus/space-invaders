@@ -23,15 +23,13 @@ module SpaceInvaders
       @active = options.fetch(:active) { false }
       @callback = options.fetch(:callback)
       @needs_redraw = true
-      @scroll = false
-      @scroll_text = ''
     end
 
     def draw(x, y)
       @x = x
       @y = y
       color = @active ? ACTIVE_COLOR : DEFAULT_COLOR
-      @brush.draw_text(text, x, y, 0, 1.0, 1.0, color)
+      @brush.draw_text(scroll_text || text, x, y, 0, 1.0, 1.0, color)
       @needs_redraw = false
     end
 
@@ -40,12 +38,13 @@ module SpaceInvaders
       @needs_redraw = true
     end
 
-    def trigger
-      @callback.call
+    def scroll=(value)
+      @scroll = value
+      @scroll_text = nil unless value
     end
 
-    def text
-      scroll ? scroll_text : @text
+    def trigger
+      @callback.call
     end
   end
 end

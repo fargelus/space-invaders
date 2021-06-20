@@ -9,6 +9,7 @@ module SpaceInvaders
       @window = window
       @items = []
       @font_size = size
+      @items_with_coordinates = {}
     end
 
     def add_item(text, callback:)
@@ -61,20 +62,9 @@ module SpaceInvaders
     end
 
     def draw(start_x, start_y)
-      calc_items_coordinates(start_x, start_y) unless @items_with_coordinates
-      scroll_if_out_of_screen_by_y
+      calc_items_coordinates(start_x, start_y) if @items_with_coordinates.empty?
 
-      drawing_items = @items_with_coordinates.reject { |mi, _| mi.scroll }
-      drawing_items.each do |mi, coords|
-        mi.draw(coords[0], coords[1])
-      end
-
-      scroll_items_trigger = @items_with_coordinates.select { |mi, *| mi.scroll }
-                                                    .min_by { |_, coords| coords[1] }
-      if scroll_items_trigger
-        scroll_coords = scroll_items_trigger[1]
-        scroll_items_trigger[0].draw(scroll_coords[0], scroll_coords[1])
-      end
+      @items_with_coordinates.each { |mi, coords| mi.draw(coords[0], coords[1]) }
     end
 
     def active_item
@@ -84,23 +74,10 @@ module SpaceInvaders
     private
 
     def calc_items_coordinates(initial_x, initial_y)
-      @items_with_coordinates = {}
       @items.each_with_index do |item, index|
         coord_x = initial_x + menu_item_offset_x(item)
         coord_y = initial_y + index * @font_size
         @items_with_coordinates[item] = [coord_x, coord_y]
-      end
-    end
-
-    def scroll_if_out_of_screen_by_y
-      screen_out_y = @window.height * 0.8
-      @items.each { |mi| mi.scroll = false }
-      @items_with_coordinates.each do |item, coords|
-        coord_y = coords[1]
-        if coord_y > screen_out_y
-          item.scroll = true
-          item.scroll_text = '...'
-        end
       end
     end
 

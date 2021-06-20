@@ -68,7 +68,7 @@ module SpaceInvaders
     def button_down(id)
       return if button_down_for_frames_handle?(id) || @menu.needs_redraw?
 
-      @menu.button_down(id)
+      @menu.button_down(id) if @frames.last == @menu
       @frames.push(@menu) if id == Gosu::KbEscape
     end
 
