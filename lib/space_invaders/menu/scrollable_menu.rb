@@ -22,7 +22,7 @@ module SpaceInvaders
 
     def scroll_y(drawing_y)
       @scroll_coords ||= [drawing_y]
-      if need_scroll?
+      if scroll_bottom?
         new_coord = @scroll_coords.last - SCROLL_Y_OFFSET_BASE
         @scroll_coords.push(new_coord)
         new_coord
@@ -31,22 +31,11 @@ module SpaceInvaders
       end
     end
 
-    def need_scroll?
-      scrollable_item = first_scrollable_item
-      return false unless scrollable_item
+    def scroll_bottom?
+      return false if @bottom_scrolled_coords.nil? || @items_with_coordinates.empty?
 
-      scrollable_trigger = scrollable_item[0]
-      return false unless scrollable_trigger.active
-
-      true
-    end
-
-    def first_scrollable_item
-      scrolled_items = @items_with_coordinates.select { |mi, *| mi.scroll }
-      return if scrolled_items.empty?
-
-      scrollable_trigger = scrolled_items.min_by { |_, coords| y = coords[1] }
-      scrollable_trigger || scrolled_items.max_by { |_, coords| y = coords[1] }
+      bottom_scrolled_items = @items_with_coordinates.select { |_, coords| @bottom_scrolled_coords.include? coords[1] }
+      bottom_scrolled_items.any? { |item, _| item.active }
     end
 
     def scroll_if_out_of_screen_by_y
