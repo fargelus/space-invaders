@@ -51,25 +51,32 @@ module SpaceInvaders
 
     def scroll_if_out_of_screen_by_y
       screen_max_out_y = @window.height * 0.8
+      screen_min_out_y = @window.height * 0.35
       @items.each { |mi| mi.scroll = false }
+      @bottom_scrolled_coords = []
+      @top_scrolled_coords = []
 
       @items_with_coordinates.each do |item, coords|
         coord_y = coords[1]
-        if coord_y > screen_max_out_y
-          item.scroll = true
-          item.scroll_text = '...'
-        end
+        next unless coord_y > screen_max_out_y || screen_min_out_y > coord_y
+
+        item.scroll = true
+        item.scroll_text = '...'
+
+        @bottom_scrolled_coords.push(coord_y) if coord_y > screen_max_out_y
+        @top_scrolled_coords.push(coord_y) if coord_y < screen_min_out_y
       end
     end
 
     def draw_scroll_trigger
-      scrolled_items = @items_with_coordinates.select { |mi, *| mi.scroll }
       min_size_item = @items_with_coordinates.max_by { |_, coords| coords[0] }.first
-      scroll_items_trigger = @items_with_coordinates.select { |mi, *| mi.scroll }
-                                                    .min_by { |_, coords| coords[1] }
-      if scroll_items_trigger
-        scroll_coords = scroll_items_trigger[1]
-        scroll_items_trigger[0].draw(min_size_item.x, scroll_coords[1])
+      scroll_coords = [@bottom_scrolled_coords.min]
+      scroll_coords.push(@top_scrolled_coords.max)
+      scroll_coords.compact!
+
+      scroll_coords.each do |scroll_y|
+        item_with_coords = @items_with_coordinates.find { |_, coords| coords[1] == scroll_y }
+        item_with_coords[0].draw(min_size_item.x, scroll_y)
       end
     end
   end
