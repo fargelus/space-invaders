@@ -60,6 +60,8 @@ module SpaceInvaders
     SUNNY_COLOR = Gosu::Color.new(217, 240, 8)
     BROWN_COLOR = Gosu::Color.new(133, 104, 66)
     EFFECTS_DIR = IMAGES_PATH / 'effects'
+    CHAR_OFFSET_RATIO = 3.6
+    VERTICAL_MARGIN_FOR_ITEM = 10
 
     def ship_ammo_options
       {

@@ -13,14 +13,22 @@ module SpaceInvaders
     end
 
     def draw(x, y)
-      top_margin = 10
       @leaders.each do |leader|
-        next unless leader[:user]
-
-        record = "#{leader[:user]}#{('.' * 20)}#{leader[:score]}"
-        @font.draw(record, x, y, 0)
-        y += @font_size + top_margin
+        coord_x = x + leader_offset_x(leader)
+        @font.draw(leader_record(leader), coord_x, y, 0)
+        y += @font_size + Settings::VERTICAL_MARGIN_FOR_ITEM
       end
+
+      @was_draw = true
+    end
+
+    def leader_offset_x(leader)
+      first_item_text_len = leader_record(@leaders.first).size
+      (first_item_text_len - leader_record(leader).size) * @font_size / Settings::CHAR_OFFSET_RATIO
+    end
+
+    def leader_record(leader)
+      "#{leader[:user]} - #{leader[:score]} POINTS"
     end
   end
 end

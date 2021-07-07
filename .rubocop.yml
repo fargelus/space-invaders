@@ -4,3 +4,4 @@ AllCops:
   Exclude:
     - bin/*
     - space_invaders.gemspec
+    - lib/space_invaders/db/operations.rb

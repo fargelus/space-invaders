@@ -11,12 +11,13 @@ module SpaceInvaders
       @window = window
       @font_size = font_size
       @font = Gosu::Font.new(@window, FONT, @font_size)
+      @was_draw = false
     end
 
     def draw(x, y); end
 
     def needs_redraw?
-      true
+      !@was_draw
     end
   end
 end

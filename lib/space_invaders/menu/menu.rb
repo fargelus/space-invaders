@@ -9,6 +9,7 @@ module SpaceInvaders
       @window = window
       @items = []
       @font_size = size
+      @items_with_coordinates = {}
     end
 
     def add_item(text, callback:)
@@ -38,6 +39,12 @@ module SpaceInvaders
       @items[active_index + 1].active = true
     end
 
+    def button_down(id)
+      next_item if id == Gosu::KbDown
+      previous_item if id == Gosu::KbUp
+      run_command if id == Gosu::KbReturn
+    end
+
     def previous_item
       active_item, active_index = active_item_with_index
       return if active_index.zero?
@@ -55,28 +62,32 @@ module SpaceInvaders
     end
 
     def draw(start_x, start_y)
-      top_margin = 10
+      calc_items_coordinates(start_x, start_y) if @items_with_coordinates.empty?
 
-      @items.each do |mi|
-        coord_x = start_x + menu_item_offset_x(mi)
-        item_y = start_y + @items.index(mi) * @font_size
-        mi.draw(coord_x, item_y)
-        start_y += top_margin
-      end
+      @items_with_coordinates.each { |mi, coords| mi.draw(coords[0], coords[1]) }
+    end
+
+    def active_item
+      @items.detect(&:active)
     end
 
     private
 
+    def calc_items_coordinates(initial_x, initial_y)
+      @items.each_with_index do |item, index|
+        coord_x = initial_x + menu_item_offset_x(item)
+        coord_y = initial_y + index * @font_size
+        @items_with_coordinates[item] = [coord_x, coord_y]
+      end
+    end
+
     def menu_item_offset_x(mi)
-      char_offset_ratio = 3.6
       first_item_text_len = @items.first.text.size
-      (first_item_text_len - mi.text.size) * @font_size / char_offset_ratio
+      (first_item_text_len - mi.text.size) * @font_size / Settings::CHAR_OFFSET_RATIO
     end
 
     def active_item_with_index
-      active_item = @items.detect(&:active)
-      active_index = @items.index(active_item)
-      [active_item, active_index]
+      [active_item, @items.index(active_item)]
     end
   end
 end

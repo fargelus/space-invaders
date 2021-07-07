@@ -26,9 +26,8 @@ module SpaceInvaders
 
     def draw(x, y)
       @font.draw(@input.text, x, y, 0)
-      top_margin = 10
-      left_margin = top_margin * 6
-      @menu.draw(x + left_margin, y + @font_size + top_margin)
+      left_margin = Settings::VERTICAL_MARGIN_FOR_ITEM * 6
+      @menu.draw(x + left_margin, y + @font_size + Settings::VERTICAL_MARGIN_FOR_ITEM)
 
       draw_caret(x, y)
     end
