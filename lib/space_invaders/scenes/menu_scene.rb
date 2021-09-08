@@ -9,6 +9,7 @@ require_relative '../menu/aliens_scoreboard'
 require_relative '../menu/new_game'
 require_relative '../menu/leaderboard'
 require_relative '../menu/continue_game'
+require_relative '../menu/load_game'
 
 module SpaceInvaders
   class MenuScene < GameScene
@@ -31,8 +32,9 @@ module SpaceInvaders
       @aliens_scoreboard = AliensScoreboard.new(window, INFO_FONT_SIZE)
       @label_font = Gosu::Font.new(window, FONT, LABEL_FONT_SIZE)
       @new_game = NewGame.new(window, INFO_FONT_SIZE - 10)
-      @leaderboard = Leaderboard.new(window, INFO_FONT_SIZE - 10)
+      @leaderboard = Leaderboard.new(window, INFO_FONT_SIZE - 15)
       @continue_game = ContinueGame.new(window, INFO_FONT_SIZE)
+      @load_game = LoadGame.new(window, INFO_FONT_SIZE - 10)
 
       @menu = Menu.new(window, INFO_FONT_SIZE)
       if @continue_game.visible?
@@ -64,20 +66,30 @@ module SpaceInvaders
     end
 
     def button_down(id)
-      if @frames.last == @new_game && id != Gosu::KbEscape
-        @new_game.button_down(id)
-        @change = @new_game.need_start
-        return
-      end
-      return if @menu.needs_redraw?
+      return if button_down_for_frames_handle?(id) || @menu.needs_redraw?
 
-      @menu.next_item if id == Gosu::KbDown
-      @menu.previous_item if id == Gosu::KbUp
-      @menu.run_command if id == Gosu::KbReturn
+      @menu.button_down(id) if @frames.last == @menu
       @frames.push(@menu) if id == Gosu::KbEscape
     end
 
     private
+
+    def button_down_for_frames_handle?(id)
+      return false if id == Gosu::KbEscape
+
+      case @frames.last
+      when @new_game
+        @new_game.button_down(id)
+        @change = @new_game.need_start
+        true
+      when @load_game
+        @load_game.button_down(id)
+        @change = @load_game.loaded
+        true
+      else
+        false
+      end
+    end
 
     def menu_needs_to_draw?
       return false if @entrance_text.needs_redraw?
@@ -113,6 +125,8 @@ module SpaceInvaders
                   @width * 0.4
                 when @aliens_scoreboard
                   @width * 0.25
+                when @load_game
+                  @width * 0.45
                 else
                   @width * 0.35
                 end
@@ -128,7 +142,7 @@ module SpaceInvaders
     end
 
     def load_game
-      puts 'LOAD GAME!!!'
+      @frames.push(@load_game)
     end
 
     def show_leaderboard
