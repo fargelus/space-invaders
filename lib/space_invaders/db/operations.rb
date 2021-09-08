@@ -34,6 +34,10 @@ module SpaceInvaders
         SCORES_COLLECTION.find_one_and_update({ active: true }, '$set': { active: false })
       end
 
+      def turn_session(session_name)
+        SCORES_COLLECTION.find_one_and_update({ user: session_name }, '$set': { active: true })
+      end
+
       def current_user
         SCORES_COLLECTION.find(active: true)&.first&.send(:[], 'user')
       end

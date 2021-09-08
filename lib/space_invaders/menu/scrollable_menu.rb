@@ -32,7 +32,9 @@ module SpaceInvaders
     end
 
     def scroll_bottom?
-      return false if @bottom_scrolled_coords.nil? || @items_with_coordinates.empty?
+      if @bottom_scrolled_coords.nil? || @items_with_coordinates.empty?
+        return false
+      end
 
       bottom_scrolled_items = @items_with_coordinates.select { |_, coords| @bottom_scrolled_coords.include? coords[1] }
       bottom_scrolled_items.any? { |item, _| item.active }

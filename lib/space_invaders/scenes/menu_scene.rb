@@ -84,6 +84,7 @@ module SpaceInvaders
         true
       when @load_game
         @load_game.button_down(id)
+        @change = @load_game.loaded
         true
       else
         false
