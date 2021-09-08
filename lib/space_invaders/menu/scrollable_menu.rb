@@ -6,11 +6,12 @@ module SpaceInvaders
   class ScrollableMenu < Menu
     SCROLL_Y_OFFSET_BASE = 30
 
+    attr_reader :drawing_items
+
     def draw(start_x, start_y)
       calc_items_coordinates(start_x, scroll_y(start_y))
       scroll_if_out_of_screen_by_y
 
-      drawing_items = @items_with_coordinates.reject { |mi, _| mi.scroll }
       drawing_items.each do |mi, coords|
         mi.draw(coords[0], coords[1])
       end
@@ -43,31 +44,45 @@ module SpaceInvaders
     def scroll_if_out_of_screen_by_y
       screen_max_out_y = @window.height * 0.8
       screen_min_out_y = @window.height * 0.35
-      @items.each { |mi| mi.scroll = false }
       @bottom_scrolled_coords = []
       @top_scrolled_coords = []
+      @drawing_items = {}
 
       @items_with_coordinates.each do |item, coords|
         coord_y = coords[1]
-        next unless coord_y > screen_max_out_y || screen_min_out_y > coord_y
 
-        item.scroll = true
-        item.scroll_text = '...'
+        if coord_y < screen_max_out_y && coord_y > screen_min_out_y
+          @drawing_items[item] = coords
+          next
+        end
 
-        @bottom_scrolled_coords.push(coord_y) if coord_y > screen_max_out_y
-        @top_scrolled_coords.push(coord_y) if coord_y < screen_min_out_y
+        value = Hash[scrollable_menu_item, coord_y]
+        if coord_y > screen_max_out_y
+          @bottom_scrolled_coords.push(value)
+        else
+          @top_scrolled_coords.push(value)
+        end
+
+        break if @bottom_scrolled_coords.any? || @top_scrolled_coords.any?
       end
+    end
+
+    def scrollable_menu_item
+      MenuItem.new(
+        @window,
+        text: '...',
+        font_size: @font_size,
+        active: false,
+        callback: nil
+      )
     end
 
     def draw_scroll_trigger
       min_size_item = @items_with_coordinates.max_by { |_, coords| coords[0] }.first
-      scroll_coords = [@bottom_scrolled_coords.min]
-      scroll_coords.push(@top_scrolled_coords.max)
-      scroll_coords.compact!
+      scroll_coords = [@bottom_scrolled_coords, @top_scrolled_coords].flatten.compact
 
-      scroll_coords.each do |scroll_y|
-        item_with_coords = @items_with_coordinates.find { |_, coords| coords[1] == scroll_y }
-        item_with_coords[0].draw(min_size_item.x, scroll_y)
+      scroll_coords.each do |scrollable|
+        scrollable.each { |mi, scroll_y| mi.draw(min_size_item.x, scroll_y) }
       end
     end
   end
