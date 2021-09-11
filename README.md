@@ -1,3 +1,5 @@
+![logo](./doc/logo.png)
+
 # Classic Space Invaders Game
 ![Game board](./doc/gameboard.png)
 
