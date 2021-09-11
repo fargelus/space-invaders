@@ -1,7 +1,7 @@
-![logo](./doc/logo.png)
-
 # Classic Space Invaders Game
-![Game board](./doc/gameboard.png)
+<p align="center">
+  <img src="./doc/logo.png">
+</p>
 
 ## Features:
 1. Player moves ship horizontally by pressing on keyboard. :heavy_check_mark:
@@ -12,6 +12,9 @@
 6. Game ends when player lifes become 0. :heavy_check_mark:
 7. Game has record table. :heavy_check_mark:
 8. Game has sounds effects. :heavy_check_mark:
+
+## Screens
+![Game board](./doc/gameboard.png)
 
 ### Resources:
 - [Demo](https://www.youtube.com/watch?v=MU4psw3ccUI)
