@@ -37,7 +37,7 @@ module SpaceInvaders
     end
 
     def draw_visible_items
-      @items_with_coordinates.select { |item, coords| visible_item?(coords[1]) }
+      @items_with_coordinates.select { |_, coords| visible_item?(coords[1]) }
                              .each { |item, coords| item.draw(coords[0], coords[1]) }
     end
 
@@ -57,10 +57,15 @@ module SpaceInvaders
       top_scrolled_coords = []
       bottom_scrolled_coords = []
       @items_with_coordinates.reject { |*, coords| visible_item?(coords[1]) }
-                             .each do |item, coords|
+                             .each do |_, coords|
                                coord_y = coords[1]
-                               top_scrolled_coords << coord_y if coord_y < screen_min_out_y
-                               bottom_scrolled_coords << coord_y if coord_y > screen_max_out_y
+                               if coord_y < screen_min_out_y
+                                 top_scrolled_coords << coord_y
+                               end
+
+                               if coord_y > screen_max_out_y
+                                 bottom_scrolled_coords << coord_y
+                               end
                              end
 
       min_size_item = @items_with_coordinates.max_by { |_, coords| coords[0] }.first
