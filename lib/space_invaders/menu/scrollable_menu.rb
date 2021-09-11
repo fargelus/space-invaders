@@ -10,13 +10,8 @@ module SpaceInvaders
 
     def draw(start_x, start_y)
       calc_items_coordinates(start_x, scroll_y(start_y))
-      scroll_if_out_of_screen_by_y
-
-      drawing_items.each do |mi, coords|
-        mi.draw(coords[0], coords[1])
-      end
-
-      draw_scroll_trigger
+      draw_visible_items
+      draw_scrollable_items
     end
 
     private
@@ -41,30 +36,36 @@ module SpaceInvaders
       bottom_scrolled_items.any? { |item, _| item.active }
     end
 
-    def scroll_if_out_of_screen_by_y
-      screen_max_out_y = @window.height * 0.8
-      screen_min_out_y = @window.height * 0.35
-      @bottom_scrolled_coords = []
-      @top_scrolled_coords = []
-      @drawing_items = {}
+    def draw_visible_items
+      @items_with_coordinates.select { |item, coords| visible_item?(coords[1]) }
+                             .each { |item, coords| item.draw(coords[0], coords[1]) }
+    end
 
-      @items_with_coordinates.each do |item, coords|
-        coord_y = coords[1]
+    def visible_item?(coord_y)
+      coord_y < screen_max_out_y && coord_y > screen_min_out_y
+    end
 
-        if coord_y < screen_max_out_y && coord_y > screen_min_out_y
-          @drawing_items[item] = coords
-          next
-        end
+    def screen_max_out_y
+      @window.height * 0.8
+    end
 
-        value = Hash[scrollable_menu_item, coord_y]
-        if coord_y > screen_max_out_y
-          @bottom_scrolled_coords.push(value)
-        else
-          @top_scrolled_coords.push(value)
-        end
+    def screen_min_out_y
+      @window.height * 0.35
+    end
 
-        break if @bottom_scrolled_coords.any? || @top_scrolled_coords.any?
-      end
+    def draw_scrollable_items
+      top_scrolled_coords = []
+      bottom_scrolled_coords = []
+      @items_with_coordinates.reject { |*, coords| visible_item?(coords[1]) }
+                             .each do |item, coords|
+                               coord_y = coords[1]
+                               top_scrolled_coords << coord_y if coord_y < screen_min_out_y
+                               bottom_scrolled_coords << coord_y if coord_y > screen_max_out_y
+                             end
+
+      min_size_item = @items_with_coordinates.max_by { |_, coords| coords[0] }.first
+      scroll_coords = [bottom_scrolled_coords.min, top_scrolled_coords.max].compact
+      scroll_coords.each { |scroll_y| scrollable_menu_item.draw(min_size_item.x, scroll_y) }
     end
 
     def scrollable_menu_item
@@ -75,15 +76,6 @@ module SpaceInvaders
         active: false,
         callback: nil
       )
-    end
-
-    def draw_scroll_trigger
-      min_size_item = @items_with_coordinates.max_by { |_, coords| coords[0] }.first
-      scroll_coords = [@bottom_scrolled_coords, @top_scrolled_coords].flatten.compact
-
-      scroll_coords.each do |scrollable|
-        scrollable.each { |mi, scroll_y| mi.draw(min_size_item.x, scroll_y) }
-      end
     end
   end
 end
