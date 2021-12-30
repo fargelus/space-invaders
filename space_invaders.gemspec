@@ -2,11 +2,11 @@
 
 lib = File.expand_path('lib', __dir__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'space_invaders/base/settings'
+require_relative 'lib/space_invaders/version'
 
 Gem::Specification.new do |spec|
   spec.name          = 'space_invaders'
-  spec.version       = SpaceInvaders::Settings::VERSION
+  spec.version       = SpaceInvaders::VERSION
   spec.authors       = ['fargelus']
   spec.email         = ['ddraudred@gmail.com']
 
