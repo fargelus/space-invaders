@@ -8,7 +8,6 @@ module SpaceInvaders
     WIDTH = 800
     HEIGHT = 600
     CAPTION = 'Space Invaders'
-    VERSION = '0.1.0'
     SPACESHIP_SPEED = 3
     SPACESHIP_LIFES = 3
     BULLET_SPEED = 5

@@ -14,6 +14,10 @@ module SpaceInvaders
       @was_draw = false
     end
 
+    def visible?
+      true
+    end
+
     def draw(x, y); end
 
     def needs_redraw?

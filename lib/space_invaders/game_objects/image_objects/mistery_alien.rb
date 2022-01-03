@@ -41,9 +41,7 @@ module SpaceInvaders
     private
 
     def on_last_moving_step
-      if @x + ALIENS_MARGIN < WIDTH + MISTERY_WIDTH && @x >= -MISTERY_WIDTH
-        return
-      end
+      return if @x + ALIENS_MARGIN < WIDTH + MISTERY_WIDTH && @x >= -MISTERY_WIDTH
 
       @move_direction = @opposite_directions[@move_direction]
       @on_start = @move_direction == INITIAL_MOVE_DIRECTION

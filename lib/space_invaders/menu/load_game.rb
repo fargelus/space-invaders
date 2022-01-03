@@ -19,6 +19,10 @@ module SpaceInvaders
       @loaded = false
     end
 
+    def visible?
+      @games.any?
+    end
+
     def draw(x, y)
       @menu.draw(x, y)
       @was_draw = true

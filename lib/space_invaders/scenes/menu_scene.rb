@@ -37,14 +37,7 @@ module SpaceInvaders
       @load_game = LoadGame.new(window, INFO_FONT_SIZE - 10)
 
       @menu = Menu.new(window, INFO_FONT_SIZE)
-      if @continue_game.visible?
-        @menu.add_item('Continue', callback: method(:continue_game))
-      end
-      @menu.add_item('New Game', callback: method(:new_game))
-      @menu.add_item('Load Game', callback: method(:load_game))
-      @menu.add_item('Leaderboard', callback: method(:show_leaderboard))
-      @menu.add_item('Aliens', callback: method(:show_aliens_scoreboard))
-      @menu.add_item('Exit', callback: method(:exit_game))
+      add_menu_items
 
       @frames = [@menu]
     end
@@ -73,6 +66,41 @@ module SpaceInvaders
     end
 
     private
+
+    def add_menu_items
+      @menu.add_item('New Game', callback: method(:new_game))
+
+      player_based_menu_items.each do |mi_obj|
+        next unless mi_obj.item.visible?
+
+        @menu.add_item(mi_obj.text, callback: mi_obj.callback)
+      end
+
+      @menu.add_item('Aliens', callback: method(:show_aliens_scoreboard))
+      @menu.add_item('Exit', callback: method(:exit_game))
+    end
+
+    def player_based_menu_items
+      items = [OpenStruct.new(
+        item: @continue_game,
+        text: 'Continue',
+        callback: method(:continue_game)
+      )]
+
+      items << OpenStruct.new(
+        item: @load_game,
+        text: 'Load Game',
+        callback: method(:load_game)
+      )
+
+      items << OpenStruct.new(
+        item: @leaderboard,
+        text: 'Leaderboard',
+        callback: method(:show_leaderboard)
+      )
+
+      items
+    end
 
     def button_down_handled_by_frames?(id)
       return false if id == Gosu::KbEscape

@@ -12,6 +12,10 @@ module SpaceInvaders
       @leaders = DBOperations.find_max_scores(5)
     end
 
+    def visible?
+      @leaders.any?
+    end
+
     def draw(x, y)
       @leaders.each do |leader|
         coord_x = x + leader_offset_x(leader)
