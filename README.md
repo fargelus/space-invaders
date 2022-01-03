@@ -15,9 +15,9 @@
 - Game has record table :heavy_check_mark:
 - Game has sounds effects :heavy_check_mark:
 
-## Screens
+## Preview
 
-![Game board](./doc/gameboard.png)
+![Game preview](./doc/preview.gif)
 
 ## Installation
 

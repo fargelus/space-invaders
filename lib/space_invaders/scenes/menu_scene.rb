@@ -68,13 +68,14 @@ module SpaceInvaders
     private
 
     def add_menu_items
+      @menu.add_item('New Game', callback: method(:new_game))
+
       player_based_menu_items.each do |mi_obj|
         next unless mi_obj.item.visible?
 
         @menu.add_item(mi_obj.text, callback: mi_obj.callback)
       end
 
-      @menu.add_item('New Game', callback: method(:new_game))
       @menu.add_item('Aliens', callback: method(:show_aliens_scoreboard))
       @menu.add_item('Exit', callback: method(:exit_game))
     end
