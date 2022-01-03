@@ -1,7 +1,7 @@
 # Classic Space Invaders Game
 
 <p align="center">
-  <img src="./doc/logo.png">
+  <img alt="logo" src="./doc/logo.png">
 </p>
 
 ## Features
@@ -9,9 +9,9 @@
 - Player moves ship horizontally by pressing on keyboard :heavy_check_mark:
 - Player shoot aliens, which can move horizontally & vertically :heavy_check_mark:
 - When bullet reach alien, alien disappear & total score increase :heavy_check_mark:
-- Aliens can shoot too. When alien hit player, his lifes decrease :heavy_check_mark:
+- Aliens can shoot too. When alien hit player, his lives decrease :heavy_check_mark:
 - Player can hide behind obstacles
-- Game ends when player lifes become 0 :heavy_check_mark:
+- Game ends when player lives become 0 :heavy_check_mark:
 - Game has record table :heavy_check_mark:
 - Game has sounds effects :heavy_check_mark:
 
@@ -40,9 +40,16 @@
     bundle install
     ```
 
-3. Install mongodb. Installation instructions: <https://docs.mongodb.com/manual/tutorial/install-mongodb-on-ubuntu/>
+3. Install mongodb. Installation instructions: <https://docs.mongodb.com/manual/tutorial/install-mongodb-on-ubuntu/><br>
+   After success installation add mongod.service to init startup loading system and check
+   that mongo is starting. Commands for systemd based systems:
 
-4. Copy .env.sample to .env file and specify your mongodb settings if it need.
+    ```sh
+    sudo systemctl enable --now mongod
+    sudo systemctl status mongod
+    ```
+
+5. Copy .env.sample to .env file and specify your mongodb settings if it need.
 
     ```sh
     cp .env.sample .env

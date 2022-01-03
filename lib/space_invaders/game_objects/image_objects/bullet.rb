@@ -39,9 +39,7 @@ module SpaceInvaders
     end
 
     def stop_moving?
-      if @obstacle
-        obstacle_collided = @y > @obstacle.y - BULLET_HEIGHT + BULLET_SPEED
-      end
+      obstacle_collided = @y > @obstacle.y - BULLET_HEIGHT + BULLET_SPEED if @obstacle
       @y.negative? || @y > HEIGHT || obstacle_collided
     end
 

@@ -28,9 +28,7 @@ module SpaceInvaders
     end
 
     def scroll_bottom?
-      if @bottom_scrolled_coords.nil? || @items_with_coordinates.empty?
-        return false
-      end
+      return false if @bottom_scrolled_coords.nil? || @items_with_coordinates.empty?
 
       bottom_scrolled_items = @items_with_coordinates.select { |_, coords| @bottom_scrolled_coords.include? coords[1] }
       bottom_scrolled_items.any? { |item, _| item.active }
@@ -59,13 +57,9 @@ module SpaceInvaders
       @items_with_coordinates.reject { |*, coords| visible_item?(coords[1]) }
                              .each do |_, coords|
                                coord_y = coords[1]
-                               if coord_y < screen_min_out_y
-                                 top_scrolled_coords << coord_y
-                               end
+                               top_scrolled_coords << coord_y if coord_y < screen_min_out_y
 
-                               if coord_y > screen_max_out_y
-                                 bottom_scrolled_coords << coord_y
-                               end
+                               bottom_scrolled_coords << coord_y if coord_y > screen_max_out_y
                              end
 
       min_size_item = @items_with_coordinates.max_by { |_, coords| coords[0] }.first
