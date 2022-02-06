@@ -22,7 +22,7 @@
 ## Installation
 
 - [Debian based Linux distros](doc/installation/ubuntu.md)
-- [macOs](doc/installation/macos.md)
+- [macOS](doc/installation/macos.md)
 
 ## Launch
 
