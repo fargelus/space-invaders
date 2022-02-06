@@ -19,7 +19,7 @@
     ```
 
 3. Install MongoDB. Installation instructions: <https://docs.mongodb.com/manual/tutorial/install-mongodb-on-ubuntu/><br>
-   After success installation add mongod.service to init startup loading system and check
+   After success installation add _mongod.service_ to init startup loading system and check
    that mongo is starting. Commands for systemd based systems:
 
     ```sh
@@ -27,7 +27,7 @@
     sudo systemctl status mongod
     ```
 
-4. Copy _.env.sample_ to _.env_ file and specify your mongodb settings if it need.
+4. Copy _.env.sample_ to _.env_ file and specify your MongoDB settings if it need.
 
     ```sh
     cp .env.sample .env
