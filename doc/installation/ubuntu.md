@@ -1,4 +1,4 @@
-1. Install dependencies for using Gosu lib
+1. Install dependencies for using Gosu lib:
 
     ```sh
     sudo apt-get install -y build-essential libsdl2-dev libgl1-mesa-dev \
@@ -14,6 +14,7 @@
 2. Install required gems:
 
     ```sh
+    gem install gosu
     bundle install
     ```
 
@@ -26,7 +27,7 @@
     sudo systemctl status mongod
     ```
 
-4. Copy .env.sample to .env file and specify your mongodb settings if it need.
+4. Copy _.env.sample_ to _.env_ file and specify your mongodb settings if it need.
 
     ```sh
     cp .env.sample .env
