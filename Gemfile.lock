@@ -8,12 +8,30 @@ GEM
   specs:
     bson (4.8.2)
     byebug (11.1.3)
+    chef-utils (17.9.46)
+      concurrent-ruby
+    concurrent-ruby (1.1.9)
     diff-lcs (1.3)
     dotenv (2.7.5)
-    gosu (0.15.1)
+    kramdown (2.3.1)
+      rexml
+    kramdown-parser-gfm (1.1.0)
+      kramdown (~> 2.0)
+    mdl (0.11.0)
+      kramdown (~> 2.3)
+      kramdown-parser-gfm (~> 1.1)
+      mixlib-cli (~> 2.1, >= 2.1.1)
+      mixlib-config (>= 2.2.1, < 4)
+      mixlib-shellout
+    mixlib-cli (2.1.8)
+    mixlib-config (3.0.9)
+      tomlrb
+    mixlib-shellout (3.2.5)
+      chef-utils
     mongo (2.2.7)
       bson (~> 4.0)
     rake (13.0.1)
+    rexml (3.2.5)
     rspec (3.9.0)
       rspec-core (~> 3.9.0)
       rspec-expectations (~> 3.9.0)
@@ -27,6 +45,7 @@ GEM
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.9.0)
     rspec-support (3.9.2)
+    tomlrb (2.0.1)
 
 PLATFORMS
   ruby
@@ -35,7 +54,7 @@ DEPENDENCIES
   bundler (~> 2.0)
   byebug
   dotenv
-  gosu
+  mdl
   mongo (~> 2.2.5)
   rake (~> 13.0)
   rspec (~> 3.0)

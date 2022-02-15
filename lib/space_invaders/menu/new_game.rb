@@ -8,13 +8,12 @@ require_relative '../db/operations'
 
 module SpaceInvaders
   class NewGame < MenuSceneComponent
-    CARET_COLOR = 0xffffffff
     attr_reader :need_start
 
     def initialize(window, size)
       super
 
-      @input = TextField.new(window)
+      @input = TextField.new(window, @font)
       @input.text = 'Type new game name'
       @input.restrict = /[^a-z]/i
 
@@ -25,11 +24,9 @@ module SpaceInvaders
     end
 
     def draw(x, y)
-      @font.draw(@input.text, x, y, 0)
+      @input.draw(x, y)
       left_margin = Settings::VERTICAL_MARGIN_FOR_ITEM * 6
       @menu.draw(x + left_margin, y + @font_size + Settings::VERTICAL_MARGIN_FOR_ITEM)
-
-      draw_caret(x, y)
     end
 
     def button_down(id)
@@ -46,15 +43,6 @@ module SpaceInvaders
       DBOperations.reset_previous_session
       DBOperations.insert(score: 0, user: @input.text, active: true)
       @need_start = true
-    end
-
-    private
-
-    def draw_caret(x, y)
-      pos_x = x + @font.text_width(@input.text[0...@input.caret_pos])
-      vertical_offset = 3
-      @window.draw_line(pos_x, y - vertical_offset, CARET_COLOR,
-                        pos_x, y + @font_size - vertical_offset, CARET_COLOR, 0)
     end
   end
 end
