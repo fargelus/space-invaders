@@ -109,10 +109,10 @@ module SpaceInvaders
       closest = find(@enemy.x + @enemy.w)
       return closest if closest
 
-      further_x = last_column_x(@aliens)
+      further_x = max_x_coord(@aliens)
       return find(further_x) if further_x < @enemy.x
 
-      find(first_column_x(@aliens))
+      find(min_x_coord(@aliens))
     end
 
     def can_move?
@@ -146,8 +146,8 @@ module SpaceInvaders
     def available_directions
       extreme_right_aliens = WIDTH - ALIENS_WIDTH - ALIENS_MARGIN
       {
-        right: first_column_x(@aliens) < ALIENS_MARGIN,
-        left: last_column_x(@aliens) > extreme_right_aliens
+        right: min_x_coord(@aliens) < ALIENS_MARGIN,
+        left: max_x_coord(@aliens) > extreme_right_aliens
       }
     end
 
