@@ -1,2 +1,4 @@
 .env
 TODO.md
+.rspec_status
+*.gem
