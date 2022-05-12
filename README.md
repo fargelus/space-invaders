@@ -17,7 +17,7 @@
 
 ## Demo
 
-![Game demo](./doc/demo.mov)
+https://user-images.githubusercontent.com/14609424/168065403-aa3b19fd-e091-4d56-97ed-2b01863fbc58.mov
 
 ## Installation
 
